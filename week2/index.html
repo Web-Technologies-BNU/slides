@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 2 — Structuring Content with HTML5</title>
+  <style>
+    :root { --bg:#0e0f12; --card:#151821; --muted:#9aa3b2; --text:#e8edf6; --accent:#ff8c00; --blue:#3b82f6; --code:#0b0d12; --good:#86efac; --bad:#fca5a5; --radius:18px; }
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin:0; background: radial-gradient(1200px 800px at 100% 0, #141827 0%, var(--bg) 55%); color: var(--text); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial; overflow: hidden; }
+    .deck { height: 100%; display: grid; grid-template-rows: 1fr auto; }
+    .slide { display:none; height:100%; padding:56px 64px; }
+    .slide.active { display:block; }
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,.35); padding: 32px; }
+    h1{ margin:0 0 10px; font-size:40px; letter-spacing:.2px; }
+    h2{ margin:0 0 10px; font-size:28px; color:#f8fafc; }
+    h3{ margin:0 0 8px; font-size:20px; color:#dbeafe; }
+    p{ margin:6px 0 14px; color: var(--muted); }
+    ul, ol { margin: 0 0 12px 22px; }
+    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap:20px; }
+    .badge{ display:inline-block; padding:6px 10px; border-radius:999px; background: rgba(59,130,246,.14); color:#bfdbfe; border:1px solid rgba(59,130,246,.4); font-weight:700; font-size:12px; }
+    .kbd{ display:inline-block; padding:2px 8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); font-weight:600; color:#f1f5f9; font-size:14px; }
+    .ok{ color: var(--good); font-weight:700; }
+    .bad{ color: var(--bad); font-weight:700; }
+    pre{ margin: 14px 0; background: var(--code); padding: 16px; border-radius: 12px; overflow:auto; border:1px solid rgba(255,255,255,.08); }
+    code{ color:#d1e9ff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 14px; }
+    .callout{ border-left:4px solid var(--accent); padding:10px 12px; border-radius:8px; background: rgba(255,140,0,.06); }
+    .bar{ position: fixed; left:24px; right:24px; bottom:24px; display:flex; gap:12px; align-items:center; padding:12px 16px; border-radius:14px; background: rgba(21,24,33,.7); border:1px solid rgba(255,255,255,.08); backdrop-filter: blur(8px); }
+    .btn{ padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, #1b2030, #141824); color:#eef2ff; font-weight:600; cursor:pointer; }
+    .btn:hover{ transform: translateY(-1px); }
+    .progress{ height:6px; flex:1; border-radius:999px; background: rgba(255,255,255,.1); overflow:hidden; }
+    .progress>i{ display:block; height:100%; width:0; background: linear-gradient(90deg, var(--accent), var(--blue)); }
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- Slide 1: Title -->
+    <section class="slide active">
+      <div class="card">
+        <span class="badge">Week 2 • Class 1–2</span>
+        <h1>Structuring Content with <span style="color:var(--accent);font-weight:800">HTML5</span></h1>
+        <p>Instructor: <strong>Hamad Rakhshani</strong> · Fall 2025</p>
+        <ul>
+          <li>Semantic vs Non‑Semantic HTML (in depth)</li>
+          <li>Resume/landing page structure patterns</li>
+          <li>Images, links, lists, tables (resume use‑cases)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 2: Outcomes -->
+    <section class="slide">
+      <div class="card">
+        <h2>Learning Outcomes (Week 2)</h2>
+        <ul>
+          <li>Explain what makes an element <em>semantic</em> and why it matters (SEO, a11y, maintainability).</li>
+          <li>Use core semantic sections: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code>.</li>
+          <li>Choose between <code>&lt;div&gt;</code>/<code>&lt;span&gt;</code> and semantic tags appropriately.</li>
+          <li>Structure a resume page in plain HTML (no CSS yet).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 3: What is Semantic HTML? -->
+    <section class="slide">
+      <div class="card">
+        <h2>What is <em>Semantic</em> HTML?</h2>
+        <p><strong>Definition:</strong> Elements whose <em>names describe their meaning/role</em> in the document (not just how they look). Browsers, assistive tech, and search engines can infer structure and purpose.</p>
+        <div class="callout">
+          <strong>Benefits:</strong> Better accessibility (screen readers announce roles), improved SEO (search engines parse sections), cleaner code and easier collaboration.
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Core semantic elements -->
+    <section class="slide">
+      <div class="card">
+        <h2>Core semantic elements (definitions + use)</h2>
+        <ul>
+          <li><code>&lt;header&gt;</code> — Introductory content for a page/section (logo, title, actions).</li>
+          <li><code>&lt;nav&gt;</code> — Major navigation blocks of links (primary/secondary menus).</li>
+          <li><code>&lt;main&gt;</code> — Unique main content of the document (one per page).</li>
+          <li><code>&lt;section&gt;</code> — Thematic grouping of content (with a heading).</li>
+          <li><code>&lt;article&gt;</code> — Self‑contained, reusable unit (post, card, press release).</li>
+          <li><code>&lt;aside&gt;</code> — Tangential/secondary content (sidebars, callouts).</li>
+          <li><code>&lt;footer&gt;</code> — Closing area for page/section (copyright, links).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 5: Non-semantic elements -->
+    <section class="slide">
+      <div class="card">
+        <h2>Non‑semantic elements (and when to use)</h2>
+        <p><strong>Definition:</strong> Elements whose names do not convey meaning (e.g., <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>). They are neutral containers used for grouping or styling <em>when no semantic element fits</em>.</p>
+        <ul>
+          <li><code>&lt;div&gt;</code> — Block‑level generic container (layout wrappers, utility groupings).</li>
+          <li><code>&lt;span&gt;</code> — Inline generic container (highlight text, apply a class).</li>
+        </ul>
+        <div class="callout"><strong>Rule of thumb:</strong> Prefer a semantic element if one clearly describes the content. Use <code>&lt;div&gt;</code>/<code>&lt;span&gt;</code> to fill gaps or for hooks/classes.</div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Div soup vs semantic structure -->
+    <section class="slide">
+      <div class="card">
+        <h2>Example: “div soup” vs semantic structure</h2>
+        <div class="two-col">
+          <div>
+            <h3 class="bad">Only divs</h3>
+            <pre><code>&lt;div class="page"&gt;
+  &lt;div class="top"&gt;My Name&lt;/div&gt;
+  &lt;div class="menu"&gt;Home · Work · Contact&lt;/div&gt;
+  &lt;div class="content"&gt;
+    &lt;div class="box"&gt;Experience...&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="bottom"&gt;© 2025&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div>
+            <h3 class="ok">Semantic layout</h3>
+            <pre><code>&lt;header&gt;My Name&lt;/header&gt;
+&lt;nav&gt;Home · Work · Contact&lt;/nav&gt;
+&lt;main&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Experience&lt;/h2&gt;
+    &lt;article&gt;Job details...&lt;/article&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer&gt;© 2025&lt;/footer&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: Inline vs Block -->
+    <section class="slide">
+      <div class="card">
+        <h2>Inline vs Block elements</h2>
+        <div class="two-col">
+          <div>
+            <h3>Block examples</h3>
+            <pre><code>&lt;h1&gt;Heading&lt;/h1&gt;
+&lt;p&gt;Paragraph&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;item&lt;/li&gt;&lt;/ul&gt;</code></pre>
+            <p>Start on a new line and take available width.</p>
+          </div>
+          <div>
+            <h3>Inline examples</h3>
+            <pre><code>&lt;em&gt;emphasis&lt;/em&gt; and &lt;strong&gt;importance&lt;/strong&gt;
+&lt;a href="#"&gt;link&lt;/a&gt; and &lt;span class="tag"&gt;tag&lt;/span&gt;</code></pre>
+            <p>Flow within a line, no line break by default.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Resume scaffold demo -->
+    <section class="slide">
+      <div class="card">
+        <h2>Resume scaffold (semantic)</h2>
+        <pre><code>&lt;header&gt;
+  &lt;h1&gt;Your Name&lt;/h1&gt;
+  &lt;p&gt;Role · City · Email&lt;/p&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Experience&lt;/h2&gt;
+    &lt;article&gt;Role @ Company — impact summary&lt;/article&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Education&lt;/h2&gt;
+    &lt;article&gt;Degree — School&lt;/article&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer&gt;© 2025 Your Name&lt;/footer&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 9: Images & links for resumes -->
+    <section class="slide">
+      <div class="card">
+        <h2>Images & links for resumes</h2>
+        <pre><code>&lt;img src="images/headshot.jpg" alt="Your headshot" width="160" /&gt;
+&lt;p&gt;Portfolio: &lt;a href="https://yourdomain.com" target="_blank" rel="noopener noreferrer"&gt;yourdomain.com&lt;/a&gt;&lt;/p&gt;</code></pre>
+        <div class="callout">Use descriptive <code>alt</code>; prefer <code>https://</code>; add <code>rel="noopener noreferrer"</code> with <code>target="_blank"</code>.</div>
+      </div>
+    </section>
+
+    <!-- Slide 10: Lists & tables (use cases) -->
+    <section class="slide">
+      <div class="card">
+        <h2>Lists & tables (resume use‑cases)</h2>
+        <div class="two-col">
+          <div>
+            <h3>Skills list</h3>
+            <pre><code>&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt; &lt;li&gt;CSS&lt;/li&gt; &lt;li&gt;JS&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <div>
+            <h3>Education table</h3>
+            <pre><code>&lt;table&gt;
+  &lt;tr&gt;&lt;th&gt;Program&lt;/th&gt;&lt;th&gt;Institute&lt;/th&gt;&lt;th&gt;Year&lt;/th&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;BBA&lt;/td&gt;&lt;td&gt;BNU&lt;/td&gt;&lt;td&gt;2025&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: Hands-on prompt -->
+    <section class="slide">
+      <div class="card">
+        <h2>Hands‑on (20–30 min)</h2>
+        <ol>
+          <li>Create <code>resume.html</code> with <strong>header</strong>, <strong>main</strong> (2+ sections), and <strong>footer</strong>.</li>
+          <li>Add an image, one external link, and a skills list.</li>
+          <li>Bonus: add an <strong>article</strong> for a project/case study.</li>
+        </ol>
+        <p class="callout">Instructor walk‑through + peer review in pairs.</p>
+      </div>
+    </section>
+
+    <!-- Slide 12: Broken resume fix (activity) -->
+    <section class="slide">
+      <div class="card">
+        <h2>Activity: Fix a broken resume</h2>
+        <p>We’ll repeat the Cena‑style debugging on a resume page. Checklist:</p>
+        <ul>
+          <li class="bad">Invalid or missing doctype</li>
+          <li class="bad">Misplaced metadata or duplicate <code>id</code>s</li>
+          <li class="bad">Mis‑nested tags; unclosed <code>&lt;li&gt;</code> items</li>
+          <li class="bad">Missing <code>alt</code> on images; unsafe external links</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 13: Quick quiz -->
+    <section class="slide">
+      <div class="card">
+        <h2>Quick quiz</h2>
+        <ol>
+          <li>When should you use <code>&lt;article&gt;</code> vs <code>&lt;section&gt;</code>?</li>
+          <li>Why is <code>&lt;main&gt;</code> limited to one per page?</li>
+          <li>Give two reasons semantic HTML improves SEO.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Slide 14: Homework -->
+    <section class="slide">
+      <div class="card">
+        <h2>Homework — HTML Resume v1 (Due next week)</h2>
+        <ul>
+          <li>Build a semantic resume page with: header, 2+ sections, footer</li>
+          <li>Include: one image (<code>alt</code>), one external link, skills list</li>
+          <li>Optional: add an About page and link to it</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Bottom controls -->
+    <div class="bar">
+      <button id="prev" class="btn" title="Previous (←)">◀ Prev</button>
+      <button id="next" class="btn" title="Next (→)">Next ▶</button>
+      <div class="progress"><i id="prog"></i></div>
+      <span class="kbd">←</span>
+      <span class="kbd">→</span>
+      <a href="../index.html" class="btn" style="text-decoration:none;color:#e5e7eb" title="Back to Home">🏠 Home</a>
+    </div>
+  </div>
+
+  <script>
+    const slides=[...document.querySelectorAll('.slide')];
+    const prog=document.getElementById('prog');
+    let i=0; function show(n){ i=Math.max(0, Math.min(slides.length-1, n)); slides.forEach((s,k)=>s.classList.toggle('active', k===i)); prog.style.width=((i+1)/slides.length*100)+'%'; }
+    document.getElementById('next').onclick=()=>show(i+1);
+    document.getElementById('prev').onclick=()=>show(i-1);
+    window.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') show(i+1); if(e.key==='ArrowLeft') show(i-1); });
+    show(0);
+  </script>
+</body>
+</html>

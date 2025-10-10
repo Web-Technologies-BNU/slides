@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 3 — CSS Basics, Centering, and Fonts</title>
+  <style>
+    :root{
+      --bg:#0f172a; /* slate-900 */
+      --fg:#e5e7eb; /* gray-200 */
+      --muted:#94a3b8; /* slate-400 */
+      --brand:#a78bfa; /* violet-300 */
+      --accent:#22d3ee; /* cyan-400 */
+      --card:#111827; /* gray-900 */
+      --code:#1f2937; /* gray-800 */
+    }
+    html,body{height:100%;}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#0b1220);color:var(--fg);font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";}
+    .deck{height:100%;display:grid;grid-template-rows:auto 1fr auto;}
+    header,footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);backdrop-filter: blur(6px);position:sticky;z-index:10}
+    header{top:0;border-bottom:1px solid rgba(255,255,255,0.06)}
+    footer{bottom:0;border-top:1px solid rgba(255,255,255,0.06)}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand .dot{width:10px;height:10px;border-radius:999px;background:conic-gradient(from 0deg,var(--brand),var(--accent));box-shadow:0 0 16px var(--accent)}
+    .brand h1{font-size:16px;margin:0;letter-spacing:.3px}
+    .slides{position:relative;overflow:hidden}
+    .slide{position:absolute;inset:0;padding:40px 64px;opacity:0;transform:translateX(40px) scale(.98);transition:all .35s ease;display:grid;grid-template-rows:auto 1fr;row-gap:22px;pointer-events:none}
+    .slide.active{opacity:1;transform:translateX(0) scale(1);pointer-events:auto;z-index:1}
+
+    h2.title{font-size:42px;line-height:1.1;margin:0}
+    .subtitle{color:var(--muted);font-size:18px;margin-top:6px}
+    .content{align-self:start;}
+    .grid{display:grid;gap:16px}
+    .grid.cols-2{grid-template-columns:1fr 1fr}
+    .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:16px}
+    .kicker{color:var(--accent);font-weight:600;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+    ul{margin:0 0 0 18px}
+    li{margin:6px 0}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    code.inline{background:var(--code);padding:.2em .45em;border-radius:8px;border:1px solid rgba(255,255,255,.08)}
+    pre{background:var(--code);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,0.08);overflow:auto}
+    .controls{display:flex;gap:8px}
+    .btn{appearance:none;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--fg);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600}
+    .btn:hover{border-color:rgba(255,255,255,.35)}
+    .progress{height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;flex:1;margin:0 12px}
+    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--accent));}
+
+    /* Interactive playground */
+    .playground{display:grid;grid-template-columns:320px 1fr;gap:16px}
+    .playground .panel{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
+    .demoStage{min-height:220px;display:block;background:repeating-conic-gradient(from 0deg,transparent 0 20deg, rgba(255,255,255,.03) 20deg 40deg);border-radius:16px;border:1px dashed rgba(255,255,255,.15)}
+    .demoStage.is-flex{display:flex;align-items:center;justify-content:center}
+    .demoBox{width:160px;height:100px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.6);border-radius:12px;display:flex;align-items:center;justify-content:center;padding:10px;text-align:center}
+
+    .kbd{display:inline-block;padding:2px 8px;border:1px solid rgba(255,255,255,.2);border-bottom-width:2px;border-radius:6px;font-weight:700}
+    .note{font-size:13px;color:var(--muted)}
+    a{color:#7dd3fc}
+  </style>
+  <!-- Load Inter so the font switcher visibly changes -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="deck" role="application" aria-label="Slide deck: Week 3 — CSS Basics, Centering, and Fonts">
+    <header>
+      <div class="brand"><span class="dot" aria-hidden="true"></span><h1>Web Technologies — Week 3</h1></div>
+      <div class="controls">
+        <button class="btn" id="prev" title="Previous (←)">◀ Prev</button>
+        <div class="progress" aria-label="Slide progress"><i id="bar"></i></div>
+        <button class="btn" id="next" title="Next (→)">Next ▶</button>
+        <a href="../index.html" class="btn" style="text-decoration:none;color:var(--fg)" title="Back to Home">🏠 Home</a>
+      </div>
+    </header>
+
+    <main class="slides" id="slides" tabindex="0">
+
+      <!-- Slide 1: Title -->
+      <section class="slide active" data-title="Week 3 — CSS Basics">
+        <div>
+          <h2 class="title">CSS Basics, Centering & Fonts</h2>
+          <p class="subtitle">How to style pages, center content beautifully, and use the right typefaces — with a live playground ✨</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <div class="kicker">Today</div>
+            <ul>
+              <li>What CSS is & how browsers read it</li>
+              <li>3 ways to add CSS to HTML</li>
+              <li>Selectors, properties, the cascade</li>
+              <li>Centering strategies (inline, block, flex)</li>
+              <li>Fonts: stacks, web fonts, fallbacks</li>
+              <li>Live playground + mini‑quiz</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="kicker">Tip</div>
+            Press <span class="kbd">→</span> / <span class="kbd">←</span> to navigate.
+            <p class="note">You can also click Next/Prev.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: What is CSS -->
+      <section class="slide" data-title="What is CSS?">
+        <div>
+          <h2 class="title">What is CSS?</h2>
+          <p class="subtitle">Cascading Style Sheets — the presentation layer of the web.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <ul>
+              <li>Controls layout, color, spacing, typography, and responsiveness.</li>
+              <li>“Cascading” means rules can inherit and override based on specificity and order.</li>
+              <li>Separation of concerns: HTML = structure, CSS = style, JS = behavior.</li>
+            </ul>
+          </div>
+          <div class="card">
+<pre><code>/* selector */
+.card {
+  background: #111827;
+  color: #e5e7eb;
+  padding: 1rem;
+}
+</code></pre>
+            <p class="note">Syntax: <code class="inline">selector</code> → <code class="inline">{ property: value; }</code></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: How to add CSS -->
+      <section class="slide" data-title="How to add CSS">
+        <div>
+          <h2 class="title">How do you add CSS to a page?</h2>
+          <p class="subtitle">Three common ways — pick the right tool for the job.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <ol>
+              <li><strong>External file</strong> — best for real projects
+                <pre><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+              </li>
+              <li><strong>Internal &lt;style&gt;</strong> — fine for small demos
+                <pre><code>&lt;style&gt;
+  body { font-family: system-ui; }
+&lt;/style&gt;</code></pre>
+              </li>
+              <li><strong>Inline</strong> — quick one‑offs
+                <pre><code>&lt;h1 style="color:tomato"&gt;Hi&lt;/h1&gt;</code></pre>
+              </li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="kicker">Avoid</div>
+            <ul>
+              <li>Overusing <code class="inline">@import</code> — it delays loading.</li>
+              <li>Massive inline styles — hard to maintain.</li>
+              <li>Unscoped rules that accidentally style everything.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Centering patterns -->
+      <section class="slide" data-title="Centering patterns">
+        <div>
+          <h2 class="title">Centering a &lt;div&gt; — 3 useful patterns</h2>
+          <p class="subtitle">Different context, different tool.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+<pre><code>/* 1) Horizontal in a fixed-width container */
+.container { width: 600px; margin: 0 auto; }
+
+/* 2) Full center with Flexbox */
+.stage { display:flex; align-items:center; justify-content:center; }
+
+/* 3) Absolute + transform */
+.box { position:absolute; top:50%; left:50%;
+       transform: translate(-50%, -50%); }
+</code></pre>
+            <p class="note">Flexbox is usually the simplest for full centering.</p>
+          </div>
+          <div class="card">
+            <div class="kicker">Try it soon</div>
+            We’ll toggle Flexbox on/off in the live playground.
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Fonts basics -->
+      <section class="slide" data-title="Fonts basics">
+        <div>
+          <h2 class="title">Fonts: stacks & fallbacks</h2>
+          <p class="subtitle">Always give the browser a safe plan B.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+<pre><code>/* System UI stack: fast & good */
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto,
+               Ubuntu, Cantarell, Noto Sans, Helvetica, Arial,
+               "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* With a Google Font loaded via &lt;link&gt; */
+body{ font-family: "Inter", system-ui, Arial, sans-serif; }
+</code></pre>
+          </div>
+          <div class="card">
+            <div class="kicker">Load a web font</div>
+<pre><code>&lt;!-- In &lt;head&gt; --&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"&gt;
+</code></pre>
+            <p class="note">Use <code class="inline">display=swap</code> to avoid invisible text during load.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Interactive playground -->
+      <section class="slide" data-title="Interactive playground">
+        <div>
+          <h2 class="title">Interactive: Centering & Font switcher</h2>
+          <p class="subtitle">Toggle CSS and watch the layout & typography react live.</p>
+        </div>
+        <div class="content playground">
+          <div class="panel">
+            <div class="kicker">Controls</div>
+            <label><input type="checkbox" id="toggleFlex" checked> Use Flexbox centering on stage</label><br>
+            <label><input type="checkbox" id="toggleWidth"> Constrain container to 600px (margin auto)</label><br>
+            <label><input type="checkbox" id="toggleBorder"> Show helper borders</label>
+            <hr>
+            <label for="fontSelect"><strong>Font family</strong></label><br>
+            <select id="fontSelect">
+              <option value="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji'">System UI Stack (default)</option>
+              <option value="'Georgia', 'Times New Roman', serif">Serif (Georgia)</option>
+              <option value="'Courier New', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace">Monospace</option>
+              <option value="'Inter', system-ui, Arial, sans-serif">Inter (if loaded)</option>
+            </select>
+            <p class="note">Try toggling Flexbox and width, then change fonts to see the instant effect.</p>
+            <hr>
+            <div class="kicker">Copy this into your HTML to link CSS</div>
+<pre><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+          </div>
+          <div class="panel">
+            <div class="demoStage" id="demoStage">
+              <div class="demoBox" id="demoBox">I’m a centered box ✨<br><small>(toggle my world)</small></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Benefits -->
+      <section class="slide" data-title="Benefits of CSS">
+        <div>
+          <h2 class="title">Why CSS this way?</h2>
+          <p class="subtitle">Practical benefits you’ll feel as projects grow.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <ul>
+              <li><strong>Maintainability:</strong> one stylesheet powers many pages.</li>
+              <li><strong>Performance:</strong> external CSS is cached across pages.</li>
+              <li><strong>Consistency:</strong> tokens & variables create a design system.</li>
+              <li><strong>Accessibility:</strong> proper sizing/contrast improves readability.</li>
+              <li><strong>Teamwork:</strong> clean separation from HTML & JS.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="kicker">Debug tips</div>
+            <ul>
+              <li>Use DevTools: toggle CSS rules live.</li>
+              <li>Check <em>computed</em> styles to see what wins specificity.</li>
+              <li>Add temporary outlines: <code class="inline">*{outline:1px solid #fff3}</code></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Mini-quiz -->
+      <section class="slide" data-title="Mini‑quiz">
+        <div>
+          <h2 class="title">Mini‑quiz</h2>
+          <p class="subtitle">Answer in pairs, then we review.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <ol>
+              <li>Name the three ways to add CSS and the best use for each.</li>
+              <li>What does the “C” in CSS stand for and why does it matter?</li>
+              <li>Two ways to center a block both horizontally and vertically.</li>
+              <li>Why include multiple font families in a stack?</li>
+              <li>How does external CSS improve performance?</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="kicker">Stretch task</div>
+            <p>Import a Google Font into this deck (in <code class="inline">&lt;head&gt;</code>) and switch to it using the playground font selector.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Homework -->
+      <section class="slide" data-title="Homework">
+        <div>
+          <h2 class="title">Homework</h2>
+          <p class="subtitle">Reinforce today’s concepts with a tiny project.</p>
+        </div>
+        <div class="content grid cols-2">
+          <div class="card">
+            <ul>
+              <li>Create <code class="inline">index.html</code> + <code class="inline">styles.css</code>.</li>
+              <li>Center a hero box using Flexbox; add a headline & button.</li>
+              <li>Try two different font stacks and pick your favorite.</li>
+              <li>Push to GitHub and share the Pages link.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="kicker">Rubric</div>
+            <ul>
+              <li>Valid HTML/CSS (W3C validator ✓)</li>
+              <li>Clear centering (both axes)</li>
+              <li>Readable typography</li>
+              <li>Clean, commented CSS</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="note">Use ← → keys • Slide <span id="idx">1</span>/<span id="len">1</span></div>
+      <div class="note">BNU · Web Technologies · Week 3</div>
+    </footer>
+  </div>
+
+  <script>
+    // Simple slide deck logic
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const slidesEl = document.getElementById('slides');
+    const nextBtn = document.getElementById('next');
+    const prevBtn = document.getElementById('prev');
+    const bar = document.getElementById('bar');
+    const idxOut = document.getElementById('idx');
+    const lenOut = document.getElementById('len');
+    let idx = 0;
+
+    function update(){
+      slides.forEach((s,i)=>{
+        s.classList.toggle('active', i===idx);
+      });
+      const n = slides.length; lenOut.textContent = n; idxOut.textContent = idx+1;
+      bar.style.width = ((idx+1)/n*100)+'%';
+      prevBtn.disabled = idx===0; nextBtn.disabled = idx===n-1;
+      document.title = (slides[idx].dataset.title||'Slide') + ' — Week 3';
+    }
+    function next(){ if(idx < slides.length-1){ idx++; update(); } }
+    function prev(){ if(idx > 0){ idx--; update(); } }
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+    // Hotkeys: ignore when typing in inputs/selects/textareas/contenteditable
+    function isFormField(el){
+      return el && (el.tagName === 'INPUT' || el.tagName === 'SELECT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+    }
+    function handleKeys(e){
+      if(isFormField(e.target)) return; // don't steal arrows while using controls
+      if(['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); next(); }
+      if(['ArrowLeft','PageUp','Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+      if(e.key === 'Home'){ e.preventDefault(); idx=0; update(); }
+      if(e.key === 'End'){ e.preventDefault(); idx=slides.length-1; update(); }
+    }
+    window.addEventListener('keydown', handleKeys);
+    slidesEl.addEventListener('keydown', handleKeys);
+    // Ensure the slide area has focus initially so keys work
+    window.addEventListener('load', ()=> { slidesEl.focus(); });
+    // Clicking on non-form areas refocuses hotkeys (won't steal focus from controls)
+    slidesEl.addEventListener('click', (e)=>{
+      const t = e.target;
+      if(t && t.closest('select, input, textarea, label, .panel, button')) return;
+      slidesEl.focus();
+    });
+    update();
+
+    // Interactive playground wiring
+    const stage = document.getElementById('demoStage');
+    const box = document.getElementById('demoBox');
+    const toggleFlex = document.getElementById('toggleFlex');
+    const toggleWidth = document.getElementById('toggleWidth');
+    const toggleBorder = document.getElementById('toggleBorder');
+    const fontSelect = document.getElementById('fontSelect');
+
+    function applyPlayground(){
+      // Flexbox center toggle via class toggle (more reliable than inline styles)
+      if(toggleFlex.checked){
+        stage.classList.add('is-flex');
+      } else {
+        stage.classList.remove('is-flex');
+      }
+
+      // Width constraint toggle
+      if(toggleWidth.checked){
+        stage.style.maxWidth = '600px';
+        stage.style.margin = '0 auto';
+      } else {
+        stage.style.maxWidth = '';
+        stage.style.margin = '';
+      }
+
+      // Helper borders
+      stage.style.borderStyle = toggleBorder.checked ? 'solid' : '';
+      stage.style.borderColor = toggleBorder.checked ? 'rgba(255,255,255,.25)' : '';
+      stage.style.borderWidth = toggleBorder.checked ? '1px' : '';
+
+      // Font family switch
+      document.body.style.fontFamily = fontSelect.value;
+    }
+
+    [toggleFlex, toggleWidth, toggleBorder, fontSelect].forEach(el=>{
+      el.addEventListener('input', applyPlayground);
+      el.addEventListener('change', applyPlayground);
+    });
+    applyPlayground();
+  </script>
+</body>
+</html>

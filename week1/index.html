@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web Technologies 101 — Week 1, Class 1</title>
+  <style>
+    /* --------------------
+       HTML-Inspired Theme
+       -------------------- */
+    :root{
+      --bg: #0f1226;          /* deep indigo */
+      --panel: #14183a;       /* darker card */
+      --ink: #e7e9ff;         /* primary text */
+      --muted: #aab0ff;       /* secondary text */
+      --accent: #7c5cff;      /* accent violet */
+      --accent-2: #00d1ff;    /* cyan accent */
+      --accent-3: #ff6b6b;    /* coral */
+      --tag-html: #ff6b6b;    /* <html> */
+      --tag-css: #20dfb2;     /* <style> */
+      --tag-js: #ffd166;      /* <script> */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 20px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root{
+        --bg: #f7f8ff;
+        --panel: #ffffff;
+        --ink: #1c2141;
+        --muted: #5a61a3;
+        --accent: #6a4cff;
+        --accent-2: #0db4d6;
+        --accent-3: #e85c5c;
+      }
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0; background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(124,92,255,.15), transparent 60%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(0,209,255,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 40%),
+        var(--bg);
+      color:var(--ink); font: 16px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow:hidden;
+    }
+
+    /* Deck container */
+    .deck{position:relative; height:100%; display:grid; grid-template-rows:auto 1fr auto;}
+
+    /* Top bar */
+    .topbar{
+      display:flex; align-items:center; gap:14px; padding:12px 20px; color:var(--muted);
+      letter-spacing:.02em; font-size:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(255,255,255,.06); box-shadow: var(--shadow);}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent-2); box-shadow:0 0 12px var(--accent-2);}    
+
+    /* Slides */
+    .stage{position:relative; height:100%;}
+    .slide{position:absolute; inset:0; opacity:0; transform: translate3d(20px,0,0) scale(.98); filter: saturate(.9) contrast(.98);
+      transition: opacity .45s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+      display:grid; place-items:center; padding: clamp(18px,3vw,40px);
+    }
+    .slide.active{opacity:1; transform: translate3d(0,0,0) scale(1);}
+
+    .card{
+      width:min(1100px, 92vw); min-height:min(70vh, 600px);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: clamp(22px,4vw,40px);
+      display:flex; flex-direction:column; justify-content:center; gap:20px;
+    }
+
+    h1{font-size: clamp(36px, 5vw, 56px); line-height:1.05; margin:0;}
+    h2{font-size: clamp(28px, 3vw, 38px); margin:0 0 10px;}
+    p,li{font-size: clamp(16px,1.4vw,20px); color: var(--ink);}
+    .muted{color:var(--muted);}    
+
+    /* HTML-like tag banners */
+    .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:4px}
+    .tag{font: 600 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; padding:6px 10px; border-radius: 8px; letter-spacing:.02em;}
+    .html { background: color-mix(in oklab, var(--tag-html) 18%, transparent); border: 1px solid color-mix(in oklab, var(--tag-html) 45%, transparent); color: var(--tag-html)}
+    .css  { background: color-mix(in oklab, var(--tag-css) 18%,  transparent); border: 1px solid color-mix(in oklab, var(--tag-css) 45%, transparent);  color: var(--tag-css)}
+    .js   { background: color-mix(in oklab, var(--tag-js) 22%,   transparent); border: 1px solid color-mix(in oklab, var(--tag-js) 45%, transparent);   color: #2c2c2c}
+
+    /* List styling */
+    ul{margin:0; padding-left: 1.2em; display:flex; flex-direction:column; gap:.35em}
+    li{margin:.1em 0}
+
+    /* Footer */
+    .footer{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 20px; }
+    .progress{position:relative; height:8px; background:rgba(255,255,255,.08); border-radius:999px; flex:1; overflow:hidden}
+    .bar{position:absolute; inset:0 auto 0 0; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow:0 0 18px rgba(0,209,255,.55);}
+    .kbd{font: 600 12px ui-monospace, Menlo, Consolas, monospace; color:var(--muted); background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.16); padding:4px 8px; border-radius:8px;}
+
+    /* Content helpers */
+    .subtitle{font-size: clamp(16px,1.6vw,22px); color: var(--muted)}
+    .grid-2{display:grid; gap:22px; grid-template-columns: 1.25fr 1fr; align-items:center}
+    .callout{border-left: 4px solid var(--accent-2); padding-left:14px; color:var(--muted)}
+
+    /* Print (export to PDF) */
+    @media print {
+      body{overflow:visible;}
+      .topbar,.footer{display:none}
+      .stage{height:auto}
+      .slide{position:static; opacity:1; transform:none; break-after:page;}
+      .card{min-height:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="deck" role="application" aria-label="Web Technologies 101 deck">
+    <div class="topbar">
+      <span class="badge"><span class="dot"></span> Web Technologies 101</span>
+      <span class="muted">Week 1 · Class 1</span>
+      <span class="muted">Use ← → or Space to navigate • Press D for dark/light</span>
+      <a href="../index.html" style="margin-left:auto;color:#7dd3fc;text-decoration:none;font-size:14px;font-weight:600;padding:6px 12px;background:rgba(255,255,255,.06);border-radius:8px;border:1px solid rgba(255,255,255,.1);transition:all .2s ease" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">← Back to Home</a>
+    </div>
+
+    <div class="stage" id="stage">
+      <!-- Slide 1: Title -->
+      <section class="slide active" data-title="Title">
+        <div class="card">
+          <h1>Web Technologies 101: The Basics</h1>
+          <div class="subtitle">Week 1, Class 1</div>
+          <div class="tags" aria-hidden="true">
+            <span class="tag html">&lt;html&gt;</span>
+            <span class="tag css">&lt;style&gt;</span>
+            <span class="tag js">&lt;script&gt;</span>
+          </div>
+          <p class="muted">Hamad Rakhshani</p>
+        </div>
+      </section>
+
+      <!-- Slide 2: Welcome & Intro -->
+      <section class="slide" data-title="Welcome">
+        <div class="card">
+          <h2>Welcome to Web Technologies! 👋</h2>
+          <p>Over the next few weeks, we'll learn how to build dynamic and interactive websites.</p>
+          <p>Today, we'll start with the fundamentals: the pieces of a webpage and how the web works.</p>
+          <div class="callout">Goal today: get a mental model of the web stack and how browsers talk to servers.</div>
+        </div>
+      </section>
+
+      <!-- Slide 3: What is a Webpage? -->
+      <section class="slide" data-title="What is a Webpage?">
+        <div class="card grid-2">
+          <div>
+            <h2>What is a Webpage?</h2>
+            <p>A webpage is more than just a single file. It's a collection of parts that work together.</p>
+            <p><strong>Analogy:</strong> A house is built with a frame (<span class="tag html">HTML</span>), styled with paint & furniture (<span class="tag css">CSS</span>), and given electricity & plumbing (<span class="tag js">JavaScript</span>).</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 320 220" width="100%" aria-hidden="true">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="var(--accent)" />
+                  <stop offset="1" stop-color="var(--accent-2)" />
+                </linearGradient>
+              </defs>
+              <rect x="10" y="20" width="300" height="180" rx="18" fill="url(#g1)" opacity="0.18" />
+              <rect x="20" y="30" width="280" height="160" rx="14" fill="var(--panel)" stroke="rgba(255,255,255,.2)" />
+              <rect x="30" y="45" width="110" height="18" rx="6" fill="rgba(255,255,255,.1)" />
+              <rect x="30" y="75" width="240" height="10" rx="5" fill="rgba(124,92,255,.5)" />
+              <rect x="30" y="95" width="200" height="10" rx="5" fill="rgba(0,209,255,.5)" />
+              <rect x="30" y="115" width="220" height="10" rx="5" fill="rgba(255,107,107,.5)" />
+              <rect x="30" y="145" width="120" height="30" rx="8" fill="rgba(255,255,255,.08)" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Building Blocks -->
+      <section class="slide" data-title="Building Blocks">
+        <div class="card">
+          <h2>The Building Blocks</h2>
+          <ul>
+            <li><strong>HTML (HyperText Markup Language)</strong>: The structure of the page. It's the skeleton that provides the content and meaning (headings, paragraphs, links).</li>
+            <li><strong>CSS (Cascading Style Sheets)</strong>: The style. It controls the colors, fonts, layout, and visual appearance of the page.</li>
+            <li><strong>JavaScript</strong>: The behavior. It makes the page interactive and dynamic.</li>
+          </ul>
+          <div class="tags" aria-hidden="true" style="margin-top:8px">
+            <span class="tag html">&lt;h1&gt;</span>
+            <span class="tag css">color:</span>
+            <span class="tag js">addEventListener()</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Client-Server Model -->
+      <section class="slide" data-title="Client-Server">
+        <div class="card grid-2">
+          <div>
+            <h2>The Client–Server Model</h2>
+            <p><strong>The Client</strong>: Your web browser (Chrome, Firefox, Safari) that requests information.</p>
+            <p><strong>The Server</strong>: A powerful computer that provides the website's files.</p>
+          </div>
+          <div>
+            <svg viewBox="0 0 340 220" width="100%" aria-hidden="true">
+              <rect x="15" y="30" width="120" height="150" rx="12" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+              <rect x="30" y="50" width="90" height="12" rx="4" fill="var(--accent-2)"/>
+              <rect x="30" y="70" width="70" height="10" rx="4" fill="rgba(255,255,255,.2)"/>
+
+              <rect x="205" y="30" width="120" height="150" rx="12" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.18)"/>
+              <circle cx="265" cy="60" r="8" fill="var(--accent)"/>
+              <rect x="225" y="80" width="100" height="8" rx="4" fill="rgba(255,255,255,.2)"/>
+
+              <path d="M135,105 C165,105 175,105 205,105" stroke="var(--accent)" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+              <path d="M205,130 C175,130 165,130 135,130" stroke="var(--accent-2)" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L6,3 L0,6 z" fill="currentColor" />
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Request-Response Cycle -->
+      <section class="slide" data-title="Request–Response">
+        <div class="card">
+          <h2>The Request–Response Cycle</h2>
+          <ul>
+            <li><strong>Request:</strong> You type a URL (e.g., <em>google.com</em>) into your browser. The browser sends an HTTP request to the server.</li>
+            <li><strong>Lookup:</strong> The browser finds the server's address.</li>
+            <li><strong>Response:</strong> The server finds the requested files (HTML, CSS, JS) and sends them back to the client.</li>
+            <li><strong>Render:</strong> Your browser assembles the files and renders the webpage for you to see.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Slide 7: Introducing HTTP -->
+      <section class="slide" data-title="HTTP">
+        <div class="card">
+          <h2>Introducing HTTP</h2>
+          <p><strong>HTTP (Hypertext Transfer Protocol)</strong> is the "language" that the client and server use to communicate.</p>
+          <p>It's a set of rules for transferring hypermedia documents, like HTML.</p>
+          <div class="tags" aria-hidden="true">
+            <span class="tag js">GET</span>
+            <span class="tag js">POST</span>
+            <span class="tag js">200 OK</span>
+            <span class="tag js">404 Not Found</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Environment Setup -->
+      <section class="slide" data-title="Setup">
+        <div class="card">
+          <h2>Environment Setup</h2>
+          <p>Before our next class, please install a code editor.</p>
+          <ul>
+            <li><strong>Recommendation:</strong> VS Code (Visual Studio Code) — free, popular, and great for web development.</li>
+            <li><strong>Action Item:</strong> Download and install VS Code.</li>
+          </ul>
+          <p class="muted">Bonus: install the extensions “Live Server” and “Prettier”.</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      <span class="muted" id="counter">1 / 8</span>
+      <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+      <div class="kbd">← / →</div>
+    </div>
+  </div>
+
+  <script>
+    // Simple slide deck controller
+    const slides = [...document.querySelectorAll('.slide')];
+    const bar = document.getElementById('bar');
+    const counter = document.getElementById('counter');
+    let i = 0;
+
+    function setSlide(n){
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, idx)=> s.classList.toggle('active', idx === i));
+      const pct = ((i+1)/slides.length)*100; bar.style.width = pct + '%';
+      counter.textContent = `${i+1} / ${slides.length}`;
+      const title = slides[i].dataset.title || `Slide ${i+1}`;
+      document.title = `${title} — Web Technologies 101`;
+    }
+
+    function next(){ setSlide(i+1) }
+    function prev(){ setSlide(i-1) }
+
+    window.addEventListener('keydown', (e)=>{
+      if(['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); next(); }
+      if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){ e.preventDefault(); prev(); }
+      if(e.key.toLowerCase() === 'd'){
+        document.documentElement.classList.toggle('light');
+        // swap light/dark by toggling root vars via class
+        if(document.documentElement.classList.contains('light')){
+          document.documentElement.style.setProperty('--bg', '#f7f8ff');
+          document.documentElement.style.setProperty('--panel', '#ffffff');
+          document.documentElement.style.setProperty('--ink', '#1c2141');
+          document.documentElement.style.setProperty('--muted', '#5a61a3');
+          document.documentElement.style.setProperty('--accent', '#6a4cff');
+          document.documentElement.style.setProperty('--accent-2', '#0db4d6');
+          document.documentElement.style.setProperty('--accent-3', '#e85c5c');
+        } else {
+          document.documentElement.style.cssText = '';
+        }
+      }
+    });
+
+    // Touch support
+    let startX = null;
+    window.addEventListener('touchstart', (e)=> startX = e.touches[0].clientX, {passive:true});
+    window.addEventListener('touchend', (e)=>{
+      if(startX === null) return; const dx = e.changedTouches[0].clientX - startX;
+      if(Math.abs(dx) > 40){ dx < 0 ? next() : prev(); }
+      startX = null;
+    }, {passive:true});
+
+    // Click to advance
+    document.getElementById('stage').addEventListener('click', (e)=>{
+      // don't advance when selecting text or clicking links/buttons
+      const tag = e.target.tagName.toLowerCase();
+      if(['a','button','input','textarea','svg','path','rect','circle'].includes(tag)) return;
+      next();
+    });
+
+    // Initialize
+    setSlide(0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 2 Quiz – HTML5 Semantics</title>
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --card: #151821;
+      --muted: #94a3b8;
+      --text: #e6eaf2;
+      --accent: #ff8c00;
+      --blue: #3b82f6;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 100% 0, #141827 0%, var(--bg) 55%);
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    h1 { margin: 0 0 12px; font-size: 40px; }
+    h2 { margin: 20px 0 10px; font-size: 24px; color: #f8fafc; }
+    p { color: var(--muted); margin: 6px 0 14px; }
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(59,130,246,.14);
+      color: #bfdbfe;
+      border: 1px solid rgba(59,130,246,.4);
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    .question {
+      background: rgba(255,255,255,0.02);
+      border-left: 4px solid var(--accent);
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+    .options li {
+      padding: 10px 14px;
+      margin: 8px 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .options li:hover {
+      background: rgba(59,130,246,0.1);
+      border-color: rgba(59,130,246,0.3);
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, var(--blue), #2563eb);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(59,130,246,0.4);
+    }
+    .nav-home {
+      margin-top: 32px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <span class="badge">Week 2 Quiz</span>
+      <h1>HTML5 Semantic Elements Quiz</h1>
+      <p>Test your understanding of semantic HTML! Answer these questions to reinforce what you've learned.</p>
+    </div>
+
+    <div class="card">
+      <div class="question">
+        <h2>Question 1: What is Semantic HTML?</h2>
+        <ul class="options">
+          <li>A) HTML that uses colors and styling</li>
+          <li>B) HTML elements whose names describe their meaning/role in the document</li>
+          <li>C) HTML written by AI tools</li>
+          <li>D) HTML that only works in Chrome</li>
+        </ul>
+        <p style="color:#86efac;font-size:13px;margin-top:12px"><strong>Answer: B</strong> – Semantic elements like &lt;header&gt;, &lt;nav&gt;, &lt;article&gt; convey meaning to browsers and assistive technologies.</p>
+      </div>
+
+      <div class="question">
+        <h2>Question 2: Which is NOT a semantic element?</h2>
+        <ul class="options">
+          <li>A) &lt;header&gt;</li>
+          <li>B) &lt;div&gt;</li>
+          <li>C) &lt;article&gt;</li>
+          <li>D) &lt;footer&gt;</li>
+        </ul>
+        <p style="color:#86efac;font-size:13px;margin-top:12px"><strong>Answer: B</strong> – &lt;div&gt; is a non-semantic, generic container element.</p>
+      </div>
+
+      <div class="question">
+        <h2>Question 3: When should you use &lt;article&gt; vs &lt;section&gt;?</h2>
+        <ul class="options">
+          <li>A) Use &lt;article&gt; for self-contained, reusable content (blog post, card)</li>
+          <li>B) Use &lt;section&gt; for thematic groupings with a heading</li>
+          <li>C) Both A and B</li>
+          <li>D) They are exactly the same</li>
+        </ul>
+        <p style="color:#86efac;font-size:13px;margin-top:12px"><strong>Answer: C</strong> – &lt;article&gt; is for standalone content, &lt;section&gt; groups related content thematically.</p>
+      </div>
+
+      <div class="question">
+        <h2>Question 4: Why is the &lt;main&gt; element limited to one per page?</h2>
+        <ul class="options">
+          <li>A) It's a browser limitation</li>
+          <li>B) It represents the unique main content of the document</li>
+          <li>C) Multiple &lt;main&gt; tags will break the page</li>
+          <li>D) It makes styling easier</li>
+        </ul>
+        <p style="color:#86efac;font-size:13px;margin-top:12px"><strong>Answer: B</strong> – &lt;main&gt; identifies the primary content, which should be unique per page.</p>
+      </div>
+
+      <div class="question">
+        <h2>Question 5: Give two reasons semantic HTML improves SEO.</h2>
+        <p style="color:var(--muted);font-size:15px;margin-top:12px">
+          <strong>Sample Answer:</strong><br>
+          1. <strong>Better structure parsing:</strong> Search engines can better understand the hierarchy and importance of content.<br>
+          2. <strong>Improved accessibility:</strong> Screen readers and assistive tech provide better navigation, which search engines reward.
+        </p>
+      </div>
+    </div>
+
+    <div class="card nav-home">
+      <p style="color:var(--muted);margin-bottom:20px">Great work! Review the lecture slides if you need more clarity.</p>
+      <a href="../index.html" class="btn">🏠 Back to Home</a>
+      <a href="index.html" class="btn" style="margin-left:12px">📚 Week 2 Lecture</a>
+    </div>
+  </div>
+
+  <script>
+    // Simple interactive quiz - students can click options
+    const options = document.querySelectorAll('.options li');
+    options.forEach(opt => {
+      opt.addEventListener('click', function() {
+        // Remove selection from siblings
+        this.parentElement.querySelectorAll('li').forEach(li => {
+          li.style.background = 'rgba(255,255,255,0.04)';
+          li.style.borderColor = 'rgba(255,255,255,0.08)';
+        });
+        // Highlight selected
+        this.style.background = 'rgba(59,130,246,0.2)';
+        this.style.borderColor = 'rgba(59,130,246,0.5)';
+      });
+    });
+
+    console.log('%c📝 Week 2 Quiz', 'color: #ff8c00; font-size: 18px; font-weight: bold;');
+    console.log('Click on options to select your answers. Scroll down to see the correct answers!');
+  </script>
+</body>
+</html>
+

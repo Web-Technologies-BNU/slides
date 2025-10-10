@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 3 – Styling for Impact with CSS (Interactive)</title>
+  <!-- Google Fonts for demo (students can swap) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link id="gfont-link" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Inter:wght@300;400;600&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --brand:#6c63ff;
+      --brand-2:#ffd166;
+      --ink:#222;
+      --bg:#f7f7fb;
+      --card:#fff;
+      --muted:#6b7280;
+      --ok:#16a34a;
+      --warn:#ea580c;
+      --danger:#dc2626;
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;}
+    body{
+      font-family:Poppins,Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink);
+      background:linear-gradient(180deg,#fafafe 0%, #f2f3ff 60%, #eef1ff 100%);
+    }
+    .deck{display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
+    header{
+      position:sticky;top:0;z-index:5;background:#ffffffb0;backdrop-filter:saturate(1.2) blur(6px);
+      border-bottom:1px solid #e6e6f9;display:flex;align-items:center;gap:16px;padding:12px 20px
+    }
+    header h1{font-size:18px;margin:0;font-weight:600}
+    header .tag{background:var(--brand);color:#fff;padding:6px 10px;border-radius:999px;font-size:12px}
+
+    main{padding:20px;}
+    .slide{display:none;animation:fade .45s ease}
+    .slide.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+    .nav{display:flex;justify-content:space-between;gap:8px;padding:16px 20px}
+    .nav button{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer}
+    .nav button.secondary{background:#e9e9ff;color:#2b2b66}
+
+    .grid{display:grid;gap:16px}
+    .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:900px){.cols-2{grid-template-columns:1fr}}
+
+    .card{background:var(--card);border:1px solid #ececff;border-radius:var(--radius);padding:18px;box-shadow:0 6px 18px -10px rgba(52,64,199,.25)}
+    .card h2{margin-top:0}
+    .muted{color:var(--muted)}
+    code,kbd{background:#111;color:#00ff90;border-radius:8px;padding:2px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .codebox{background:#0b1022;color:#d4ffe9;border:1px solid #172554;border-radius:12px;padding:14px;white-space:pre;overflow:auto}
+    .editor{width:100%;min-height:140px;border:1px solid #d8d8ff;border-radius:12px;padding:10px;font-family:ui-monospace,monospace;background:#fbfbff}
+
+    /* Interactive demo scaffolding */
+    .demo-area{display:grid;gap:12px}
+    .preview{background:#fff;border:1px dashed #c7c7ff;border-radius:12px;padding:16px;min-height:120px;display:grid;place-items:center}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px}
+    .toolbar select,.toolbar button,.toolbar input[type="color"]{border:1px solid #d8d8ff;border-radius:10px;padding:8px 10px;background:#fff;font-weight:600}
+
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#edf2ff;color:#2b2b66;border:1px solid #dbe2ff;padding:8px 12px;border-radius:999px}
+
+    .resume{max-width:800px;margin-inline:auto}
+    .resume .resume-card{border:1px solid #eaeaff;border-radius:16px;padding:22px;background:#fff}
+    .hint{font-size:13px;color:#6166a6}
+
+    .kbd{border:1px solid #cfd0ff;border-bottom-width:3px;border-radius:8px;padding:3px 6px;background:#fff}
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header>
+      <span class="tag">Week 3</span>
+      <h1>Styling for Impact with CSS · The Business of Branding · Box Model · DevTools · Styled Resume</h1>
+      <a href="../index.html" style="margin-left:auto;color:#6c63ff;text-decoration:none;font-size:14px;font-weight:600;padding:8px 14px;background:#e9e9ff;border-radius:10px;transition:all .2s ease" onmouseover="this.style.background='#d8d8ff'" onmouseout="this.style.background='#e9e9ff'">🏠 Back to Home</a>
+    </header>
+
+    <main>
+      <!-- Slide 1 -->
+      <section class="slide active" data-slide="1">
+        <div class="grid cols-2">
+          <div class="card">
+            <h2>🎨 What we'll do today</h2>
+            <ul>
+              <li>Connect <b>brand thinking</b> to CSS decisions</li>
+              <li>Review <b>selectors</b> & the <b>Box Model</b></li>
+              <li>Use <b>DevTools</b> to tweak styles live</li>
+              <li>Build a <b>Styled Resume Page</b></li>
+            </ul>
+            <p class="muted">Tip: Keep Chrome DevTools open (Right‑click → Inspect). You'll learn faster.</p>
+          </div>
+          <div class="card">
+            <h2>🧠 Branding = Consistency</h2>
+            <p>Decide and stick to: <b>colors</b>, <b>fonts</b>, <b>spacing</b>, <b>shapes</b>, and <b>tone</b>.</p>
+            <div class="pill">Deliverable today: a resume that <b>looks</b> like a brand, not a default page.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: AI prompt -->
+      <section class="slide" data-slide="2">
+        <div class="card">
+          <h2>🤖 Use AI Design Tools (Lovable, Canva AI) to Brainstorm</h2>
+          <p>Copy–paste a prompt like this into Lovable/Canva AI and extract colors & typography:</p>
+          <div class="codebox">Prompt:
+Create a minimal, modern personal brand for a front‑end developer portfolio. Provide:
+- Primary + secondary color (hex)
+- Accent color (hex)
+- Two Google Fonts (heading/body) with weights
+- Button style guidelines (radius, shadow)
+- Example hero section moodboard</div>
+          <p class="hint">Then, implement those choices in CSS below.</p>
+        </div>
+      </section>
+
+      <!-- Slide 3: CSS Fundamentals quick demo -->
+      <section class="slide" data-slide="3">
+        <div class="grid cols-2">
+          <div class="card">
+            <h2>🧱 CSS Fundamentals</h2>
+            <ul>
+              <li><b>Selectors</b>: element, class, id, attribute</li>
+              <li><b>Specificity</b>: id &gt; class &gt; element</li>
+              <li><b>Cascade</b>: later rules override earlier ones (if equally specific)</li>
+            </ul>
+            <div class="codebox">p { color: royalblue; font-size: 18px; text-align: center; }</div>
+          </div>
+          <div class="card demo-area">
+            <div class="toolbar">
+              <button id="demo-apply-1">Apply Demo Styles</button>
+              <button id="demo-reset-1" class="secondary">Reset</button>
+            </div>
+            <div class="preview" id="demo1">
+              <p>Hello, I’m learning CSS! 🎯</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Box Model visual -->
+      <section class="slide" data-slide="4">
+        <div class="grid cols-2">
+          <div class="card">
+            <h2>📦 Box Model Essentials</h2>
+            <p>Every element is a box with <b>content → padding → border → margin</b>.</p>
+            <div class="codebox">.demo-box {
+  margin: 16px;         /* outside spacing */
+  padding: 18px;        /* inside spacing */
+  border: 3px solid #7c3aed; /* outline */
+  background: #faf5ff;
+}</div>
+            <p class="hint">Use DevTools &gt; Layout panel to see it live.</p>
+          </div>
+          <div class="card demo-area">
+            <div class="toolbar">
+              <label>Padding <input id="pad" type="range" min="0" max="64" value="18"/></label>
+              <label>Margin <input id="mar" type="range" min="0" max="64" value="16"/></label>
+              <label>Border <input id="bor" type="range" min="0" max="12" value="3"/></label>
+              <input id="boxColor" type="color" value="#7c3aed" />
+            </div>
+            <div class="preview" id="boxPreview" style="width:100%">
+              <div id="demoBox" class="demo-box" style="margin:16px;padding:18px;border:3px solid #7c3aed;background:#faf5ff;border-radius:12px">This is the box. Adjust controls to feel the model.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Centering + Font Switcher -->
+      <section class="slide" data-slide="5">
+        <div class="card">
+          <h2>🎯 Centering & Typography (Live)</h2>
+          <div class="toolbar">
+            <label>Center with
+              <select id="centerMode">
+                <option value="none">None</option>
+                <option value="margin">margin: auto</option>
+                <option value="flex">Flexbox</option>
+                <option value="grid">CSS Grid</option>
+              </select>
+            </label>
+            <label>Heading Font
+              <select id="fontHead">
+                <option value="Poppins">Poppins</option>
+                <option value="Inter">Inter</option>
+                <option value="Merriweather">Merriweather</option>
+                <option value="Georgia, serif">Georgia (system)</option>
+                <option value="Arial, Helvetica, sans-serif">Arial (system)</option>
+              </select>
+            </label>
+            <label>Body Font
+              <select id="fontBody">
+                <option value="Inter">Inter</option>
+                <option value="Poppins">Poppins</option>
+                <option value="Merriweather">Merriweather</option>
+                <option value="Georgia, serif">Georgia (system)</option>
+                <option value="Arial, Helvetica, sans-serif">Arial (system)</option>
+              </select>
+            </label>
+            <label>Brand Color <input type="color" id="brandColor" value="#6c63ff"/></label>
+          </div>
+          <div class="preview" id="centerStage" style="height:220px;padding:16px;border-radius:16px;border:1px dashed #c7c7ff">
+            <div id="centerBox" style="width:220px;height:120px;background:#6c63ff;color:#fff;border-radius:14px;display:grid;place-items:center;font-weight:700">Brand Box</div>
+          </div>
+          <p class="hint">No document.write, no intrusive popups. Pure CSS toggles—robust and safe.</p>
+        </div>
+      </section>
+
+      <!-- Slide 6: Live CSS Editor applied to a Resume preview -->
+      <section class="slide" data-slide="6">
+        <div class="grid cols-2 resume">
+          <div class="card">
+            <h2>🧑‍💼 Classwork – Styled Resume Page</h2>
+            <ol>
+              <li>Paste/select your brand colors + fonts from AI output.</li>
+              <li>Edit the CSS (left) and resume HTML (left bottom).</li>
+              <li>See the live preview (right). Use DevTools to inspect.</li>
+            </ol>
+            <div class="pill">Goal: ship a resume that <b>looks branded</b> and communicates clearly.</div>
+          </div>
+          <div class="card">
+            <h3>How to test like a pro</h3>
+            <ul>
+              <li>Open <span class="kbd">⌥⌘I</span> (Mac) / <span class="kbd">Ctrl+Shift+I</span> (Win) → Elements → Styles</li>
+              <li>Toggle hover states, adjust padding, check mobile via <b>Device Toolbar</b></li>
+              <li>Run Lighthouse (Audits) for basic SEO/Accessibility hints</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid cols-2" style="margin-top:16px">
+          <div class="card">
+            <h3>🎛️ CSS (editable)</h3>
+<textarea id="cssEditor" class="editor">:root{
+  --brand:#6c63ff;
+  --ink:#1f2937;
+  --paper:#ffffff;
+  --bg:#f7f7fb;
+}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);}
+.resume-wrap{max-width:760px;margin:24px auto;background:var(--paper);border:1px solid #ececff;border-radius:16px;padding:26px}
+.resume-wrap h1{font-family:Poppins,system-ui,sans-serif;margin:0 0 8px;font-size:28px;color:#111827}
+.resume-wrap .title{color:var(--brand);font-weight:700}
+.resume-wrap .section{margin-top:20px;padding-top:10px;border-top:1px dashed #e5e7eb}
+.resume-wrap .skill{display:inline-block;margin:6px 6px 0 0;padding:6px 10px;border-radius:999px;border:1px solid #dbeafe;background:#eff6ff;color:#1e3a8a;font-weight:600}
+.resume-wrap a{color:var(--brand);text-decoration:none;border-bottom:1px solid transparent}
+.resume-wrap a:hover{border-bottom-color:var(--brand)}
+</textarea>
+            <div style="margin-top:8px" class="toolbar"><button id="applyCss">Apply CSS</button><button id="resetCss" class="secondary">Reset</button></div>
+
+            <h3 style="margin-top:18px">🧾 HTML (editable)</h3>
+<textarea id="htmlEditor" class="editor"><div class="resume-wrap">
+  <h1>Hamad Rakhshani <span class="title">· Front‑End Developer</span></h1>
+  <p>📍 Lahore · <a href="#">hamad@example.com</a> · <a href="#">portfolio.example</a></p>
+  <div class="section">
+    <h3>About</h3>
+    <p>Curious builder who turns brand guidelines into snappy, accessible UI. Loves clean CSS and performance.</p>
+  </div>
+  <div class="section">
+    <h3>Skills</h3>
+    <span class="skill">HTML5</span><span class="skill">CSS3</span><span class="skill">JavaScript</span><span class="skill">React</span>
+  </div>
+  <div class="section">
+    <h3>Education</h3>
+    <p>B.S. Computer Science – 2024</p>
+  </div>
+</div></textarea>
+            <div style="margin-top:8px" class="toolbar"><button id="applyHtml">Apply HTML</button></div>
+          </div>
+
+          <div class="card">
+            <h3>🖥️ Live Preview</h3>
+            <div class="preview" style="min-height:460px;align-items:stretch">
+              <!-- Inline frame keeps the live CSS sandboxed and avoids global conflicts -->
+              <iframe id="previewFrame" title="Resume Preview" style="width:100%;height:100%;min-height:440px;border:0;border-radius:12px;background:white"></iframe>
+            </div>
+            <p class="hint">Use the Device Toolbar in DevTools to check mobile layout.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Wrap up -->
+      <section class="slide" data-slide="7">
+        <div class="card">
+          <h2>✨ Wrap Up</h2>
+          <ul>
+            <li>Brand choices → CSS tokens (colors, fonts, spacing)</li>
+            <li>Box Model mastery = pixel‑perfect confidence</li>
+            <li>DevTools is your superpower</li>
+          </ul>
+          <p class="muted">Next: Layouts with Flexbox & Grid → Responsive components.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="nav">
+      <div>
+        <button class="secondary" id="prevBtn">← Back</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="muted">Slide <span id="slideNum">1</span>/7</span>
+        <button id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Slide navigation ---
+    const slides=[...document.querySelectorAll('.slide')];
+    let idx=0;
+    const slideNumEl=document.getElementById('slideNum');
+    function show(i){slides.forEach(s=>s.classList.remove('active'));slides[i].classList.add('active');slideNumEl.textContent=i+1;idx=i}
+    document.getElementById('nextBtn').addEventListener('click',()=>{if(idx<slides.length-1) show(idx+1)});
+    document.getElementById('prevBtn').addEventListener('click',()=>{if(idx>0) show(idx-1)});
+
+    // --- Demo 1 apply/reset ---
+    const d1=document.getElementById('demo1');
+    const apply1=document.getElementById('demo-apply-1');
+    const reset1=document.getElementById('demo-reset-1');
+    const backupDemo1=d1.innerHTML;
+    apply1.addEventListener('click',()=>{
+      const p=d1.querySelector('p');
+      p.style.color='royalblue';
+      p.style.fontSize='22px';
+      p.style.textAlign='center';
+      p.textContent='Styled 🎉 – selector → property: value;';
+    });
+    reset1.addEventListener('click',()=>{d1.innerHTML=backupDemo1});
+
+    // --- Box model controls ---
+    const box=document.getElementById('demoBox');
+    const pad=document.getElementById('pad');
+    const mar=document.getElementById('mar');
+    const bor=document.getElementById('bor');
+    const boxColor=document.getElementById('boxColor');
+    function updBox(){
+      box.style.padding=pad.value+'px';
+      box.style.margin=mar.value+'px';
+      box.style.borderWidth=bor.value+'px';
+      box.style.borderColor=boxColor.value;
+    }
+    [pad,mar,bor,boxColor].forEach(el=>el.addEventListener('input',updBox));
+
+    // --- Centering + Font switcher ---
+    const centerStage=document.getElementById('centerStage');
+    const centerBox=document.getElementById('centerBox');
+    const centerMode=document.getElementById('centerMode');
+    const fontHead=document.getElementById('fontHead');
+    const fontBody=document.getElementById('fontBody');
+    const brandColor=document.getElementById('brandColor');
+
+    function applyCenter(){
+      const mode=centerMode.value;
+      centerStage.style.display='block';
+      centerStage.style.justifyContent='';
+      centerStage.style.alignItems='';
+      centerStage.style.placeItems='';
+      centerBox.style.margin='';
+
+      if(mode==='margin'){
+        centerStage.style.display='block';
+        centerBox.style.margin='0 auto';
+      } else if(mode==='flex'){
+        centerStage.style.display='flex';
+        centerStage.style.justifyContent='center';
+        centerStage.style.alignItems='center';
+      } else if(mode==='grid'){
+        centerStage.style.display='grid';
+        centerStage.style.placeItems='center';
+      } else {
+        centerStage.style.display='block';
+      }
+    }
+    function applyFonts(){
+      document.body.style.fontFamily=fontBody.value;
+      // Simulate heading font by updating the box font
+      centerBox.style.fontFamily=fontHead.value;
+    }
+    function applyBrand(){
+      centerBox.style.background=brandColor.value;
+    }
+    [centerMode,fontHead,fontBody].forEach(el=>el.addEventListener('change',()=>{applyCenter();applyFonts()}));
+    brandColor.addEventListener('input',applyBrand);
+    applyCenter();applyFonts();applyBrand();
+
+    // --- Sandbox preview (iframe) for resume ---
+    const iframe=document.getElementById('previewFrame');
+    const cssEditor=document.getElementById('cssEditor');
+    const htmlEditor=document.getElementById('htmlEditor');
+    const applyCssBtn=document.getElementById('applyCss');
+    const resetCssBtn=document.getElementById('resetCss');
+    const applyHtmlBtn=document.getElementById('applyHtml');
+
+    const defaultCSS=cssEditor.value;
+    const defaultHTML=htmlEditor.value;
+
+    function writePreview(html, css){
+      const doc=iframe.contentDocument;
+      const fontLink=document.getElementById('gfont-link')?.href || '';
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>${fontLink?`<link rel=\"stylesheet\" href=\"${fontLink}\">`:''}<style>${css}</style></head><body>${html}</body></html>`);
+      doc.close();
+    }
+    function applyCss(){ writePreview(htmlEditor.value, cssEditor.value); }
+    function applyHtml(){ writePreview(htmlEditor.value, cssEditor.value); }
+
+    applyCssBtn.addEventListener('click',applyCss);
+    applyHtmlBtn.addEventListener('click',applyHtml);
+    resetCssBtn.addEventListener('click',()=>{ cssEditor.value=defaultCSS; applyCss(); });
+
+    // Initial render
+    writePreview(defaultHTML, defaultCSS);
+  </script>
+</body>
+</html>

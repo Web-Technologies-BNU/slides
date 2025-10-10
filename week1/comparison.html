@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fixing Broken HTML — John Cena (Workshop Slides)</title>
+  <style>
+    :root{
+      --bg:#0e0f12; --card:#151821; --muted:#94a3b8; --text:#e6eaf2; --accent:#ff8c00; --blue:#3b82f6; --code:#0b0d12; --ok:#86efac; --bad:#fca5a5; --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 800px at 100% 0,#141827 0%,var(--bg) 55%);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;overflow:hidden}
+    .deck{height:100%;display:grid;grid-template-rows:1fr auto}
+    .slide{display:none;height:100%;padding:56px 64px}
+    .slide.active{display:block}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.35);padding:32px}
+    h1{margin:0 0 12px;font-size:40px;letter-spacing:.2px}
+    h2{margin:0 0 10px;font-size:28px;color:#f8fafc}
+    h3{margin:0 0 8px;font-size:20px;color:#dbeafe}
+    p{margin:6px 0 14px;color:var(--muted)}
+    ul{margin:0 0 8px 22px}
+    ol{margin:0 0 8px 22px}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(59,130,246,.14);color:#bfdbfe;border:1px solid rgba(59,130,246,.4);font-weight:700;font-size:12px}
+    .accent{color:var(--accent);font-weight:700}
+    .ok{color:var(--ok);font-weight:700}
+    .bad{color:var(--bad);font-weight:700}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(12,1fr)}
+    .col-6{grid-column:span 6}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    pre{margin:14px 0;background:var(--code);padding:16px;border-radius:12px;overflow:auto;border:1px solid rgba(255,255,255,.08)}
+    code{color:#d1e9ff;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:14px}
+    .bar{position:fixed;left:24px;right:24px;bottom:24px;display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:14px;background:rgba(21,24,33,.7);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(8px)}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#1b2030,#141824);color:#eef2ff;font-weight:600;cursor:pointer}
+    .btn:hover{transform:translateY(-1px)}
+    .progress{height:6px;flex:1;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden}
+    .progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--blue))}
+    .kbd{display:inline-block;padding:2px 8px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);font-weight:600;color:#f1f5f9;font-size:14px}
+    .callout{border-left:4px solid var(--accent);padding:8px 12px;border-radius:8px;background:rgba(255,140,0,.06)}
+  </style>
+</head>
+<body>
+  <div class="deck">
+
+    <!-- Slide 1: Title -->
+    <section class="slide active">
+      <div class="card">
+        <span class="badge">Workshop</span>
+        <h1>Fixing Broken <span class="accent">HTML</span> — John Cena Fan Page</h1>
+        <p>Instructor: <strong>Hamad Rakhshani</strong> · Week 1</p>
+        <ul>
+          <li>Scan for common HTML mistakes</li>
+          <li>Fix step by step (manually first)</li>
+          <li>Compare with a validated solution + ChatGPT prompt</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 2: Activity plan -->
+    <section class="slide">
+      <div class="card">
+        <h2>Activity plan (15–25 min)</h2>
+        <ol>
+          <li>Open <code>broken.html</code> and read it top → bottom</li>
+          <li>List every error you spot (syntax + semantics)</li>
+          <li>Fix them in your editor, one by one</li>
+          <li>Only then, paste into ChatGPT to validate your fix</li>
+        </ol>
+        <div class="callout"><strong>Tip:</strong> Refresh the browser after each small change to see progress.</div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Broken snippet preview -->
+    <section class="slide">
+      <div class="card">
+        <h2>Broken snippet (preview)</h2>
+        <pre><code>&lt;DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt; John Cena Fan Page
+  &lt;meta charset="utf-8"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;head&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;/head&gt;
+
+  &lt;h1 id="title"&gt;Welcome to John Cena Page&lt;/h1&gt;
+  &lt;h2 id="title"&gt;About John&lt;/h2&gt;
+
+  &lt;p&gt;&lt;strong&gt;Hi, I am John Cena.&lt;/p&gt;&lt;/strong&gt;
+  &lt;p&gt;I like wrestling, movies and memes.
+
+  &lt;img src="cena.jpg" width=300&gt;
+
+  &lt;a href="htp://wwe.com" target="blank"&gt;Official WWE Page&lt;/a&gt;
+
+  &lt;ul&gt;
+    &lt;li&gt;Champion&lt;li&gt;Actor&lt;/li&gt;
+    &lt;li&gt;Philanthropist
+  &lt;/ul&gt;
+
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;© 2025 John Cena
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 4: Checklist of issues -->
+    <section class="slide">
+      <div class="card">
+        <h2>Checklist: find these issues</h2>
+        <ul>
+          <li class="bad">Invalid DOCTYPE</li>
+          <li class="bad">Unclosed &lt;title&gt; / misplaced tags in &lt;head&gt;</li>
+          <li class="bad">Extra &lt;head&gt; inside &lt;body&gt;</li>
+          <li class="bad">Duplicate <code>id</code> values</li>
+          <li class="bad">Mis-nested &amp; unclosed tags (<code>&lt;p&gt;</code>, <code>&lt;strong&gt;</code>)</li>
+          <li class="bad">Image missing <code>alt</code>, unquoted width</li>
+          <li class="bad">Broken link protocol + wrong <code>target</code></li>
+          <li class="bad">List items not closed</li>
+          <li class="bad">Stylesheet link inside body</li>
+          <li class="bad">Footer not closed</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Step Slides: Before vs After (a couple combined per slide to keep compact) -->
+    <section class="slide">
+      <div class="card">
+        <h2>Step 1: Fix the DOCTYPE</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;DOCTYPE html&gt;</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
+            <p class="ok">Ensures standards mode rendering.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="card">
+        <h2>Step 2: Clean up the &lt;head&gt;</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;head&gt;
+  &lt;title&gt; John Cena Fan Page
+  &lt;meta charset="utf-8"&gt;
+&lt;/head&gt;
+...
+&lt;body&gt;
+  &lt;head&gt; &lt;meta name="viewport" ... &gt; &lt;/head&gt;</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;head&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+  &lt;title&gt;John Cena Fan Page&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;</code></pre>
+            <p class="ok">All metadata + styles sit in the <code>&lt;head&gt;</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="card">
+        <h2>Step 3: Headings & IDs</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;h1 id="title"&gt;Welcome...&lt;/h1&gt;
+&lt;h2 id="title"&gt;About John&lt;/h2&gt;</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;h1 id="title"&gt;Welcome...&lt;/h1&gt;
+&lt;h2&gt;About John&lt;/h2&gt;</code></pre>
+            <p class="ok">Use a unique <code>id</code> or none for secondary headings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="card">
+        <h2>Step 4: Fix nesting & paragraphs</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;p&gt;&lt;strong&gt;Hi, I am John Cena.&lt;/p&gt;&lt;/strong&gt;</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;p&gt;&lt;strong&gt;Hi, I am John Cena.&lt;/strong&gt;&lt;/p&gt;</code></pre>
+            <p class="ok">Tags must close in the reverse order they open.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="card">
+        <h2>Step 5: Image & link attributes</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;img src="cena.jpg" width=300&gt;
+&lt;a href="htp://wwe.com" target="blank"&gt;Official WWE Page&lt;/a&gt;</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;img src="https://upload.wikimedia.org/wikipedia/commons/5/59/John_Cena_2012.jpg" alt="Photo of John Cena" width="300" /&gt;
+&lt;a href="https://www.wwe.com/superstars/john-cena" target="_blank" rel="noopener noreferrer"&gt;Official WWE Page&lt;/a&gt;</code></pre>
+            <p class="ok">Add <code>alt</code>, quote numeric attributes, use <code>https</code>, and safe target.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="card">
+        <h2>Step 6: Lists & closing tags</h2>
+        <div class="two-col">
+          <div>
+            <h3>Before</h3>
+            <pre><code>&lt;ul&gt;
+  &lt;li&gt;Champion&lt;li&gt;Actor&lt;/li&gt;
+  &lt;li&gt;Philanthropist
+&lt;/ul&gt;
+...
+&lt;footer&gt;
+  &lt;p&gt;© 2025 John Cena</code></pre>
+          </div>
+          <div>
+            <h3>After</h3>
+            <pre><code>&lt;ul&gt;
+  &lt;li&gt;Champion&lt;/li&gt;
+  &lt;li&gt;Actor&lt;/li&gt;
+  &lt;li&gt;Philanthropist&lt;/li&gt;
+&lt;/ul&gt;
+...
+&lt;footer&gt;
+  &lt;p&gt;© 2025 John Cena Fan Page&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+            <p class="ok">Every opened tag should be properly closed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final fixed code -->
+    <section class="slide">
+      <div class="card">
+        <h2>Final fixed HTML</h2>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+  &lt;title&gt;John Cena Fan Page&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1 id="title"&gt;Welcome to John Cena’s Page&lt;/h1&gt;
+  &lt;h2&gt;About John&lt;/h2&gt;
+
+  &lt;p&gt;&lt;strong&gt;Hi, I am John Cena.&lt;/strong&gt;&lt;/p&gt;
+  &lt;p&gt;I like wrestling, movies, and memes.&lt;/p&gt;
+
+  &lt;img src="https://upload.wikimedia.org/wikipedia/commons/5/59/John_Cena_2012.jpg" alt="Photo of John Cena" width="300" /&gt;
+
+  &lt;p&gt;
+    &lt;a href="https://www.wwe.com/superstars/john-cena" target="_blank" rel="noopener noreferrer"&gt;
+      Official WWE Page
+    &lt;/a&gt;
+  &lt;/p&gt;
+
+  &lt;ul&gt;
+    &lt;li&gt;Champion&lt;/li&gt;
+    &lt;li&gt;Actor&lt;/li&gt;
+    &lt;li&gt;Philanthropist&lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;© 2025 John Cena Fan Page&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide: Validate with ChatGPT -->
+    <section class="slide">
+      <div class="card">
+        <h2>Validate with ChatGPT (optional)</h2>
+        <div class="two-col">
+          <div>
+            <ul>
+              <li>Paste your fixed code and ask for HTML validation.</li>
+              <li>Compare suggestions with your manual fix.</li>
+              <li>Be ready to explain any differences.</li>
+            </ul>
+          </div>
+          <div>
+            <pre><code>Fix HTML validity and semantics for this page:
+- Proper &lt;!DOCTYPE html&gt;, &lt;head&gt; and &lt;body&gt;
+- Close and properly nest all tags
+- Ensure unique ids; add alt text
+- Move CSS &lt;link&gt; to &lt;head&gt;
+- Use https:// and target="_blank" + rel="noopener noreferrer"
+
+&lt;PASTE YOUR HTML HERE&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide: Quick quiz -->
+    <section class="slide">
+      <div class="card">
+        <h2>Quick quiz (2 mins)</h2>
+        <ol>
+          <li>Where should <code>&lt;link rel="stylesheet"&gt;</code> live?</li>
+          <li>Why is <code>alt</code> required on <code>&lt;img&gt;</code>?</li>
+          <li>What’s wrong with <code>target="blank"</code>?</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <div class="bar">
+      <button id="prev" class="btn" title="Previous (←)">◀ Prev</button>
+      <button id="next" class="btn" title="Next (→)">Next ▶</button>
+      <div class="progress"><i id="prog"></i></div>
+      <span class="kbd">←</span>
+      <span class="kbd">→</span>
+      <a href="../index.html" class="btn" style="text-decoration:none;color:#eef2ff" title="Back to Home">🏠 Home</a>
+    </div>
+  </div>
+
+  <script>
+    const slides=[...document.querySelectorAll('.slide')];
+    const prog=document.getElementById('prog');
+    let i=0; function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('active',k===i));prog.style.width=((i+1)/slides.length*100)+'%'}
+    document.getElementById('next').onclick=()=>show(i+1);
+    document.getElementById('prev').onclick=()=>show(i-1);
+    window.addEventListener('keydown',e=>{if(e.key==='ArrowRight')show(i+1);if(e.key==='ArrowLeft')show(i-1)});
+    show(0);
+  </script>
+</body>
+</html>

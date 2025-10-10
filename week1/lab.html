@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 1 — HTML Setup & Page Anatomy</title>
+  <style>
+    :root {
+      --bg: #0e0f12;
+      --card: #151821;
+      --muted: #94a3b8;
+      --text: #e6eaf2;
+      --accent: #ff8c00;
+      --accent-2: #3b82f6;
+      --code-bg: #0b0d12;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 100% 0, #141827 0%, var(--bg) 55%);
+      overflow: hidden;
+    }
+    .deck {
+      height: 100%;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+    .slide {
+      width: 100%; height: 100%;
+      padding: 56px 64px;
+      display: none;
+      position: relative;
+    }
+    .slide.active { display: block; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      padding: 32px;
+    }
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 40px; letter-spacing: 0.2px; }
+    h2 { font-size: 28px; color: #f8fafc; }
+    h3 { font-size: 20px; color: #dbeafe; }
+    p { color: var(--muted); margin: 6px 0 14px; }
+    ul { margin: 0 0 8px 22px; }
+
+    .kbd {
+      display:inline-block; padding:2px 8px; border-radius:8px;
+      border:1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06);
+      font-weight: 600; color:#f1f5f9; font-size: 14px;
+    }
+    .note { color:#cbd5e1; font-style: italic; }
+
+    pre { margin: 14px 0; background: var(--code-bg); padding: 16px; border-radius: 12px; overflow:auto; border:1px solid rgba(255,255,255,0.08); }
+    code { color:#d1e9ff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 14px; }
+    .grid { display:grid; gap:18px; grid-template-columns: repeat(12, 1fr); }
+    .col-6 { grid-column: span 6; }
+    .col-7 { grid-column: span 7; }
+    .col-5 { grid-column: span 5; }
+
+    .bar {
+      position: absolute; inset-inline: 24px; bottom: 24px; display:flex; align-items:center; justify-content: space-between;
+      padding: 12px 16px; border-radius: 14px; background: rgba(21,24,33,0.7); border:1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+    }
+    .controls { display:flex; gap:8px; }
+    .btn {
+      padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, #1b2030, #141824);
+      color: #eef2ff; font-weight: 600; cursor: pointer; letter-spacing: .2px;
+    }
+    .btn:hover { transform: translateY(-1px); background: linear-gradient(180deg,#23283a,#161b28); }
+    .btn:active { transform: translateY(0); }
+
+    .badge { display:inline-block; padding:6px 10px; border-radius: 999px; background: rgba(59,130,246,.14); color:#bfdbfe; border: 1px solid rgba(59,130,246,.4); font-weight:700; font-size: 12px; }
+    .accent { color: var(--accent); font-weight: 700; }
+    .hl { color: #86efac; font-weight: 700; }
+
+    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    img.demo { width:100%; border-radius: 12px; border: 1px solid rgba(255,255,255,.08); }
+
+    .progress { height: 6px; flex:1; margin:0 12px; border-radius: 999px; background: rgba(255,255,255,0.1); overflow:hidden; }
+    .progress > i { display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    
+    <!-- Slide 1: Title -->
+    <section class="slide active">
+      <div class="card">
+        <span class="badge">Week 1 • Class 1</span>
+        <h1>Set up your first <span class="accent">HTML</span> page</h1>
+        <p>Instructor: <strong>Hamad Rakhshani</strong> · Fall 2025</p>
+        <ul>
+          <li>What is a webpage? Quick mental model.</li>
+          <li>Folder + file setup on your laptop.</li>
+          <li>Build a first page and open it in the browser.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 2: Mental Model -->
+    <section class="slide">
+      <div class="card">
+        <h2>How the web works (in 20 seconds)</h2>
+        <div class="grid">
+          <div class="col-6">
+            <p><span class="hl">Browser</span> (Chrome, Safari) sends a request → <span class="hl">Server</span> sends back files (<code>HTML</code>, <code>CSS</code>, <code>JS</code>, images).</p>
+            <p class="note">For now, we’ll open our file <em>locally</em> by double‑clicking it.</p>
+          </div>
+          <div class="col-6">
+            <pre><code>Request:  GET /index.html
+Response: 200 OK (HTML + CSS + JS)</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Setup -->
+    <section class="slide">
+      <div class="card">
+        <h2>Setup (5 minutes)</h2>
+        <ol>
+          <li>Create a folder: <code>web101</code></li>
+          <li>Open in VS Code (or any editor)</li>
+          <li>Create a file: <code>index.html</code></li>
+          <li>Paste the starter template (next slide)</li>
+          <li>Double‑click <code>index.html</code> to open in your browser</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Slide 4: Starter Template -->
+    <section class="slide">
+      <div class="card">
+        <h2>Starter template</h2>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+  &lt;style&gt;/* quick styles go here */ body { font-family: system-ui; } &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, world!&lt;/h1&gt;
+  &lt;p&gt;This is my first HTML page.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p class="note">Save and refresh the browser tab to see changes.</p>
+      </div>
+    </section>
+
+    <!-- Slide 5: Page Anatomy -->
+    <section class="slide">
+      <div class="card">
+        <h2>Page anatomy: <code>&lt;head&gt;</code> vs <code>&lt;body&gt;</code></h2>
+        <div class="two-col">
+          <div>
+            <h3>&lt;head&gt;</h3>
+            <ul>
+              <li><code>&lt;meta&gt;</code> — settings (charset, viewport)</li>
+              <li><code>&lt;title&gt;</code> — tab title</li>
+              <li><code>&lt;style&gt;</code> or <code>&lt;link&gt;</code> — CSS</li>
+              <li><code>&lt;script&gt;</code> — optional JavaScript includes</li>
+            </ul>
+          </div>
+          <div>
+            <h3>&lt;body&gt;</h3>
+            <ul>
+              <li>Visible content: headings, paragraphs, images, links, lists</li>
+              <li>What users actually see and interact with</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Head essentials -->
+    <section class="slide">
+      <div class="card">
+        <h2><code>&lt;head&gt;</code> essentials</h2>
+        <pre><code>&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Page Title&lt;/title&gt;
+  &lt;style&gt;
+    body { font-family: system-ui; margin: 40px; }
+    h1 { color: #0ea5e9; }
+  &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+        <p class="note">Tip: use <code>&lt;style&gt;</code> for quick demos; switch to a separate CSS file later.</p>
+      </div>
+    </section>
+
+    <!-- Slide 7: Body basics -->
+    <section class="slide">
+      <div class="card">
+        <h2><code>&lt;body&gt;</code> basics</h2>
+        <pre><code>&lt;body&gt;
+  &lt;h1&gt;Welcome&lt;/h1&gt;
+  &lt;p&gt;This is a paragraph.&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;One&lt;/li&gt;
+    &lt;li&gt;Two&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 8: Images -->
+    <section class="slide">
+      <div class="card">
+        <h2>Images with <code>&lt;img&gt;</code></h2>
+        <pre><code>&lt;img src="images/logo.png" alt="Company logo" width="200"&gt;</code></pre>
+        <p>
+          <strong>Attributes:</strong> <code>src</code> (path to file), <code>alt</code> (text for screen readers/when image fails),
+          optional <code>width</code>/<code>height</code>.
+        </p>
+        <p class="note">Keep images inside an <code>images/</code> folder for neatness.</p>
+      </div>
+    </section>
+
+    <!-- Slide 9: Links -->
+    <section class="slide">
+      <div class="card">
+        <h2>Links with <code>&lt;a&gt;</code></h2>
+        <pre><code>&lt;a href="https://example.com" target="_blank"&gt;Visit Example&lt;/a&gt;</code></pre>
+        <p>
+          <strong>Attributes:</strong> <code>href</code> (destination), <code>target</code> (<code>_self</code> = same tab, <code>_blank</code> = new tab)
+        </p>
+        <p class="note">Use descriptive link text. Avoid: “click here”. Prefer: “Read our pricing”.</p>
+      </div>
+    </section>
+
+    <!-- Slide 10: Quick Styles -->
+    <section class="slide">
+      <div class="card">
+        <h2>Adding quick styles</h2>
+        <pre><code>&lt;style&gt;
+  body { font-family: system-ui; margin: 40px; background: #f7fafc; }
+  .btn { background: #111827; color:#fff; padding: 10px 14px; border-radius: 8px; }
+&lt;/style&gt;</code></pre>
+        <p>Later: move CSS to <code>styles.css</code> and link it with <code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></p>
+      </div>
+    </section>
+
+    <!-- Slide 11: Mini Exercise -->
+    <section class="slide">
+      <div class="card">
+        <h2>Mini‑exercise (10 minutes)</h2>
+        <ol>
+          <li>Add a heading with your name.</li>
+          <li>Write a short paragraph about you.</li>
+          <li>Add one image and one link to a site you like.</li>
+          <li>Change heading color using <code>&lt;style&gt;</code>.</li>
+        </ol>
+        <p class="note">Save the file and refresh the browser tab to preview.</p>
+      </div>
+    </section>
+
+    <!-- Slide 12: Cheat Sheet -->
+    <section class="slide">
+      <div class="card">
+        <h2>Cheat sheet</h2>
+        <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt; ... &lt;/head&gt;
+&lt;body&gt; ... &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <ul>
+          <li><code>&lt;head&gt;</code>: meta, title, styles, scripts</li>
+          <li><code>&lt;body&gt;</code>: everything visible</li>
+          <li><code>&lt;img&gt;</code>: images with <code>src</code> + <code>alt</code></li>
+          <li><code>&lt;a&gt;</code>: links with <code>href</code></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Slide 13: Class 2 Title -->
+    <section class="slide">
+      <div class="card">
+        <span class="badge">Week 1 • Class 2</span>
+        <h1>From template → resume page</h1>
+        <p>We’ll build a simple resume page with headings, paragraphs, image, and links.</p>
+      </div>
+    </section>
+
+    <!-- Slide 14: Folder Layout -->
+    <section class="slide">
+      <div class="card">
+        <h2>Folder layout</h2>
+        <pre><code>web101/
+  index.html
+  images/
+    headshot.jpg
+  styles.css (optional)
+</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 15: Resume HTML scaffold -->
+    <section class="slide">
+      <div class="card">
+        <h2>Resume scaffold</h2>
+        <pre><code>&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Your Name&lt;/h1&gt;
+    &lt;p&gt;Email · City · Portfolio link&lt;/p&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;h2&gt;Experience&lt;/h2&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Role @ Company — one‑line impact&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;h2&gt;Skills&lt;/h2&gt;
+    &lt;ul&gt;&lt;li&gt;HTML&lt;/li&gt; &lt;li&gt;CSS&lt;/li&gt; &lt;li&gt;JS&lt;/li&gt;&lt;/ul&gt;
+  &lt;/main&gt;
+&lt;/body&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 16: Image + Link in resume -->
+    <section class="slide">
+      <div class="card">
+        <h2>Image + link in resume</h2>
+        <pre><code>&lt;img src="images/headshot.jpg" alt="Your Name headshot" width="140"&gt;
+&lt;p&gt;Portfolio: &lt;a href="https://yourdomain.com" target="_blank"&gt;yourdomain.com&lt;/a&gt;&lt;/p&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 17: Quick styles for resume -->
+    <section class="slide">
+      <div class="card">
+        <h2>Quick styles for resume</h2>
+        <pre><code>&lt;style&gt;
+  body { max-width: 860px; margin: 48px auto; padding: 0 20px; font-family: system-ui; }
+  h1 { color: #22d3ee; margin-bottom: 0; }
+  header p { color: #475569; }
+  h2 { margin-top: 28px; }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Slide 18: DevTools -->
+    <section class="slide">
+      <div class="card">
+        <h2>DevTools: your superpower</h2>
+        <p>Right‑click → Inspect. Edit HTML/CSS live in the Elements/Styles panels. Refresh resets to your file.</p>
+        <p class="note">Shortcut: <span class="kbd">Cmd/Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">I</span></p>
+      </div>
+    </section>
+
+    <!-- Slide 19: Exercise -->
+    <section class="slide">
+      <div class="card">
+        <h2>Exercise (in class)</h2>
+        <ol>
+          <li>Finish your resume page (name, paragraph, image, link).</li>
+          <li>Add one custom style (color or spacing).</li>
+          <li>Show your neighbor. Give one suggestion each.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Slide 20: Wrap & HW -->
+    <section class="slide">
+      <div class="card">
+        <h2>Wrap‑up & homework</h2>
+        <ul>
+          <li>Finish resume page and submit screenshot + code.</li>
+          <li>Optional: create a second page (About) and link it from Home.</li>
+          <li>Bring one question about <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code> next class.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Bottom bar: controls + progress -->
+    <div class="bar">
+      <div class="controls">
+        <button id="prev" class="btn" title="Previous (←)">◀ Prev</button>
+        <button id="next" class="btn" title="Next (→)">Next ▶</button>
+      </div>
+      <div class="progress"><i id="prog"></i></div>
+      <div class="controls">
+        <span class="kbd">←</span>
+        <span class="kbd">→</span>
+        <a href="../index.html" class="btn" style="text-decoration:none;color:#eef2ff;margin-left:8px" title="Back to Home">🏠 Home</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prog = document.getElementById('prog');
+    let i = 0;
+
+    function show(idx){
+      i = Math.max(0, Math.min(slides.length-1, idx));
+      slides.forEach((s, n)=> s.classList.toggle('active', n===i));
+      const pct = ((i+1)/slides.length)*100; prog.style.width = pct + '%';
+    }
+
+    document.getElementById('next').onclick = () => show(i+1);
+    document.getElementById('prev').onclick = () => show(i-1);
+
+    window.addEventListener('keydown', (e)=>{
+      if(e.key==='ArrowRight') show(i+1);
+      if(e.key==='ArrowLeft') show(i-1);
+    });
+
+    // Start on first slide
+    show(0);
+  </script>
+</body>
+</html>
