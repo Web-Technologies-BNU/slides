@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 4 — Class 1: Mobile‑First & Flexbox Foundations</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #12141a;
+      --card: #171a21;
+      --text: #e8eaf2;
+      --muted: #a9b1c1;
+      --brand: #4f46e5;
+      --accent: #22c55e;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --radius: 14px;
+      --gap: 16px;
+      --maxw: 1100px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, #0b0c10 0%, #0e1117 100%);
+      color: var(--text);
+    }
+
+    /* App shell */
+    .app { display: grid; grid-template-rows: auto 1fr auto; min-height: 100dvh; }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(18,20,26,.8); backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .bar { width: min(100% - 2rem, var(--maxw)); margin-inline: auto; display: flex; align-items: center; justify-content: space-between; padding: .85rem 0; }
+    .brand { display: flex; align-items: center; gap: .75rem; font-weight: 800; letter-spacing: .3px; }
+    .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 6px rgba(79,70,229,.15), 0 0 20px var(--brand); }
+    .bar .controls { display: flex; gap: .5rem; align-items: center; }
+    .btn { appearance: none; border: 1px solid rgba(255,255,255,.12); background: #141821; color: var(--text); padding: .55rem .9rem; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .btn:hover { border-color: rgba(255,255,255,.2); }
+    .btn.primary { background: var(--brand); border-color: transparent; }
+    .btn.ghost { background: transparent; }
+
+    main { width: min(100% - 2rem, var(--maxw)); margin-inline: auto; display: grid; gap: 1.25rem; padding: 1.25rem 0 2.5rem; }
+    .slides { position: relative; border: 1px solid rgba(255,255,255,.08); background: var(--panel); border-radius: var(--radius); overflow: clip; box-shadow: var(--shadow); }
+
+    /* Slide deck */
+    .slide { display: none; padding: clamp(16px, 2.5vw, 32px); }
+    .slide.active { display: grid; gap: 18px; }
+    .kicker { color: var(--muted); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; }
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: clamp(1.25rem, 2.6vw + .6rem, 2rem); }
+    h2 { font-size: clamp(1.1rem, 2.2vw + .5rem, 1.6rem); color: #cdd5e1; }
+    p { color: #d8dcef; margin: 0; }
+    .grid { display: grid; gap: var(--gap); }
+    .two { grid-template-columns: 1fr; }
+    @media (min-width: 860px){ .two { grid-template-columns: 1.1fr .9fr; } }
+    .card { background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 12px; padding: 16px; }
+
+    /* Code blocks & toggles */
+    .code { position: relative; background: #0f1420; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; overflow: hidden; }
+    .code pre { margin: 0; padding: 14px; overflow: auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: .9rem; color: #e5e7eb; }
+    .code .toolbar { display: flex; gap: .5rem; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,.08); background: #0b0f17; }
+    .copy { font-size: .8rem; }
+    .tabs { display: flex; gap: 6px; }
+    .tab { font-size: .8rem; padding: .25rem .5rem; border-radius: 8px; border: 1px solid rgba(255,255,255,.12); cursor: pointer; background: transparent; }
+    .tab.active { background: rgba(79,70,229,.18); border-color: rgba(79,70,229,.6); }
+
+    /* Playground */
+    .play { display: grid; gap: var(--gap); }
+    .controls-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+    .field { display: grid; gap: 6px; font-size: .9rem; }
+    .field select, .field input[type="range"], .field input[type="number"]{
+      width: 100%; background: #0b0f17; color: var(--text); border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: .5rem .6rem;
+    }
+
+    .stage { border: 1px dashed rgba(255,255,255,.15); border-radius: 12px; padding: 14px; background: #0c111b; overflow: auto; }
+    .box { background: #1c2333; border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: .8rem; text-align: center; }
+
+    /* Landing skeleton preview */
+    .skeleton { display: grid; gap: 1rem; }
+    .s-header, .s-hero, .s-features, .s-testimonials, .s-footer { background: #0c111b; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 14px; }
+    .s-header .row { display: flex; justify-content: space-between; align-items: center; }
+    .hamburger { padding: .45rem .6rem; border-radius: 8px; border: 1px solid rgba(255,255,255,.16); background: #121827; color: var(--text); }
+    .chip { display: inline-flex; align-items: center; gap: .4rem; padding: .25rem .5rem; background: rgba(79,70,229,.16); color: #c7d2fe; border: 1px solid rgba(79,70,229,.45); border-radius: 999px; font-size: .75rem; }
+
+    .note { color: var(--muted); font-size: .9rem; }
+
+    /* Footer */
+    footer { color: var(--muted); font-size: .85rem; opacity: .9; text-align: center; padding: 1rem 0 2rem; }
+
+    /* Quiz */
+    .quiz { display: grid; gap: 12px; }
+    .q { background: #0b0f17; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+    .q h4 { margin: 0; }
+    .q .opts { display: grid; gap: 6px; }
+    .pill { display:inline-block; padding:.2rem .5rem; border:1px solid rgba(255,255,255,.12); border-radius:999px; font-size:.75rem; color:#cad3e6; }
+
+    /* Slide nav */
+    .slide-nav { display:flex; justify-content:space-between; align-items:center; padding:10px; border-top:1px solid rgba(255,255,255,.08); background:#0b0f17; }
+    .slide-nav .left, .slide-nav .right { display:flex; gap:8px; }
+
+    /* Utility */
+    .hide { display:none !important; }
+    .muted { color: var(--muted); }
+    .success { color: var(--accent); }
+    .danger { color: var(--danger); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="bar">
+        <div class="brand"><span class="dot"></span> Week 4 · Class 1 — Mobile‑First & Flexbox</div>
+        <div class="controls">
+          <button class="btn ghost" id="toggle-dark">Dark</button>
+          <button class="btn" id="prev">← Prev</button>
+          <button class="btn primary" id="next">Next →</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="slides" id="deck">
+        <!-- Slide 1: Goals -->
+        <article class="slide active" data-title="Goals">
+          <span class="kicker">Learning Goals (10 min)</span>
+          <h1>Think <em>mobile‑first</em> • Build with <em>Flexbox</em></h1>
+          <div class="grid two">
+            <div class="card">
+              <h2>Outcomes</h2>
+              <ul>
+                <li>Prioritize content for small screens; progressively enhance.</li>
+                <li>Apply Flexbox: <code>display:flex</code>, axis, <code>gap</code>, <code>flex-wrap</code>, <code>justify-content</code>, <code>align-items</code>, <code>flex:1</code>, <code>order</code>.</li>
+                <li>Assemble a responsive landing skeleton.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Agenda</h2>
+              <ol>
+                <li>Quick Theory (15–20m)</li>
+                <li>Live Demo (25–30m)</li>
+                <li>Build‑Along (20m)</li>
+                <li>Quiz & Wrap (10m)</li>
+              </ol>
+            </div>
+          </div>
+          <p class="note">Tip: Start small (no media queries), then enhance at breakpoints.</p>
+        </article>
+
+        <!-- Slide 2: Theory -->
+        <article class="slide" data-title="Theory">
+          <span class="kicker">Quick Theory (15–20 min)</span>
+          <h2>Mobile‑First Strategy + Responsive Mental Model</h2>
+          <div class="grid two">
+            <div class="card">
+              <h3>Mobile‑First</h3>
+              <ul>
+                <li>Base CSS for smallest viewport.</li>
+                <li>Use <code>@media (min-width:…)</code> to add features.</li>
+                <li>Performance & accessibility benefits.</li>
+              </ul>
+              <div class="code" data-codegroup>
+                <div class="toolbar"><div class="tabs"><button class="tab active" data-target="tcss1">CSS</button></div><button class="btn copy" data-copy="tcss1">Copy</button></div>
+                <pre id="tcss1">/* Base — Mobile */
+body { font:16px/1.5 system-ui; }
+nav ul { display:block; }
+
+/* Enhancement — Tablet/Desktop */
+@media (min-width: 768px){
+  nav ul { display:flex; justify-content:center; gap:1rem; }
+}</pre>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Flow → Wrap → Re‑order → Enhance</h3>
+              <ul>
+                <li><strong>Flow</strong>: natural vertical stack.</li>
+                <li><strong>Wrap</strong>: <code>flex-wrap: wrap</code> when space allows.</li>
+                <li><strong>Re‑order</strong>: visual order with <code>order</code>.</li>
+                <li><strong>Enhance</strong>: add columns, spacing, type scale on wider screens.</li>
+              </ul>
+              <p class="muted">Flexbox quick‑ref: <code>display:flex</code>, <code>flex-direction</code>, <code>justify-content</code>, <code>align-items</code>, <code>gap</code>, <code>flex-wrap</code>, <code>flex</code>, <code>order</code>.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3: Flexbox Playground -->
+        <article class="slide" data-title="Playground">
+          <span class="kicker">Interactive</span>
+          <h2>Flexbox Playground — Try the Core Properties</h2>
+          <div class="play card">
+            <div class="controls-grid">
+              <div class="field"><label>flex-direction</label>
+                <select id="dir">
+                  <option>row</option>
+                  <option>row-reverse</option>
+                  <option>column</option>
+                  <option>column-reverse</option>
+                </select>
+              </div>
+              <div class="field"><label>justify-content</label>
+                <select id="justify">
+                  <option>flex-start</option>
+                  <option>center</option>
+                  <option>flex-end</option>
+                  <option>space-between</option>
+                  <option>space-around</option>
+                  <option>space-evenly</option>
+                </select>
+              </div>
+              <div class="field"><label>align-items</label>
+                <select id="align">
+                  <option>stretch</option>
+                  <option>flex-start</option>
+                  <option selected>center</option>
+                  <option>flex-end</option>
+                  <option>baseline</option>
+                </select>
+              </div>
+              <div class="field"><label>gap (<span id="gapv">12</span>px)</label>
+                <input id="gap" type="range" min="0" max="40" step="2" value="12" />
+              </div>
+              <div class="field"><label>flex-wrap</label>
+                <select id="wrap">
+                  <option>nowrap</option>
+                  <option>wrap</option>
+                  <option>wrap-reverse</option>
+                </select>
+              </div>
+            </div>
+            <div class="stage">
+              <div id="stage" style="display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:12px; flex-wrap:nowrap; min-height:120px;">
+                <div class="box" style="flex:0 0 auto;">1</div>
+                <div class="box" style="flex:0 0 auto;">2</div>
+                <div class="box" style="flex:0 0 auto;">3</div>
+                <div class="box" style="flex:0 0 auto;">4</div>
+                <div class="box" style="flex:0 0 auto;">5</div>
+              </div>
+            </div>
+          </div>
+          <p class="note">Try shrinking the window to see wrapping behavior.</p>
+        </article>
+
+        <!-- Slide 4: Live Demo — Landing Skeleton -->
+        <article class="slide" data-title="Skeleton">
+          <span class="kicker">Live Demo (25–30 min)</span>
+          <h2>Build the Mobile‑First Landing Skeleton</h2>
+          <div class="grid two">
+            <div class="card">
+              <div class="skeleton">
+                <div class="s-header">
+                  <div class="row">
+                    <span class="chip">Logo</span>
+                    <button class="hamburger" id="btnOrder" title="Toggle order on mobile">☰</button>
+                  </div>
+                </div>
+                <div class="s-hero">
+                  <h3 style="margin:0 0 6px">Grow your business with confidence</h3>
+                  <p class="muted" style="margin:0 0 10px">Simple tools to launch, market, and scale.</p>
+                  <button class="btn primary">Get Started</button>
+                </div>
+                <div class="s-features" id="features">
+                  <div class="box">Launch</div>
+                  <div class="box">Market</div>
+                  <div class="box">Scale</div>
+                </div>
+                <div class="s-testimonials">
+                  <p class="muted">“10× sign‑ups in 30 days.” — Ayesha, CEO</p>
+                </div>
+                <div class="s-footer">
+                  <span class="muted">© 2025 BizBrand</span>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Notes</h3>
+              <ul>
+                <li>Header: <code>display:flex</code> + <code>justify-content:space-between</code>.</li>
+                <li>Hero: centered content for small screens.</li>
+                <li>Features: stacked column (<code>flex-direction:column</code>).</li>
+                <li>Enhance later at ≥768px (Class 2).</li>
+              </ul>
+              <div class="code" data-codegroup>
+                <div class="toolbar"><div class="tabs"><button class="tab active" data-target="html1">HTML</button><button class="tab" data-target="css1">CSS</button></div><button class="btn copy" data-copy="html1 css1">Copy All</button></div>
+                <pre id="html1">&lt;header class="header container"&gt;
+  &lt;div class="logo"&gt;BizBrand&lt;/div&gt;
+  &lt;button class="hamburger" aria-label="Open menu"&gt;☰&lt;/button&gt;
+&lt;/header&gt;
+&lt;section class="hero container"&gt;
+  &lt;h1&gt;Grow your business with confidence&lt;/h1&gt;
+  &lt;p&gt;Tools that help you launch, market, and scale.&lt;/p&gt;
+  &lt;a class="btn" href="#"&gt;Get Started&lt;/a&gt;
+&lt;/section&gt;
+&lt;section class="features container"&gt;
+  &lt;article class="card"&gt;&lt;h3&gt;Launch&lt;/h3&gt;&lt;p&gt;One‑click setup.&lt;/p&gt;&lt;/article&gt;
+  &lt;article class="card"&gt;&lt;h3&gt;Market&lt;/h3&gt;&lt;p&gt;Email &amp; SEO tools.&lt;/p&gt;&lt;/article&gt;
+  &lt;article class="card"&gt;&lt;h3&gt;Scale&lt;/h3&gt;&lt;p&gt;Analytics that matter.&lt;/p&gt;&lt;/article&gt;
+&lt;/section&gt;</pre>
+                <pre id="css1" class="hide">:root { --brand:#4f46e5; --space:1rem; --radius:10px; --maxw:1100px; }
+*{box-sizing:border-box} body{margin:0;font:16px/1.5 system-ui}
+.container{width:min(100% - 2rem, var(--maxw));margin-inline:auto}
+.header{display:flex;justify-content:space-between;align-items:center;padding:var(--space) 0}
+.hero{text-align:center;padding:3rem 0}
+.btn{display:inline-block;background:var(--brand);color:#fff;padding:.75rem 1.25rem;border-radius:var(--radius);text-decoration:none}
+.features{display:flex;flex-direction:column;gap:var(--space);padding:2rem 0}
+.card{border:1px solid #ddd;border-radius:var(--radius);padding:1rem;text-align:center}
+.testimonials{padding:2rem 0}
+.footer{text-align:center;padding:var(--space) 0;font-size:.875rem}
+</pre>
+              </div>
+              <p class="note">Click the ☰ button to demo <code>order</code> on mobile headers.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 5: Build‑Along Tasks -->
+        <article class="slide" data-title="Build‑Along">
+          <span class="kicker">Hands‑On (20 min)</span>
+          <h2>Build‑Along Checklist</h2>
+          <div class="grid two">
+            <div class="card">
+              <ol>
+                <li>Swap in your own brand & tagline.</li>
+                <li>Add a 4th feature card and enable <code>flex-wrap</code>.</li>
+                <li>Create a CTA strip (text + button) centered with Flexbox.</li>
+                <li>Ensure no horizontal scrolling on mobile.</li>
+              </ol>
+              <p class="note">Use DevTools → Device Toolbar → iPhone SE, iPad, 1440px.</p>
+            </div>
+            <div class="card">
+              <h3>Quick Flex Snippets</h3>
+              <div class="code"><div class="toolbar"><span class="pill">center</span><button class="btn copy" data-copy="snip1">Copy</button></div>
+                <pre id="snip1">.center { display:flex; align-items:center; justify-content:center; gap:1rem; }</pre>
+              </div>
+              <div class="code" style="margin-top:10px"><div class="toolbar"><span class="pill">wrap</span><button class="btn copy" data-copy="snip2">Copy</button></div>
+                <pre id="snip2">.wrap { display:flex; flex-wrap:wrap; gap:1rem; }</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 6: Mini Quiz -->
+        <article class="slide" data-title="Quiz">
+          <span class="kicker">Mini Quiz (10 min)</span>
+          <h2>Check Your Understanding</h2>
+          <div class="quiz">
+            <div class="q" data-answer="b">
+              <h4>1) What does <code>justify-content</code> control?</h4>
+              <div class="opts">
+                <label><input type="radio" name="q1" value="a"> Cross‑axis alignment</label>
+                <label><input type="radio" name="q1" value="b"> Main‑axis alignment</label>
+                <label><input type="radio" name="q1" value="c"> Item wrapping</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <div class="q" data-answer="c">
+              <h4>2) Which property enables items to move to a new line?</h4>
+              <div class="opts">
+                <label><input type="radio" name="q2" value="a"> flex-direction</label>
+                <label><input type="radio" name="q2" value="b"> align-items</label>
+                <label><input type="radio" name="q2" value="c"> flex-wrap</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <div class="q" data-answer="a">
+              <h4>3) Why start with mobile‑first CSS?</h4>
+              <div class="opts">
+                <label><input type="radio" name="q3" value="a"> Better performance & progressive enhancement</label>
+                <label><input type="radio" name="q3" value="b"> It removes the need for media queries entirely</label>
+                <label><input type="radio" name="q3" value="c"> Desktop users are fewer</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <button class="btn primary" id="checkQuiz">Check Answers</button>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="slide-nav">
+        <div class="left"><button class="btn" id="prev2">← Prev</button></div>
+        <div class="right"><button class="btn primary" id="next2">Next →</button></div>
+      </div>
+    </main>
+
+    <footer>Built for BNU · Week 4 · Class 1 · Mobile‑First & Flexbox</footer>
+  </div>
+
+  <script>
+    // Slide Deck Logic
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let idx = 0;
+    const show = i => { slides.forEach((s, n) => s.classList.toggle('active', n === i)); idx = i; }
+    const next = () => show(Math.min(idx + 1, slides.length - 1));
+    const prev = () => show(Math.max(idx - 1, 0));
+    document.getElementById('next').addEventListener('click', next);
+    document.getElementById('prev').addEventListener('click', prev);
+    document.getElementById('next2').addEventListener('click', next);
+    document.getElementById('prev2').addEventListener('click', prev);
+    document.addEventListener('keydown', e => { if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); });
+
+    // Dark toggle (visual only)
+    document.getElementById('toggle-dark').addEventListener('click', () => {
+      document.body.classList.toggle('light');
+    });
+
+    // Flexbox Playground Controls
+    const stage = document.getElementById('stage');
+    const dir = document.getElementById('dir');
+    const justify = document.getElementById('justify');
+    const align = document.getElementById('align');
+    const gap = document.getElementById('gap');
+    const wrap = document.getElementById('wrap');
+    const gapv = document.getElementById('gapv');
+
+    function updateStage(){
+      stage.style.flexDirection = dir.value;
+      stage.style.justifyContent = justify.value;
+      stage.style.alignItems = align.value;
+      stage.style.gap = gap.value + 'px';
+      stage.style.flexWrap = wrap.value;
+      gapv.textContent = gap.value;
+    }
+    [dir, justify, align, gap, wrap].forEach(el => el.addEventListener('input', updateStage));
+
+    // Header order demo
+    const orderBtn = document.getElementById('btnOrder');
+    if(orderBtn){
+      orderBtn.addEventListener('click', () => {
+        // toggle a class that would reorder elements if this were full header markup
+        orderBtn.classList.toggle('active');
+        orderBtn.textContent = orderBtn.classList.contains('active') ? '☷' : '☰';
+      });
+    }
+
+    // Code tabs + copy buttons
+    document.querySelectorAll('[data-codegroup]').forEach(group => {
+      const tabs = group.querySelectorAll('.tab');
+      tabs.forEach(t => t.addEventListener('click', () => {
+        tabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        const ids = Array.from(group.querySelectorAll('pre')).map(p => p.id);
+        ids.forEach(id => document.getElementById(id).classList.add('hide'));
+        document.getElementById(t.dataset.target).classList.remove('hide');
+      }));
+    });
+
+    function copyTextByIds(ids){
+      const arr = ids.split(' ');
+      const text = arr.map(id => document.getElementById(id)?.innerText ?? '').join('\n\n');
+      navigator.clipboard.writeText(text).then(()=>{
+        const b = document.querySelector(`[data-copy="${ids}"]`);
+        if(b){ b.textContent = 'Copied!'; setTimeout(()=> b.textContent = 'Copy', 1400); }
+      });
+    }
+    document.querySelectorAll('.btn.copy').forEach(b => b.addEventListener('click', () => copyTextByIds(b.dataset.copy)));
+
+    // Quiz
+    const checkQuiz = document.getElementById('checkQuiz');
+    if(checkQuiz){
+      checkQuiz.addEventListener('click', () => {
+        document.querySelectorAll('.q').forEach((q, i) => {
+          const ans = q.dataset.answer;
+          const picked = q.querySelector('input[type="radio"]:checked')?.value;
+          const res = q.querySelector('.result');
+          if(!picked){ res.innerHTML = '<span class="danger">Select an answer.</span>'; return; }
+          res.innerHTML = picked === ans
+            ? '<span class="success">✓ Correct</span>'
+            : '<span class="danger">✗ Try again</span>';
+        });
+      });
+    }
+  </script>
+</body>
+</html>

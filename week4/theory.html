@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 4 — Class 1 (Business): Mobile‑First Mindset</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #10131a;
+      --card: #121723;
+      --text: #e7eaf3;
+      --muted: #9aa4b2;
+      --brand: #7c3aed;
+      --accent: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --link: #60a5fa;
+      --radius: 16px;
+      --maxw: 1100px;
+      --gap: 16px;
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --transition: all 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 0% -10%, rgba(124,58,237,.15), transparent),
+                  radial-gradient(1200px 800px at 100% 110%, rgba(34,197,94,.12), transparent),
+                  linear-gradient(180deg, #0b0c10, #0e1117 60%);
+      line-height: 1.6;
+    }
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100dvh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(16,19,26,.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .bar {
+      width: min(100% - 2rem, var(--maxw));
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 1rem;
+      gap: 2rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 800;
+      letter-spacing: .3px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .brand-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e7eaf3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--brand);
+      box-shadow: 0 0 0 6px rgba(124,58,237,.15), 0 0 18px var(--brand);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: #141821;
+      color: var(--text);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .btn:hover {
+      border-color: rgba(255,255,255,.25);
+      transform: translateY(-1px);
+    }
+
+    .btn:focus {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    .btn.primary:hover {
+      background: #6d28d9;
+    }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    main {
+      width: min(100% - 2rem, var(--maxw));
+      margin-inline: auto;
+      display: grid;
+      gap: 1.25rem;
+      padding: 1.25rem 0 2.5rem;
+    }
+
+    .slides {
+      position: relative;
+      border: 1px solid rgba(255,255,255,.08);
+      background: var(--panel);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .slide {
+      display: none;
+      padding: clamp(16px, 2.5vw, 32px);
+    }
+
+    .slide.active {
+      display: grid;
+      gap: 18px;
+    }
+
+    .kicker {
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .8rem;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: clamp(1.2rem, 2.6vw + .6rem, 2rem);
+      font-weight: 800;
+    }
+
+    h2 {
+      font-size: clamp(1.05rem, 2.1vw + .5rem, 1.6rem);
+      color: #d8def0;
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: clamp(1rem, 1.8vw + .4rem, 1.3rem);
+      color: #c9d3ea;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      gap: var(--gap);
+    }
+
+    .two {
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 860px) {
+      .two {
+        grid-template-columns: 1.1fr .9fr;
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      padding: 16px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(255,255,255,.12);
+      transform: translateY(-1px);
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .25rem .55rem;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      font-size: .75rem;
+      color: #c9d3ea;
+      background: rgba(255,255,255,.02);
+    }
+
+    /* Poll / meters */
+    .poll {
+      display: grid;
+      gap: 12px;
+    }
+
+    .poll .row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meter {
+      position: relative;
+      height: 12px;
+      background: #0e1420;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar {
+      position: absolute;
+      inset: 0;
+      width: 40%;
+      background: linear-gradient(90deg, rgba(124,58,237,.9), rgba(96,165,250,.8));
+      box-shadow: 0 0 18px rgba(124,58,237,.4) inset;
+      transition: width 0.3s ease;
+    }
+
+    /* Tech chips */
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: .35rem .6rem;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      background: #0d1421;
+      color: #cfe1ff;
+      font-size: .8rem;
+      transition: var(--transition);
+    }
+
+    .chip:hover {
+      background: #1a2332;
+      border-color: rgba(255,255,255,.2);
+    }
+
+    /* Activity */
+    .activity {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timer {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .time {
+      font-weight: 800;
+      letter-spacing: .5px;
+      color: var(--accent);
+    }
+
+    /* Copy blocks */
+    .code {
+      position: relative;
+      background: #0c111b;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .code .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: #0b0f17;
+    }
+
+    .code pre {
+      margin: 0;
+      padding: 14px;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .92rem;
+      color: #e7eaf3;
+      line-height: 1.5;
+    }
+
+    /* Quiz */
+    .quiz {
+      display: grid;
+      gap: 12px;
+    }
+
+    .q {
+      background: #0b0f17;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      transition: var(--transition);
+    }
+
+    .q:hover {
+      border-color: rgba(255,255,255,.12);
+    }
+
+    .q h4 {
+      margin: 0;
+      color: #d8def0;
+      font-weight: 600;
+    }
+
+    .q .opts {
+      display: grid;
+      gap: 6px;
+    }
+
+    .q label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .q label:hover {
+      background: rgba(255,255,255,.05);
+    }
+
+    .q input[type="radio"] {
+      margin: 0;
+    }
+
+    .success {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .danger {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .slide-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      background: #0b0f17;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: .85rem;
+      text-align: center;
+      padding: 1rem 0 2rem;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 1024px) {
+      .bar {
+        padding: 1.25rem 1rem;
+        gap: 1.5rem;
+      }
+      
+      .brand-text {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .bar {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+        padding: 1.5rem 1rem;
+      }
+
+      .brand {
+        flex: none;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .brand-text {
+        font-size: 1rem;
+      }
+
+      .controls {
+        width: 100%;
+        justify-content: center;
+        gap: 1.5rem;
+      }
+
+      .slide {
+        padding: clamp(12px, 4vw, 24px);
+      }
+
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .bar {
+        padding: 1rem;
+        gap: 1rem;
+      }
+      
+      .brand-text {
+        font-size: 0.9rem;
+        max-width: 100%;
+      }
+      
+      .controls {
+        flex-direction: row;
+        gap: 1rem;
+        justify-content: center;
+      }
+      
+      .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        min-width: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="bar">
+        <div class="brand">
+          <span class="dot"></span>
+          <span class="brand-text">Week 4 — Class 1 (Business): Mobile‑First Mindset</span>
+        </div>
+        <div class="controls">
+          <button class="btn" id="prev">← Prev</button>
+          <button class="btn primary" id="next">Next →</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="slides" id="deck">
+        <!-- Slide 1: Title -->
+        <article class="slide active" data-title="Title">
+          <span class="kicker">Mindset</span>
+          <h1>Mobile‑First Mindset: Designing for the Startup Economy</h1>
+          <p class="note">If your startup doesn’t work on mobile, it doesn’t work.</p>
+          <div class="card grid two">
+            <div>
+              <h2>Learning Goals</h2>
+              <ul>
+                <li>Connect mobile‑first design to startup success.</li>
+                <li>Think customer‑first: speed, simplicity, conversion.</li>
+                <li>Survey mobile‑first technologies and quick MVP paths.</li>
+              </ul>
+            </div>
+            <div>
+              <h2>Today’s Flow</h2>
+              <ol>
+                <li>Opening poll</li>
+                <li>What “mobile‑first” actually means</li>
+                <li>Business value & tech stack</li>
+                <li>Case activity: Your first screen</li>
+                <li>Mini‑quiz & wrap</li>
+              </ol>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 2: Opening Poll -->
+        <article class="slide" data-title="Poll">
+          <span class="kicker">Warm‑up</span>
+          <h2>Where do you browse most frequently?</h2>
+          <div class="card poll">
+            <div class="row">
+              <button class="btn" data-vote="mobile">📱 Mobile</button>
+              <button class="btn" data-vote="desktop">🖥️ Desktop</button>
+              <button class="btn" data-vote="tablet">📟 Tablet</button>
+              <button class="btn" id="resetPoll">Reset</button>
+            </div>
+            <div class="grid two">
+              <div class="card">
+                <h3>Live Tally</h3>
+                <p>Mobile: <span id="mCount">0</span> · Desktop: <span id="dCount">0</span> · Tablet: <span id="tCount">0</span></p>
+              </div>
+              <div class="card">
+                <h3>Share of Votes</h3>
+                <div class="meter" title="Mobile share"><div class="bar" id="mobileBar" style="width:0%"></div></div>
+                <p class="note">Use this to note: Google indexes mobile first; your users discover you on their phones.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3: What Mobile‑First Means -->
+        <article class="slide" data-title="Meaning">
+          <span class="kicker">Concept</span>
+          <h2>What does “Mobile‑First” actually mean?</h2>
+          <div class="grid two">
+            <div class="card">
+              <ul>
+                <li>Prioritize the smallest screen & simplest journey first.</li>
+                <li>Ship the core value fast; enhance progressively for wider screens.</li>
+                <li>Design for thumb zones, short attention, and spotty networks.</li>
+              </ul>
+              <p class="note">Business lens: faster MVP, clearer message, better conversions.</p>
+            </div>
+            <div class="card">
+              <h3>Responsive Mental Model</h3>
+              <ol>
+                <li><strong>Flow</strong> (stack vertically)</li>
+                <li><strong>Wrap</strong> (allow items to wrap)</li>
+                <li><strong>Re‑order</strong> (change priority visually)</li>
+                <li><strong>Enhance</strong> (add columns, larger type, extras)</li>
+              </ol>
+              <div class="code">
+                <div class="toolbar"><span>CSS (concept)</span><button class="btn" data-copy="cssConcept">Copy</button></div>
+                <pre id="cssConcept">/* Base — Mobile */
+body{font:16px/1.5 system-ui}
+section.cards{display:block}
+
+/* Enhance at tablet */
+@media (min-width:768px){
+  section.cards{display:flex; gap:1rem}
+}
+</pre>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 4: Business Value -->
+        <article class="slide" data-title="Value">
+          <span class="kicker">Strategy</span>
+          <h2>Why it matters for startups</h2>
+          <div class="grid two">
+            <div class="card">
+              <h3>Benefits → Impact</h3>
+              <ul>
+                <li><strong>Time‑to‑market</strong> → mobile web MVP in days, not months.</li>
+                <li><strong>Conversion</strong> → frictionless checkout/forms on phones.</li>
+                <li><strong>Cost</strong> → one responsive build across devices.</li>
+                <li><strong>SEO</strong> → Google prioritizes mobile experience.</li>
+                <li><strong>Accessibility</strong> → reach more users globally.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Quick Audit (class prompt)</h3>
+              <ol>
+                <li>Above‑the‑fold: value prop + CTA visible?</li>
+                <li>Tap targets ≥ 44px?</li>
+                <li>Page weight under ~1–2MB?</li>
+                <li>Works on 3G/slow network?</li>
+              </ol>
+              <p class="note">If any fail on mobile, you’re leaking revenue.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 5: Tech Stack Overview -->
+        <article class="slide" data-title="Tech">
+          <span class="kicker">Tools</span>
+          <h2>Mobile‑First Technologies you can ship with</h2>
+          <div class="card">
+            <h3>Web (fast MVP)</h3>
+            <div class="chips">
+              <span class="chip">Next.js</span>
+              <span class="chip">React</span>
+              <span class="chip">Tailwind CSS</span>
+              <span class="chip">Bootstrap 5</span>
+              <span class="chip">Material UI</span>
+            </div>
+            <h3 style="margin-top:12px">Mobile Apps (single codebase)</h3>
+            <div class="chips">
+              <span class="chip">React Native</span>
+              <span class="chip">Flutter</span>
+            </div>
+            <h3 style="margin-top:12px">PWA (App‑like Web)</h3>
+            <div class="chips">
+              <span class="chip">Service Worker</span>
+              <span class="chip">Web App Manifest</span>
+              <span class="chip">Add‑to‑Home</span>
+            </div>
+            <h3 style="margin-top:12px">Backends</h3>
+            <div class="chips">
+              <span class="chip">Supabase</span>
+              <span class="chip">Firebase</span>
+              <span class="chip">Sanity / Strapi</span>
+            </div>
+            <h3 style="margin-top:12px">No‑Code / Low‑Code</h3>
+            <div class="chips">
+              <span class="chip">Webflow</span>
+              <span class="chip">Bubble</span>
+              <span class="chip">Glide</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>When to choose what?</h3>
+            <ul>
+              <li><strong>Landing fast:</strong> Next.js + Tailwind or Webflow.</li>
+              <li><strong>App both stores:</strong> React Native or Flutter.</li>
+              <li><strong>Offline heavy:</strong> PWA with caching.</li>
+              <li><strong>Content team:</strong> Headless CMS + responsive frontend.</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Slide 6: Mini PWA Explainer -->
+        <article class="slide" data-title="PWA">
+          <span class="kicker">Concept</span>
+          <h2>Progressive Web Apps (PWA) — web that feels like an app</h2>
+          <div class="grid two">
+            <div class="card">
+              <ul>
+                <li>Installable on phone (no store required)</li>
+                <li>Offline caching for repeat visits</li>
+                <li>Push notifications (with permission)</li>
+              </ul>
+            </div>
+            <div class="card code">
+              <div class="toolbar"><span>manifest.json (snippet)</span><button class="btn" data-copy="pwa">Copy</button></div>
+              <pre id="pwa">{
+  "name": "BizBrand",
+  "short_name": "BizBrand",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0c10",
+  "theme_color": "#7c3aed",
+  "icons": [{"src":"/icon.png","sizes":"512x512","type":"image/png"}]
+}</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 7: Case Study Simulator -->
+        <article class="slide" data-title="Case">
+          <span class="kicker">Case</span>
+          <h2>Case: Instagram traffic → mobile checkout</h2>
+          <div class="grid two">
+            <div class="card">
+              <h3>Scenario</h3>
+              <p class="note">A fashion startup’s traffic is 90% mobile via Instagram. Desktop site works, but mobile bounce is high.</p>
+              <ul>
+                <li>Problem: checkout friction on phones.</li>
+                <li>Fix: compress images, one‑page checkout, Apple/Google Pay, sticky CTA.</li>
+              </ul>
+              <div class="poll" style="margin-top:8px">
+                <div class="row">
+                  <button class="btn" data-impact="img">Compress images</button>
+                  <button class="btn" data-impact="pay">1‑tap pay</button>
+                  <button class="btn" data-impact="cta">Sticky CTA</button>
+                </div>
+                <p>Estimated uplift: <strong id="uplift">0%</strong></p>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Rule of thumb</h3>
+              <ul>
+                <li>Above‑the‑fold = promise + proof + CTA.</li>
+                <li>Minimize typing; prefer selection & native wallets.</li>
+                <li>Load critical content first; defer the rest.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 8: Group Activity -->
+        <article class="slide" data-title="Activity">
+          <span class="kicker">Workshop (15 min)</span>
+          <h2>Design Your First Screen</h2>
+          <div class="activity card">
+            <p>In groups: pick a startup idea → sketch a <strong>mobile landing</strong> with: logo, headline, one‑line value, primary CTA.</p>
+            <div class="timer"><button class="btn" id="startTimer">Start 10:00</button> <span class="time" id="time">10:00</span></div>
+            <div class="code" style="margin-top:8px">
+              <div class="toolbar"><span>AI Wireframe Prompt</span><button class="btn" data-copy="prompt">Copy</button></div>
+              <pre id="prompt">Create a clean, mobile‑first landing wireframe for a B2B/B2C startup. Sections: header (logo + menu), hero (headline, subtext, primary CTA), three feature cards with simple icons, one testimonial, pricing teaser (3 tiers), footer. Produce mobile, tablet, and desktop variants with generous whitespace and accessible tap targets.</pre>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 9: Mini Quiz -->
+        <article class="slide" data-title="Quiz">
+          <span class="kicker">Check‑in</span>
+          <h2>Mini‑Quiz</h2>
+          <div class="quiz">
+            <div class="q" data-answer="b">
+              <h4>1) Mobile‑first means…</h4>
+              <div class="opts">
+                <label><input type="radio" name="q1" value="a"> Build desktop then shrink</label>
+                <label><input type="radio" name="q1" value="b"> Start with smallest screen, enhance upward</label>
+                <label><input type="radio" name="q1" value="c"> Build only for phones</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <div class="q" data-answer="c">
+              <h4>2) Best first step to reduce bounce on mobile ecommerce?</h4>
+              <div class="opts">
+                <label><input type="radio" name="q2" value="a"> Add a carousel</label>
+                <label><input type="radio" name="q2" value="b"> Add more text above the fold</label>
+                <label><input type="radio" name="q2" value="c"> Compress images & speed up first paint</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <div class="q" data-answer="a">
+              <h4>3) A key PWA capability is…</h4>
+              <div class="opts">
+                <label><input type="radio" name="q3" value="a"> Offline caching for repeat visits</label>
+                <label><input type="radio" name="q3" value="b"> Unlimited background GPS</label>
+                <label><input type="radio" name="q3" value="c"> Bypass HTTPS</label>
+              </div>
+              <div class="result"></div>
+            </div>
+            <button class="btn primary" id="checkQuiz">Check Answers</button>
+          </div>
+        </article>
+
+        <!-- Slide 10: Wrap -->
+        <article class="slide" data-title="Wrap">
+          <span class="kicker">Takeaways</span>
+          <h2>What to remember</h2>
+          <ul>
+            <li>Mobile‑first is customer‑first: clarity > clutter.</li>
+            <li>Ship fast on web, validate, then scale to native when needed.</li>
+            <li>Optimize the first screen: promise + proof + CTA.</li>
+          </ul>
+          <p class="note">Homework: pick a startup you like; audit their mobile homepage with today’s checklist.</p>
+        </article>
+      </section>
+
+      <div class="slide-nav">
+        <button class="btn" id="prev2">← Prev</button>
+        <button class="btn primary" id="next2">Next →</button>
+      </div>
+    </main>
+
+    <footer>Built for BNU · Week 4 · Class 1 · Business Lens — Mobile‑First Mindset</footer>
+  </div>
+
+  <script>
+    // Slide controls
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let idx = 0;
+    function show(i){ slides.forEach((s,n)=>s.classList.toggle('active', n===i)); idx = i; }
+    function next(){ show(Math.min(idx+1, slides.length-1)); }
+    function prev(){ show(Math.max(idx-1, 0)); }
+    ['next','next2'].forEach(id=>document.getElementById(id).addEventListener('click', next));
+    ['prev','prev2'].forEach(id=>document.getElementById(id).addEventListener('click', prev));
+    document.addEventListener('keydown', e=>{ if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); });
+
+    // Copy helpers
+    function copyById(id){ navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{}); }
+    document.querySelectorAll('[data-copy]').forEach(b=> b.addEventListener('click', ()=> copyById(b.dataset.copy)));
+
+    // Opening poll
+    let votes = { mobile:0, desktop:0, tablet:0 };
+    const mCount = document.getElementById('mCount');
+    const dCount = document.getElementById('dCount');
+    const tCount = document.getElementById('tCount');
+    const mobileBar = document.getElementById('mobileBar');
+
+    function renderPoll(){
+      mCount.textContent = votes.mobile; dCount.textContent = votes.desktop; tCount.textContent = votes.tablet;
+      const total = votes.mobile + votes.desktop + votes.tablet;
+      const pct = total ? Math.round((votes.mobile/total)*100) : 0;
+      mobileBar.style.width = pct + '%';
+      mobileBar.title = `Mobile share ${pct}%`;
+    }
+    document.querySelectorAll('[data-vote]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ votes[btn.dataset.vote]++; renderPoll(); });
+    });
+    document.getElementById('resetPoll').addEventListener('click', ()=>{ votes={mobile:0,desktop:0,tablet:0}; renderPoll(); });
+    renderPoll();
+
+    // Case study impact buttons
+    const uplift = document.getElementById('uplift');
+    const impacts = { img: 8, pay: 15, cta: 5 };
+    let totalUplift = 0;
+    document.querySelectorAll('[data-impact]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.impact;
+        totalUplift += impacts[key] || 0;
+        uplift.textContent = totalUplift + '%';
+        btn.disabled = true; btn.classList.add('ghost');
+      });
+    });
+
+    // Timer 10:00
+    const startBtn = document.getElementById('startTimer');
+    const timeEl = document.getElementById('time');
+    let timerId = null, remaining = 600;
+    function fmt(s){ const m=Math.floor(s/60), r=String(s%60).padStart(2,'0'); return `${m}:${r}`; }
+    function tick(){ remaining--; timeEl.textContent = fmt(remaining); if(remaining<=0){ clearInterval(timerId); timeEl.textContent='Done!'; } }
+    if(startBtn){
+      startBtn.addEventListener('click', ()=>{ if(timerId) { clearInterval(timerId); } remaining = 600; timeEl.textContent = fmt(remaining); timerId = setInterval(tick, 1000); });
+    }
+
+    // Quiz
+    const checkQuiz = document.getElementById('checkQuiz');
+    if(checkQuiz){
+      checkQuiz.addEventListener('click', ()=>{
+        document.querySelectorAll('.q').forEach(q=>{
+          const ans = q.dataset.answer;
+          const picked = q.querySelector('input[type="radio"]:checked')?.value;
+          const res = q.querySelector('.result');
+          if(!picked){ res.innerHTML = '<span class="danger">Select an answer.</span>'; return; }
+          res.innerHTML = picked === ans ? '<span class="success">✓ Correct</span>' : '<span class="danger">✗ Try again</span>';
+        })
+      });
+    }
+  </script>
+</body>
+</html>
