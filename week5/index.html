@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 5 - JavaScript & Node Fundamentals</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f8fafc;
+      overflow: hidden;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #facc15;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #facc15;
+    }
+    .nav-link {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-link:hover {
+      color: #facc15;
+      background: rgba(250, 204, 21, 0.1);
+    }
+    main {
+      padding-top: 60px;
+      height: 100vh;
+    }
+    section {
+      display: none;
+      padding: 4rem 2rem;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+    section.active {
+      display: flex;
+    }
+    h1, h2 {
+      color: #facc15;
+      margin-bottom: 1rem;
+    }
+    pre, code {
+      background: rgba(255,255,255,0.08);
+      color: #fef3c7;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: left;
+      max-width: 700px;
+      overflow-x: auto;
+      font-size: 1rem;
+    }
+    p { max-width: 700px; line-height: 1.6; }
+    ul { text-align: left; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <span>Week 5 · JavaScript & Node.js</span>
+    </div>
+    <a href="../index.html" class="nav-link" title="Back to Home">
+      🏠 Home
+    </a>
+  </header>
+  <main>
+  <section class="active">
+    <h1>Week 5: JavaScript & Node.js Fundamentals ⚙️</h1>
+    <p>Today we explore how JavaScript powers interactivity and how Node.js takes it beyond the browser.</p>
+  </section>
+
+  <section>
+    <h2>JavaScript – The Engine of the Web</h2>
+    <p>HTML builds structure 🧱<br>CSS adds style 🎨<br>JavaScript provides logic and interactivity 🧠</p>
+  </section>
+
+  <section>
+    <h2>Declaring Variables</h2>
+    <p>We use <code>var</code>, <code>let</code>, and <code>const</code> to store data in JavaScript.</p>
+    <pre><code>var x = 10;     // function-scoped, can be re-declared
+let y = 20;     // block-scoped, cannot be re-declared in same scope
+const z = 30;   // block-scoped, constant value
+
+x = 15; // ✅ allowed
+z = 50; // ❌ error - const is read-only</code></pre>
+  </section>
+
+  <section>
+    <h2>Data Types</h2>
+    <p>JavaScript is dynamically typed. Common data types include:</p>
+    <ul style="text-align:left; max-width:700px;">
+      <li><strong>String</strong> → "Hello World"</li>
+      <li><strong>Number</strong> → 42</li>
+      <li><strong>Boolean</strong> → true / false</li>
+      <li><strong>Null</strong> → intentional empty value</li>
+      <li><strong>Undefined</strong> → variable declared but not assigned</li>
+      <li><strong>Object</strong> → key-value pairs</li>
+      <li><strong>Array</strong> → list of values</li>
+    </ul>
+    <pre><code>let product = "Laptop";
+let price = 120000;
+let available = true;
+let discount = null;
+let features = ["Touchscreen", "Backlit Keyboard"];
+let manufacturer; // undefined
+
+console.log(typeof product, typeof discount); // string, object</code></pre>
+    <p><em>Note: typeof null returns 'object' – a long-standing JavaScript quirk.</em></p>
+  </section>
+
+  <section>
+    <h2>Loops: for & forEach 🔁</h2>
+    <p>Loops help repeat actions for multiple items in an array or range.</p>
+    <pre><code>// for loop
+for (let i = 0; i < 5; i++) {
+  console.log("Count:", i);
+}
+
+// forEach loop
+const fruits = ["Apple", "Banana", "Mango"];
+fruits.forEach(fruit => {
+  console.log(fruit);
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>Array Manipulation 🍱</h2>
+    <pre><code>let numbers = [1, 2, 3, 4, 5];
+
+numbers.push(6);       // Add at end
+numbers.pop();         // Remove from end
+numbers.unshift(0);    // Add at start
+numbers.shift();       // Remove from start
+
+let doubled = numbers.map(num => num * 2);   // [2, 4, 6, 8, 10]
+let evens = numbers.filter(num => num % 2 === 0); // [2, 4]
+
+console.log(numbers);
+console.log(doubled);
+console.log(evens);</code></pre>
+  </section>
+
+  <section>
+    <h2>Functions</h2>
+    <p>Functions are reusable blocks of code that perform specific tasks.</p>
+    <pre><code>function greet(user) {
+  return "Welcome, " + user + "!";
+}
+
+const greet2 = (user) => `Hello, ${user}!`;
+
+console.log(greet("Student"));
+console.log(greet2("Developer"));</code></pre>
+  </section>
+
+  <section>
+    <h2>Objects & Arrays</h2>
+    <pre><code>const student = { name: "Sara", marks: 92 };
+console.log(student.name);
+
+const students = ["Sara", "Ali", "Noor"];
+students.push("Bilal");
+console.log(students);</code></pre>
+  </section>
+
+  <section>
+    <h2>Introduction to Node.js 🧩</h2>
+    <p>JavaScript originally ran only in browsers. Node.js changed that by allowing JS to run on servers, desktops, and the cloud.</p>
+    <pre><code>// hello.js
+console.log("Running JavaScript outside the browser!");</code></pre>
+    <pre><code># Run in terminal
+node hello.js</code></pre>
+    <p>Node.js is built on Chrome's V8 engine and is widely used to build APIs, web servers, automation tools, and real-time applications.</p>
+  </section>
+
+  <section>
+    <h2>Browser vs Node.js</h2>
+    <pre><code>Browser  ---->  HTTP Request  ---->  Node.js Server (Express)  ---->  Database</code></pre>
+    <p>Tomorrow, we’ll connect the two worlds with your first Node program and Express setup 🔐</p>
+  </section>
+
+  <section>
+    <h2>In Short 🧠</h2>
+    <p><strong>Browser</strong> runs JavaScript to make websites interactive.<br><strong>Node.js</strong> runs JavaScript to power servers and backends.<br><br>One language. Two worlds. Endless possibilities.</p>
+  </section>
+  </main>
+
+  <script>
+    const slides = document.querySelectorAll('section');
+    let current = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      } else if (e.key === 'ArrowLeft') {
+        slides[current].classList.remove('active');
+        current = (current - 1 + slides.length) % slides.length;
+        slides[current].classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
