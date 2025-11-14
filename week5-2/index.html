@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Week 5 - Class II: Web APIs with Express.js</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f8fafc;
+      overflow: hidden;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #facc15;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #facc15;
+    }
+    .nav-link {
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-link:hover {
+      color: #facc15;
+      background: rgba(250, 204, 21, 0.1);
+    }
+    main {
+      padding-top: 60px;
+      height: 100vh;
+    }
+    section {
+      display: none;
+      padding: 4rem 2rem;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+    section.active {
+      display: flex;
+    }
+    h1, h2 {
+      color: #facc15;
+      margin-bottom: 1rem;
+    }
+    pre, code {
+      background: rgba(255,255,255,0.08);
+      color: #fef3c7;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: left;
+      max-width: 700px;
+      overflow-x: auto;
+      font-size: 1rem;
+    }
+    p, ul { max-width: 700px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <span>Week 5 · Class II: Web APIs with Express.js</span>
+    </div>
+    <a href="../index.html" class="nav-link" title="Back to Home">
+      🏠 Home
+    </a>
+  </header>
+  <main>
+  <section class="active">
+    <h1>Week 5 - Class II: Web APIs with Express.js ⚙️</h1>
+    <p>Today we’ll learn what Web APIs are, how HTTP methods work, and how to build a basic Express.js server with routes and error handling.</p>
+  </section>
+
+  <section>
+    <h2>What is a Web API?</h2>
+    <p>An API is like a waiter 🧑‍🍳 between your frontend and database — it takes requests and returns responses.</p>
+    <pre><code>Frontend  <---->  Express.js API  <---->  Database</code></pre>
+    <p>It allows different applications to communicate using HTTP methods like GET, POST, PUT, PATCH, DELETE.</p>
+  </section>
+
+  <section>
+    <h2>HTTP Methods Overview 🌐</h2>
+    <ul style="text-align:left; max-width:700px;">
+      <li><strong>GET</strong> – Retrieve data</li>
+      <li><strong>POST</strong> – Add new data</li>
+      <li><strong>PUT</strong> – Replace existing data</li>
+      <li><strong>PATCH</strong> – Update part of data</li>
+      <li><strong>DELETE</strong> – Remove data</li>
+    </ul>
+    <pre><code>GET /products        → Fetch all products
+POST /products       → Add a product
+PUT /products/:id    → Replace a product
+PATCH /products/:id  → Update partial data
+DELETE /products/:id → Remove a product</code></pre>
+  </section>
+
+  <section>
+    <h2>Setting Up Express.js 🧩</h2>
+    <pre><code># Terminal commands
+mkdir week5-api
+cd week5-api
+npm init -y
+npm i express</code></pre>
+    <pre><code>// index.js
+import express from "express";
+
+const app = express();
+app.use(express.json()); // Middleware to parse JSON
+
+app.listen(4000, () => console.log("Server running on http://localhost:4000"));</code></pre>
+  </section>
+
+  <section>
+    <h2>Creating Routes</h2>
+    <pre><code>app.get("/api/products", (req, res) => {
+  res.json(["Laptop", "Phone", "Tablet"]);
+});
+
+app.post("/api/products", (req, res) => {
+  const newProduct = req.body;
+  res.json({ message: "Product added", product: newProduct });
+});
+
+app.put("/api/products/:id", (req, res) => {
+  res.json({ message: `Replaced product ${req.params.id}` });
+});
+
+app.patch("/api/products/:id", (req, res) => {
+  res.json({ message: `Updated product ${req.params.id}` });
+});
+
+app.delete("/api/products/:id", (req, res) => {
+  res.json({ message: `Deleted product ${req.params.id}` });
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>Parameters & Query Strings 🔍</h2>
+    <pre><code>// URL parameter example
+app.get("/api/users/:userId", (req, res) => {
+  const userId = req.params.userId;
+  res.json({ message: `User ID received: ${userId}` });
+});
+
+// Query string example
+app.get("/api/search", (req, res) => {
+  const { q } = req.query;
+  res.json({ results: `You searched for '${q}'` });
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>Try / Catch for Error Handling 🧠</h2>
+    <p>Use try/catch to safely handle errors and prevent server crashes.</p>
+    <pre><code>app.get("/api/error-demo", (req, res) => {
+  try {
+    let result = riskyFunction(); // This will throw an error
+    res.json({ result });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong!" });
+  }
+});</code></pre>
+  </section>
+
+  <section>
+    <h2>Class Demo Flow 🧑‍💻</h2>
+    <ul style="text-align:left; max-width:700px;">
+      <li>Run <code>node index.js</code> to start server</li>
+      <li>Test API routes using browser or Postman</li>
+      <li>Observe JSON responses and console logs</li>
+      <li>Experiment with parameters, query strings, and methods</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>AI Prompt 💡</h2>
+    <p><em>"Generate Express.js routes for products with GET, POST, PUT, PATCH, and DELETE and include try/catch blocks."</em></p>
+  </section>
+
+  <section>
+    <h2>Next Step 🚀</h2>
+    <p>Tomorrow, we’ll connect Firebase Authentication to your Express API for secure endpoints 🔐</p>
+  </section>
+  </main>
+
+  <script>
+    const slides = document.querySelectorAll('section');
+    let current = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      } else if (e.key === 'ArrowLeft') {
+        slides[current].classList.remove('active');
+        current = (current - 1 + slides.length) % slides.length;
+        slides[current].classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 6 – Node.js: Endpoints, Status Codes & Error Handling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at top left, #4b6cb7 0%, #182848 40%, #0b1020 100%);
+      --accent: #ffcc66;
+      --accent-soft: rgba(255, 204, 102, 0.1);
+      --accent-2: #6ee7b7;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --border-subtle: rgba(148, 163, 184, 0.4);
+      --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      height: 100vh;
+      padding: 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header.deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.2), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: var(--shadow-soft);
+      z-index: 10;
+    }
+
+    .deck-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .deck-title h1 {
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .deck-title span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .course-tag {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #facc15;
+    }
+
+    .nav-link {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 11px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      border-color: rgba(255, 204, 102, 0.6);
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    main.slides-wrapper {
+      position: relative;
+      flex: 1;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, rgba(30, 64, 175, 0.6), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 32px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(40px) translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) translateY(0);
+    }
+
+    .slide-header {
+      margin-bottom: 4px;
+    }
+
+    .slide-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent-2);
+      margin-bottom: 6px;
+    }
+
+    .slide h2 {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #e5e7eb;
+    }
+
+    .slide-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-top: 4px;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+      gap: 24px;
+      margin-top: 6px;
+      align-items: flex-start;
+    }
+
+    .content-full {
+      margin-top: 8px;
+    }
+
+    .card {
+      border-radius: 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 18px;
+      box-shadow: 0 12px 25px rgba(15, 23, 42, 0.85);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 8px;
+    }
+
+    .card-title span {
+      color: var(--accent);
+    }
+
+    p, li {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      position: relative;
+      margin-bottom: 6px;
+      padding-left: 22px;
+    }
+
+    ul li::before {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    code, pre {
+      font-family: "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+    }
+
+    .code-card {
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(0, 0, 0, 0.95));
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    pre {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.9);
+      overflow-x: auto;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .code-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--accent-2);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent-2);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .status-card {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 64, 175, 0.6));
+      border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .status-code {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .status-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+    }
+
+    .status-desc {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    footer.deck-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      z-index: 10;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 6px 14px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn:hover {
+      background: rgba(30, 64, 175, 0.9);
+      box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #fbbf24, #f97316);
+      border-color: rgba(248, 250, 252, 0.8);
+      color: #111827;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #facc15, #fb923c);
+      box-shadow: 0 12px 25px rgba(251, 191, 36, 0.35);
+    }
+
+    .kbd-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kbd {
+      border-radius: 6px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 2px 6px;
+      font-size: 11px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+    }
+
+    .progress {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .progress-bar {
+      position: relative;
+      width: 100px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .progress-fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #fbbf24, #fb7185);
+      transition: width 0.25s ease-out;
+    }
+
+    /* Interactive code blocks */
+    .code-block {
+      margin-top: 10px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.94);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      overflow: hidden;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: radial-gradient(circle at top left, rgba(30, 64, 175, 0.7), rgba(15, 23, 42, 0.96));
+    }
+
+    .code-block-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .code-block-title span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .code-filename {
+      font-size: 12px;
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+
+    .toggle-code {
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(209, 213, 219, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .toggle-code:hover {
+      background: rgba(30, 64, 175, 0.9);
+      box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.4);
+    }
+
+    .toggle-code:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    .toggle-code span.chevron {
+      font-size: 10px;
+      transform: translateY(0.5px);
+    }
+
+    .code-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease-out;
+    }
+
+    .code-content.open {
+      max-height: 420px;
+    }
+
+    .code-content pre {
+      border-radius: 0 0 16px 16px;
+      border-top: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    /* Smaller screens */
+    @media (max-width: 900px) {
+      .deck {
+        padding: 16px;
+      }
+      .slide {
+        padding: 22px 18px 26px;
+      }
+      .content-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      header.deck-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      footer.deck-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .status-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .slide h2 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header class="deck-header">
+      <div class="deck-title">
+        <h1>Week 6 &middot; Node.js Backends</h1>
+        <span>Creating endpoints · Returning results · Status codes · Error handling</span>
+      </div>
+      <div class="header-controls">
+        <a href="../index.html" class="nav-link" title="Back to Home">
+          🏠 Home
+        </a>
+        <div class="course-tag">Web Technologies &mdash; BNU</div>
+      </div>
+    </header>
+
+    <main class="slides-wrapper">
+      <!-- Slide 1: Title -->
+      <section class="slide active" data-index="0">
+        <div class="slide-header">
+          <div class="slide-kicker">Week 6 &middot; Node.js Backend</div>
+          <h2>From URLs to Responses</h2>
+          <p class="slide-subtitle">
+            Today we turn your JavaScript into a <strong>real backend API</strong>:
+            you’ll build your own endpoints, return JSON, send correct status codes, and
+            handle errors like a professional engineer.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card">
+            <div class="card-title"><span>Learning Objectives</span></div>
+            <ul>
+              <li>Understand what an <strong>API endpoint</strong> is in Node.js.</li>
+              <li>Create routes using <strong>Express.js</strong>.</li>
+              <li>Return <strong>JSON</strong> from your endpoints.</li>
+              <li>Use <strong>HTTP status codes</strong> correctly.</li>
+              <li>Add <strong>basic error handling</strong> with <code>try/catch</code> and middleware.</li>
+            </ul>
+          </div>
+          <div class="card code-card">
+            <div class="card-title"><span>Big Picture</span></div>
+            <p>Frontend: “I need data.”</p>
+            <p>Backend (you): “Here you go, in a predictable format, with the right status.”</p>
+            <div class="code-block" style="margin-top: 12px;">
+              <div class="code-block-header">
+                <div class="code-block-title">
+                  <span>Example Flow</span>
+                  <div class="code-filename">React → Node.js (Express) → JSON</div>
+                </div>
+                <button class="toggle-code">
+                  <span class="chevron">▼</span>
+                  Show code
+                </button>
+              </div>
+              <div class="code-content">
+                <pre><code>// React (frontend)
+fetch("/api/hello")
+  .then((res) =&gt; res.json())
+  .then((data) =&gt; console.log(data.message));
+
+// Node.js (backend)
+app.get("/api/hello", (req, res) =&gt; {
+  res.json({ message: "Hello from your server 👋" });
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: What is an endpoint -->
+      <section class="slide" data-index="1">
+        <div class="slide-header">
+          <div class="slide-kicker">Concept</div>
+          <h2>What Exactly Is an Endpoint?</h2>
+          <p class="slide-subtitle">
+            An endpoint is a <strong>URL + HTTP method</strong> that runs some code and returns a response.
+            Think of it as a “door” in your backend.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card">
+            <div class="card-title"><span>Mental Model</span></div>
+            <ul>
+              <li><strong>URL</strong>: where the request is sent. (e.g. <code>/api/students</code>)</li>
+              <li><strong>Method</strong>: what you want to do (GET, POST, PUT, DELETE, etc.).</li>
+              <li><strong>Handler</strong>: the function that runs on the server.</li>
+              <li><strong>Response</strong>: what you send back (JSON / text / error).</li>
+            </ul>
+            <p style="margin-top: 8px;">
+              Example endpoint:<br />
+              <code>GET /api/students</code> &rarr; “Give me all students.”
+            </p>
+          </div>
+
+          <div class="card code-card">
+            <span class="code-label">Express.js route handler</span>
+            <pre><code>// server.js
+const express = require("express");
+const app = express();
+
+app.get("/api/students", (req, res) =&gt; {
+  res.json([
+    { id: 1, name: "Ayesha" },
+    { id: 2, name: "Ali" },
+  ]);
+});
+
+app.listen(3000, () =&gt; {
+  console.log("Server running on http://localhost:3000");
+});</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Basic Express setup -->
+      <section class="slide" data-index="2">
+        <div class="slide-header">
+          <div class="slide-kicker">Setup</div>
+          <h2>Minimal Express Server</h2>
+          <p class="slide-subtitle">
+            This is the skeleton you’ll reuse for most of your small Node.js projects.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card code-card">
+            <span class="code-label">server.js</span>
+            <pre><code>const express = require("express");
+const app = express();
+
+// Middleware: parse JSON request bodies
+app.use(express.json());
+
+// Simple health-check endpoint
+app.get("/", (req, res) =&gt; {
+  res.send("API is running ✅");
+});
+
+// Start server
+const PORT = 3000;
+app.listen(PORT, () =&gt; {
+  console.log(`Server listening on http://localhost:${PORT}`);
+});</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Key Pieces</span></div>
+            <ul>
+              <li><code>const app = express();</code> &mdash; create an Express application.</li>
+              <li><code>app.use(express.json());</code> &mdash; allows you to read <code>req.body</code> as JSON.</li>
+              <li><code>app.get("/", handler)</code> &mdash; define a <strong>GET</strong> endpoint at <code>/</code>.</li>
+              <li><code>app.listen(PORT, ...)</code> &mdash; start the server and keep it running.</li>
+            </ul>
+            <p style="margin-top: 8px;">
+              Run it with: <code>node server.js</code><br />
+              Then open: <code>http://localhost:3000</code> in your browser or Postman.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Returning JSON & params/query/body -->
+      <section class="slide" data-index="3">
+        <div class="slide-header">
+          <div class="slide-kicker">Data In · Data Out</div>
+          <h2>Reading Request Data & Returning JSON</h2>
+          <p class="slide-subtitle">
+            Three common ways to receive data in an endpoint: <strong>params</strong>, <strong>query</strong>, and
+            <strong>body</strong>.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card code-card">
+            <span class="code-label">Examples</span>
+            <pre><code>// 1) URL params: /api/student/123
+app.get("/api/student/:id", (req, res) =&gt; {
+  const id = req.params.id;
+  res.json({ message: `Fetching student with ID: ${id}` });
+});
+
+// 2) Query string: /api/search?name=hamad&amp;age=20
+app.get("/api/search", (req, res) =&gt; {
+  const { name, age } = req.query;
+  res.json({ name, age });
+});
+
+// 3) Body (POST): JSON payload
+app.post("/api/register", (req, res) =&gt; {
+  const { name, email } = req.body;
+  res.json({
+    message: "User registered",
+    user: { name, email },
+  });
+});</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Cheat Sheet</span></div>
+            <ul>
+              <li><strong>Params</strong> (<code>req.params</code>): part of the path.<br />
+                <code>/api/student/42</code> &rarr; <code>req.params.id === "42"</code>
+              </li>
+              <li><strong>Query</strong> (<code>req.query</code>): after <code>?</code> in the URL.<br />
+                <code>/search?term=node</code> &rarr; <code>req.query.term</code>
+              </li>
+              <li><strong>Body</strong> (<code>req.body</code>): usually for POST/PUT.<br />
+                Needs <code>app.use(express.json())</code>.
+              </li>
+            </ul>
+            <p style="margin-top: 8px;">
+              We almost always return <strong>JSON</strong> from APIs: <code>res.json({...})</code>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 5: Status codes overview -->
+      <section class="slide" data-index="4">
+        <div class="slide-header">
+          <div class="slide-kicker">HTTP</div>
+          <h2>Status Codes: Saying How It Went</h2>
+          <p class="slide-subtitle">
+            Status codes tell the frontend <em>how</em> the request went, not just the data.
+          </p>
+        </div>
+
+        <div class="content-full">
+          <div class="card">
+            <div class="card-title"><span>Most Used Codes in Your Projects</span></div>
+            <div class="status-grid">
+              <div class="status-card">
+                <div class="status-code">200</div>
+                <div class="status-label">OK</div>
+                <p class="status-desc">Everything worked. Default for successful GET/PUT/DELETE.</p>
+              </div>
+              <div class="status-card">
+                <div class="status-code">201</div>
+                <div class="status-label">Created</div>
+                <p class="status-desc">Something new was created (usually after POST).</p>
+              </div>
+              <div class="status-card">
+                <div class="status-code">400</div>
+                <div class="status-label">Bad Request</div>
+                <p class="status-desc">Client sent invalid / incomplete data.</p>
+              </div>
+              <div class="status-card">
+                <div class="status-code">401</div>
+                <div class="status-label">Unauthorized</div>
+                <p class="status-desc">Missing or invalid authentication.</p>
+              </div>
+              <div class="status-card">
+                <div class="status-code">404</div>
+                <div class="status-label">Not Found</div>
+                <p class="status-desc">The thing you asked for doesn’t exist.</p>
+              </div>
+              <div class="status-card">
+                <div class="status-code">500</div>
+                <div class="status-label">Server Error</div>
+                <p class="status-desc">Our fault. Something crashed on the backend.</p>
+              </div>
+            </div>
+            <p style="margin-top: 10px; font-size: 13px; color: var(--text-muted);">
+              Rule: <strong>Always send a meaningful status code + JSON body</strong>, not just one of them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 6: Using status codes in Express -->
+      <section class="slide" data-index="5">
+        <div class="slide-header">
+          <div class="slide-kicker">Practice</div>
+          <h2>Using Status Codes in Express</h2>
+          <p class="slide-subtitle">
+            Combine <code>res.status()</code> with <code>res.json()</code> to send both the status and the data.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card code-card">
+            <span class="code-label">Login example</span>
+            <pre><code>app.post("/api/login", (req, res) =&gt; {
+  const { username, password } = req.body;
+
+  // 400: Bad Request
+  if (!username || !password) {
+    return res.status(400).json({
+      error: "Username and password are required",
+    });
+  }
+
+  // Fake check
+  if (username === "admin" &amp;&amp; password === "1234") {
+    // 200: OK
+    return res.status(200).json({
+      message: "Login successful",
+    });
+  }
+
+  // 401: Unauthorized
+  res.status(401).json({
+    error: "Invalid credentials",
+  });
+});</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Patterns</span></div>
+            <ul>
+              <li>Always <strong>return</strong> when you send a response inside <code>if</code> blocks.</li>
+              <li>For <strong>successful POST</strong> that creates data, use <code>201</code>.</li>
+              <li>When something doesn’t exist, return <code>404</code> with a helpful message.</li>
+              <li>When the server crashes, use <code>500</code> (we’ll handle this with middleware).</li>
+            </ul>
+            <p style="margin-top: 8px;">
+              This makes your API predictable and easy to consume from any frontend.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 7: Basic error handling with try/catch -->
+      <section class="slide" data-index="6">
+        <div class="slide-header">
+          <div class="slide-kicker">Safety Net</div>
+          <h2>Basic Error Handling with try / catch</h2>
+          <p class="slide-subtitle">
+            Backends crash. That’s normal. Good backends crash <strong>gracefully</strong> and send a clean error to the client.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card code-card">
+            <span class="code-label">Async route example</span>
+            <pre><code>app.get("/api/data", async (req, res) =&gt; {
+  try {
+    // Imagine this is a DB call
+    const result = await fetchFromDatabase();
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error in /api/data:", error.message);
+
+    res.status(500).json({
+      success: false,
+      error: "Something went wrong on the server",
+    });
+  }
+});</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Why try / catch?</span></div>
+            <ul>
+              <li>Prevents Node.js from crashing the entire server.</li>
+              <li>Lets you log the error for debugging.</li>
+              <li>Lets you send a <strong>nice</strong> error message to the frontend.</li>
+            </ul>
+
+            <div class="code-block" style="margin-top: 10px;">
+              <div class="code-block-header">
+                <div class="code-block-title">
+                  <span>Mini Exercise</span>
+                  <div class="code-filename">Add try/catch to one of your endpoints</div>
+                </div>
+                <button class="toggle-code">
+                  <span class="chevron">▼</span>
+                  Show hint
+                </button>
+              </div>
+              <div class="code-content">
+                <pre><code>// Wrap your logic like this:
+app.get("/api/example", async (req, res) =&gt; {
+  try {
+    // 1) Do some async work
+    // 2) Return 200 with data
+  } catch (err) {
+    // 3) Log the error
+    // 4) Return res.status(500).json({ error: "Message" });
+  }
+});</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Global error handler -->
+      <section class="slide" data-index="7">
+        <div class="slide-header">
+          <div class="slide-kicker">Professional Pattern</div>
+          <h2>Global Error Handling Middleware</h2>
+          <p class="slide-subtitle">
+            Instead of repeating error responses in every route, we can centralize them in one place.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card code-card">
+            <span class="code-label">Global error handler</span>
+            <pre><code>// Place this AFTER all your routes:
+app.use((err, req, res, next) =&gt; {
+  console.error("Global Error:", err.message);
+
+  const status = err.statusCode || 500;
+
+  res.status(status).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Throwing Custom Errors</span></div>
+            <pre><code>app.get("/api/protected", (req, res, next) =&gt; {
+  const loggedIn = false;
+
+  if (!loggedIn) {
+    // Custom error object
+    return next({
+      statusCode: 401,
+      message: "You must be logged in",
+    });
+  }
+
+  res.json({ message: "Secret data here" });
+});</code></pre>
+            <p style="margin-top: 10px;">
+              Express sees <code>next(error)</code>, skips normal routes, and sends it to the
+              <strong>error handler</strong> middleware.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 9: Class activity -->
+      <section class="slide" data-index="8">
+        <div class="slide-header">
+          <div class="slide-kicker">In-Class Exercise</div>
+          <h2>Build a Tiny Student API</h2>
+          <p class="slide-subtitle">
+            You’ll now put everything together: endpoints, status codes, and error handling.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card">
+            <div class="card-title"><span>Requirements</span></div>
+            <ul>
+              <li>Create <code>server.js</code> with Express and <code>express.json()</code>.</li>
+              <li>Add an in-memory array of students (id, name, semester).</li>
+              <li>Endpoints:
+                <ul>
+                  <li><code>GET /api/students</code> &rarr; return list.</li>
+                  <li><code>GET /api/students/:id</code> &rarr; return one student or <code>404</code>.</li>
+                  <li><code>POST /api/students</code> &rarr; validate body, then <code>201</code>.</li>
+                </ul>
+              </li>
+              <li>Use proper status codes (<code>200</code>, <code>201</code>, <code>400</code>, <code>404</code>).</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span>Error Handling</span></div>
+            <ul>
+              <li>Wrap your POST logic in <code>try/catch</code>.</li>
+              <li>If <code>name</code> is missing, return <code>400</code> with JSON error.</li>
+              <li>If something unexpected happens, return <code>500</code>.</li>
+            </ul>
+            <p style="margin-top: 10px;">
+              Bonus: add a global error handler and use <code>next(err)</code> in one route.
+            </p>
+
+            <div class="pill" style="margin-top: 8px;">
+              <span class="pill-dot"></span>
+              <span>Pair-program for 10 minutes, then we review one solution on the projector.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Homework -->
+      <section class="slide" data-index="9">
+        <div class="slide-header">
+          <div class="slide-kicker">Homework</div>
+          <h2>Extend Your Weather App with Your Own API</h2>
+          <p class="slide-subtitle">
+            Last time we did a weather app that called someone else’s API. This week,
+            your frontend must talk to <strong>your own Node.js backend</strong>.
+          </p>
+        </div>
+
+        <div class="content-grid">
+          <div class="card">
+            <div class="card-title"><span>Backend Tasks</span></div>
+            <ul>
+              <li>Create a new Express server (or reuse the one from class).</li>
+              <li>Add <code>GET /weather</code> &rarr; return dummy JSON (city, temp, condition).</li>
+              <li>Add <code>POST /weather/favorite</code> &rarr; accept a city name and store it in memory.</li>
+              <li>Use:
+                <ul>
+                  <li><code>200</code> for successful GET.</li>
+                  <li><code>201</code> when a favorite is added.</li>
+                  <li><code>400</code> if city is missing in body.</li>
+                  <li><code>500</code> with a try/catch if something fails.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card code-card">
+            <span class="code-label">Frontend Tasks</span>
+            <pre><code>// In your React/HTML frontend:
+- Replace direct call to public weather API
+  with: fetch("/weather") from your Node server.
+
+- Show loading, success, and error messages
+  based on the status code.
+
+- Add a small form:
+  - Input: city name
+  - Button: "Add to favorites"
+  - On submit: POST /weather/favorite with JSON body.</code></pre>
+            <p style="margin-top: 8px; font-size: 13px; color: var(--text-muted);">
+              Submission: GitHub repo link + short README explaining your endpoints and status codes.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="deck-footer">
+      <div class="kbd-hint">
+        <span>Navigate:</span>
+        <span class="kbd">←</span>
+        <span class="kbd">→</span>
+        <span style="margin-left: 6px;">or use the buttons</span>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn" id="prevBtn">
+          ← Previous
+        </button>
+        <button class="btn btn-primary" id="nextBtn">
+          Next →
+        </button>
+        <div class="progress">
+          <span id="slideLabel">1 / 10</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const total = slides.length;
+      let current = 0;
+
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const slideLabel = document.getElementById("slideLabel");
+      const progressFill = document.getElementById("progressFill");
+
+      function updateUI() {
+        slides.forEach((slide, index) => {
+          slide.classList.toggle("active", index === current);
+        });
+
+        slideLabel.textContent = (current + 1) + " / " + total;
+
+        const percent = ((current + 1) / total) * 100;
+        progressFill.style.width = percent + "%";
+      }
+
+      function goToSlide(index) {
+        if (index < 0 || index >= total) return;
+        current = index;
+        updateUI();
+      }
+
+      function nextSlide() {
+        if (current < total - 1) {
+          goToSlide(current + 1);
+        }
+      }
+
+      function prevSlide() {
+        if (current > 0) {
+          goToSlide(current - 1);
+        }
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          nextSlide();
+        } else if (e.key === "ArrowLeft") {
+          prevSlide();
+        }
+      });
+
+      // Button navigation
+      prevBtn.addEventListener("click", prevSlide);
+      nextBtn.addEventListener("click", nextSlide);
+
+      // Interactive code blocks (expand/collapse)
+      const toggleButtons = document.querySelectorAll(".toggle-code");
+      toggleButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const block = btn.closest(".code-block");
+          if (!block) return;
+          const content = block.querySelector(".code-content");
+          const chevron = btn.querySelector(".chevron");
+          const isOpen = content.classList.contains("open");
+
+          if (isOpen) {
+            content.classList.remove("open");
+            btn.lastChild.textContent = " Show code";
+            if (chevron) chevron.textContent = "▼";
+          } else {
+            content.classList.add("open");
+            btn.lastChild.textContent = " Hide code";
+            if (chevron) chevron.textContent = "▲";
+          }
+        });
+      });
+
+      // Initial UI state
+      updateUI();
+    })();
+  </script>
+</body>
+</html>
