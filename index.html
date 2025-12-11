@@ -53,6 +53,118 @@
       flex-direction: column;
     }
 
+    /* Navigation Bar */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 18, 38, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      margin: -40px -24px 40px;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .nav-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-title::before {
+      content: '📚';
+      font-size: 18px;
+    }
+
+    .nav-weeks {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-week-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 36px;
+      padding: 0 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-week-link:hover {
+      background: rgba(108, 99, 255, 0.2);
+      border-color: var(--brand);
+      color: var(--text);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+    }
+
+    .nav-week-link.active {
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      border-color: var(--brand);
+      color: white;
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.4);
+    }
+
+    .nav-week-link.special {
+      background: rgba(255, 209, 102, 0.15);
+      border-color: rgba(255, 209, 102, 0.4);
+    }
+
+    .nav-week-link.special:hover {
+      background: rgba(255, 209, 102, 0.25);
+      border-color: var(--accent-2);
+      box-shadow: 0 4px 12px rgba(255, 209, 102, 0.3);
+    }
+
+    .nav-quiz-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: rgba(0, 209, 255, 0.15);
+      border: 1px solid rgba(0, 209, 255, 0.3);
+      border-radius: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-quiz-link:hover {
+      background: rgba(0, 209, 255, 0.25);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 209, 255, 0.3);
+    }
+
     /* Header */
     header {
       text-align: center;
@@ -157,6 +269,10 @@
     .week-card:nth-child(3) { animation-delay: 0.3s; }
     .week-card:nth-child(4) { animation-delay: 0.4s; }
     .week-card:nth-child(5) { animation-delay: 0.5s; }
+    .week-card:nth-child(6) { animation-delay: 0.6s; }
+    .week-card:nth-child(7) { animation-delay: 0.7s; }
+    .week-card:nth-child(8) { animation-delay: 0.8s; }
+    .week-card:nth-child(9) { animation-delay: 0.9s; }
 
     .week-badge {
       display: inline-flex;
@@ -376,11 +492,57 @@
       .container {
         padding: 24px 16px;
       }
+
+      .nav-bar {
+        padding: 12px 16px;
+        margin: -24px -16px 24px;
+      }
+
+      .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-weeks {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-week-link {
+        min-width: 40px;
+        height: 32px;
+        font-size: 12px;
+        padding: 0 10px;
+      }
+
+      .nav-quiz-link {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <div class="nav-title">Quick Navigation</div>
+        <div class="nav-weeks">
+          <a href="#week1" class="nav-week-link" data-week="1">W1</a>
+          <a href="#week2" class="nav-week-link" data-week="2">W2</a>
+          <a href="#week3" class="nav-week-link" data-week="3">W3</a>
+          <a href="#week4" class="nav-week-link" data-week="4">W4</a>
+          <a href="#week5" class="nav-week-link" data-week="5">W5</a>
+          <a href="#week6" class="nav-week-link" data-week="6">W6</a>
+          <a href="#week7" class="nav-week-link" data-week="7">W7</a>
+          <a href="#week9" class="nav-week-link special" data-week="9">W9</a>
+          <a href="#week12" class="nav-week-link special" data-week="12">W12</a>
+          <a href="comprehensive-quiz.html" class="nav-quiz-link">📝 Quiz</a>
+        </div>
+      </div>
+    </nav>
+
     <!-- Header -->
     <header>
       <div class="logo">
@@ -395,7 +557,7 @@
     <main>
       <div class="course-grid">
         <!-- Week 1 -->
-        <div class="week-card">
+        <div class="week-card" id="week1">
           <span class="week-badge">
             <span>📚</span>
             Week 1
@@ -418,7 +580,7 @@
         </div>
 
         <!-- Week 2 -->
-        <div class="week-card">
+        <div class="week-card" id="week2">
           <span class="week-badge">
             <span>🏗️</span>
             Week 2
@@ -440,7 +602,7 @@
         </div>
 
         <!-- Week 3 -->
-        <div class="week-card">
+        <div class="week-card" id="week3">
           <span class="week-badge">
             <span>🎨</span>
             Week 3
@@ -462,7 +624,7 @@
         </div>
 
         <!-- Week 4 -->
-        <div class="week-card">
+        <div class="week-card" id="week4">
           <span class="week-badge">
             <span>📱</span>
             Week 4
@@ -485,7 +647,7 @@
         </div>
 
         <!-- Week 5 -->
-        <div class="week-card">
+        <div class="week-card" id="week5">
           <span class="week-badge">
             <span>⚙️</span>
             Week 5
@@ -507,7 +669,7 @@
         </div>
 
         <!-- Week 6 -->
-        <div class="week-card">
+        <div class="week-card" id="week6">
           <span class="week-badge">
             <span>🔌</span>
             Week 6
@@ -529,7 +691,7 @@
         </div>
 
         <!-- Week 7 -->
-        <div class="week-card">
+        <div class="week-card" id="week7">
           <span class="week-badge">
             <span>⚛️</span>
             Week 7
@@ -547,6 +709,55 @@
           </ul>
           <div class="resource-links">
             <a href="week7/index.html" class="btn-primary">Main Lecture</a>
+          </div>
+        </div>
+
+        <!-- Week 9 -->
+        <div class="week-card" id="week9">
+          <span class="week-badge">
+            <span>📊</span>
+            Week 9
+          </span>
+          <h2 class="week-title">Digital Marketing: SEO & UX with AI</h2>
+          <p class="week-description">
+            Learn how to drive traffic to your websites using SEO, leverage AI tools for content creation, and create user-centric designs that convert visitors into customers.
+          </p>
+          <ul class="topics-list">
+            <li>Search Engine Optimization (SEO)</li>
+            <li>AI-Powered Marketing Tools</li>
+            <li>User Experience (UX) Design</li>
+            <li>Conversion Optimization</li>
+            <li>Analytics & Performance Tracking</li>
+          </ul>
+          <div class="resource-links">
+            <a href="week9/index.html" class="btn-primary">Course Materials</a>
+            <a href="week9/module1-seo.html" class="btn-secondary">📈 SEO Module</a>
+            <a href="week9/module2-ai.html" class="btn-secondary">🤖 AI Module</a>
+            <a href="week9/module3-ux.html" class="btn-secondary">🎨 UX Module</a>
+            <a href="week9/quick-reference.html" class="btn-secondary">📋 Quick Reference</a>
+          </div>
+        </div>
+
+        <!-- Week 12 -->
+        <div class="week-card" id="week12">
+          <span class="week-badge">
+            <span>🏥</span>
+            Week 12
+          </span>
+          <h2 class="week-title">CareDesk Case Study: AI-Assisted Development</h2>
+          <p class="week-description">
+            A comprehensive case study documenting the real-world development of a hospital management system, including architecture decisions, debugging challenges, and lessons learned from AI-assisted development.
+          </p>
+          <ul class="topics-list">
+            <li>Full-Stack Development Workflow</li>
+            <li>Database Design & Architecture</li>
+            <li>Authentication Challenges & Solutions</li>
+            <li>Debugging Techniques</li>
+            <li>AI-Assisted Development Best Practices</li>
+          </ul>
+          <div class="resource-links">
+            <a href="week12/index.html" class="btn-primary">Case Study</a>
+            <a href="week12/project/index.html" class="btn-secondary">🔗 Project Outline</a>
           </div>
         </div>
       </div>
@@ -582,10 +793,48 @@
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
     });
+
+    // Highlight active week in navigation based on scroll position
+    const weekCards = document.querySelectorAll('.week-card[id]');
+    const navLinks = document.querySelectorAll('.nav-week-link[data-week]');
+    
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + 150;
+      
+      weekCards.forEach((card, index) => {
+        const cardTop = card.offsetTop;
+        const cardBottom = cardTop + card.offsetHeight;
+        
+        if (scrollPos >= cardTop && scrollPos < cardBottom) {
+          const weekId = card.id.replace('week', '');
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.week === weekId) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }
+
+    // Update on scroll
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateActiveNav();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Initial check
+    updateActiveNav();
 
     // Add keyboard navigation for accessibility
     document.addEventListener('keydown', (e) => {

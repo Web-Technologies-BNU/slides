@@ -1,123 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Business of Digital Marketing - Course Materials</title>
-    <link rel="stylesheet" href="retro-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Marketing: SEO & UX with AI – Week 9</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand: #6c63ff;
+      --brand-dark: #5548d9;
+      --accent: #00d1ff;
+      --accent-2: #ffd166;
+      --bg: #0f1226;
+      --surface: #14183a;
+      --card: #1a1f3a;
+      --text: #e7e9ff;
+      --muted: #aab0ff;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 800px at 10% -10%, rgba(124, 92, 255, 0.15), transparent 60%),
+                  radial-gradient(1000px 700px at 110% 10%, rgba(0, 209, 255, 0.12), transparent 60%),
+                  linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0) 40%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 18, 38, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      margin: -40px -24px 40px;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--brand), var(--accent));
+      box-shadow: 0 0 20px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .instructor {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Intro Section */
+    .intro {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease 0.2s backwards;
+    }
+
+    .intro h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .intro p {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* Stats Grid */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease 0.3s backwards;
+    }
+
+    .stat-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Course Grid */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    /* Module Card */
+    .module-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease backwards;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--brand), var(--accent));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .module-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .module-card:nth-child(1) { 
+      animation-delay: 0.4s; 
+    }
+    .module-card:nth-child(2) { 
+      animation-delay: 0.5s; 
+    }
+    .module-card:nth-child(3) { 
+      animation-delay: 0.6s; 
+    }
+
+    .module-1::before {
+      background: linear-gradient(90deg, #ff6b9d, #c44569);
+    }
+    .module-2::before {
+      background: linear-gradient(90deg, #4ecdc4, #44a08d);
+    }
+    .module-3::before {
+      background: linear-gradient(90deg, #feca57, #ff9ff3);
+    }
+
+    .module-header {
+      margin-bottom: 20px;
+    }
+
+    .module-header h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .module-header p {
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .module-content ul {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+
+    .module-content li {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .module-content li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+    }
+
+    .btn::after {
+      content: '→';
+      transition: transform 0.3s ease;
+    }
+
+    .btn:hover::after {
+      transform: translateX(4px);
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      font-size: clamp(28px, 4vw, 36px);
+      font-weight: 700;
+      margin-bottom: 32px;
+      color: var(--text);
+      animation: fadeInUp 0.8s ease 0.1s backwards;
+    }
+
+    /* Resources Section */
+    .resources {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease 0.7s backwards;
+    }
+
+    .resources h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+
+    .resource-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .resource-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .resource-item h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .resource-item ul {
+      list-style: none;
+    }
+
+    .resource-item li {
+      padding: 8px 0;
+      color: var(--muted);
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .resource-item li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .resource-item a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .resource-item a:hover {
+      color: var(--text);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 60px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 24px 16px;
+      }
+
+      .nav-bar {
+        padding: 12px 16px;
+        margin: -24px -16px 24px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header style="text-align: center;">
-        <h1>Digital Marketing Course</h1>
-        <p>Driving Traffic: SEO & UX with AI</p>
+  <div class="container">
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="nav-container">
+        <a href="../index.html#week9" class="nav-link">← Back to Main Index</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+      <div class="logo">
+        <span class="dot"></span>
+      </div>
+      <h1>Digital Marketing Course</h1>
+      <p class="subtitle">SEO & UX with AI – Week 9</p>
+      <span class="instructor">Driving Traffic // Optimization // Conversion</span>
     </header>
-    
-    <div class="container">
-        <div class="intro">
-            <h2>Course Overview</h2>
-            <p>This comprehensive course covers the essential aspects of digital marketing, combining traditional SEO strategies with cutting-edge AI tools and user-centric design principles. Whether you're looking to drive traffic, optimize your website, or create compelling content, this course provides practical, actionable knowledge.</p>
+
+    <!-- Course Content -->
+    <main>
+      <!-- Intro Section -->
+      <div class="intro">
+        <h2>Course Overview</h2>
+        <p>This comprehensive course covers the essential aspects of digital marketing, combining traditional SEO strategies with cutting-edge AI tools and user-centric design principles. Whether you're looking to drive traffic, optimize your website, or create compelling content, this course provides practical, actionable knowledge.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-number">03</div>
+          <div class="stat-label">Core Modules</div>
         </div>
-        
-        <div class="stats">
-            <div class="stat-box">
-                <div class="stat-number">03</div>
-                <div class="stat-label">CORE MODULES</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">15+</div>
-                <div class="stat-label">KEY TOPICS</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">10+</div>
-                <div class="stat-label">AI TOOLS</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">PRACTICAL</div>
-            </div>
+        <div class="stat-box">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Key Topics</div>
         </div>
-        
-        <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark); font-size: 2rem; font-weight: 700;">Course Modules</h2>
-        
-        <div class="modules">
-            <div class="module-card module-1">
-                <div class="module-header">
-                    <h3>Module 01: SEO & Analytics</h3>
-                    <p>Master search engine optimization and traffic generation</p>
-                </div>
-                <div class="module-content">
-                    <ul>
-                        <li>What is SEO and why it matters</li>
-                        <li>Technical SEO essentials</li>
-                        <li>Keyword research strategies</li>
-                        <li>Website SEO analysis</li>
-                        <li>Analytics and tracking</li>
-                    </ul>
-                    <a href="module1-seo.html" class="btn">View Module 01 →</a>
-                </div>
-            </div>
-            
-            <div class="module-card module-2">
-                <div class="module-header">
-                    <h3>Module 02: AI-Powered Marketing</h3>
-                    <p>Leverage AI tools for content and strategy</p>
-                </div>
-                <div class="module-content">
-                    <ul>
-                        <li>AI tools for keyword research</li>
-                        <li>Content creation with AI</li>
-                        <li>Blog outlines and ad copy</li>
-                        <li>Social media automation</li>
-                        <li>Practical AI prompts</li>
-                    </ul>
-                    <a href="module2-ai.html" class="btn">View Module 02 →</a>
-                </div>
-            </div>
-            
-            <div class="module-card module-3">
-                <div class="module-header">
-                    <h3>Module 03: User-Centric Design</h3>
-                    <p>Create experiences that convert</p>
-                </div>
-                <div class="module-content">
-                    <ul>
-                        <li>UX principles and philosophy</li>
-                        <li>Usability components</li>
-                        <li>Conducting usability reviews</li>
-                        <li>AI usability testing</li>
-                        <li>Conversion optimization</li>
-                    </ul>
-                    <a href="module3-ux.html" class="btn">View Module 03 →</a>
-                </div>
-            </div>
+        <div class="stat-box">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">AI Tools</div>
         </div>
-        
-        <div class="resources">
-            <h2>Resources</h2>
-            <div class="resource-grid">
-                <div class="resource-item">
-                    <h3>Study Files</h3>
-                    <ul>
-                        <li><a href="quick-reference.html">Quick Reference</a></li>
-                        <li><a href="ai-prompts.html">AI Prompt Library</a></li>
-                    </ul>
-                </div>
-                
-                <div class="resource-item">
-                    <h3>External Resources</h3>
-                    <ul>
-                        <li><a href="https://search.google.com/search-console" target="_blank">Google Search Console</a></li>
-                        <li><a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
-                        <li><a href="https://www.nngroup.com" target="_blank">Nielsen Norman Group</a></li>
-                    </ul>
-                </div>
-            </div>
+        <div class="stat-box">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Practical</div>
         </div>
-    </div>
-    
+      </div>
+
+      <!-- Course Modules -->
+      <h2 class="section-title">Course Modules</h2>
+      
+      <div class="course-grid">
+        <a href="module1-seo.html" class="module-card module-1">
+          <div class="module-header">
+            <h3>Module 01: SEO & Analytics</h3>
+            <p>Master search engine optimization and traffic generation</p>
+          </div>
+          <div class="module-content">
+            <ul>
+              <li>What is SEO and why it matters</li>
+              <li>Technical SEO essentials</li>
+              <li>Keyword research strategies</li>
+              <li>Website SEO analysis</li>
+              <li>Analytics and tracking</li>
+            </ul>
+            <span class="btn">View Module →</span>
+          </div>
+        </a>
+
+        <a href="module2-ai.html" class="module-card module-2">
+          <div class="module-header">
+            <h3>Module 02: AI-Powered Marketing</h3>
+            <p>Leverage AI tools for content and strategy</p>
+          </div>
+          <div class="module-content">
+            <ul>
+              <li>AI tools for keyword research</li>
+              <li>Content creation with AI</li>
+              <li>Blog outlines and ad copy</li>
+              <li>Social media automation</li>
+              <li>Practical AI prompts</li>
+            </ul>
+            <span class="btn">View Module →</span>
+          </div>
+        </a>
+
+        <a href="module3-ux.html" class="module-card module-3">
+          <div class="module-header">
+            <h3>Module 03: User-Centric Design</h3>
+            <p>Create experiences that convert</p>
+          </div>
+          <div class="module-content">
+            <ul>
+              <li>UX principles and philosophy</li>
+              <li>Usability components</li>
+              <li>Conducting usability reviews</li>
+              <li>AI usability testing</li>
+              <li>Conversion optimization</li>
+            </ul>
+            <span class="btn">View Module →</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Resources Section -->
+      <div class="resources">
+        <h2>Resources</h2>
+        <div class="resource-grid">
+          <div class="resource-item">
+            <h3>Study Files</h3>
+            <ul>
+              <li><a href="quick-reference.html">Quick Reference</a></li>
+              <li><a href="ai-prompts.html">AI Prompt Library</a></li>
+            </ul>
+          </div>
+
+          <div class="resource-item">
+            <h3>External Resources</h3>
+            <ul>
+              <li><a href="https://search.google.com/search-console" target="_blank">Google Search Console</a></li>
+              <li><a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
+              <li><a href="https://www.nngroup.com" target="_blank">Nielsen Norman Group</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
     <footer>
-        <p>© 2024 Digital Marketing Course</p>
-        <p style="margin-top: 10px;">Questions? Reach out during office hours</p>
+      <p>&copy; 2025 Hamad Rakhshani · Beaconhouse National University</p>
+      <p style="margin-top: 10px;">Digital Marketing Course – Week 9</p>
     </footer>
+  </div>
 </body>
 </html>
