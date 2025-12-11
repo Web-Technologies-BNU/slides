@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareDesk Case Study - AI-Assisted Development</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0EA5E9;
+            --primary-dark: #0284C7;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            --purple: #8B5CF6;
+            --bg-dark: #0F172A;
+            --bg-card: #1E293B;
+            --bg-light: #F8FAFC;
+            --text-dark: #0F172A;
+            --text-light: #F8FAFC;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-size: 11pt;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: white;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            background: white;
+            page-break-after: always;
+            position: relative;
+        }
+
+        .page:last-child {
+            page-break-after: avoid;
+        }
+
+        /* Cover Page */
+        .cover {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2744 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30mm;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-badge {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--secondary);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .cover-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 30px;
+            box-shadow: 0 20px 60px rgba(14, 165, 233, 0.3);
+        }
+
+        .cover-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .cover-subtitle {
+            font-size: 20px;
+            color: var(--primary);
+            margin-bottom: 40px;
+        }
+
+        .cover-description {
+            font-size: 16px;
+            color: #94A3B8;
+            max-width: 500px;
+            margin: 0 auto 50px;
+            line-height: 1.7;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .cover-meta-item {
+            text-align: center;
+        }
+
+        .cover-meta-label {
+            font-size: 11px;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .cover-meta-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Section Headers */
+        .section-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        /* Content Styles */
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 24px 0 12px;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 20px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #334155;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #EFF6FF, #F0F9FF);
+            border-left: 4px solid var(--primary);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .info-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '"';
+            font-size: 60px;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 0;
+            left: 16px;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-style: italic;
+            color: #475569;
+            padding-left: 30px;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        .code-block-header {
+            color: #64748B;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .code-block code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #E2E8F0;
+            line-height: 1.6;
+        }
+
+        .code-keyword { color: #C084FC; }
+        .code-string { color: #86EFAC; }
+        .code-comment { color: #64748B; }
+        .code-function { color: #60A5FA; }
+
+        /* Table */
+        .table-container {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #F1F5F9;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        tr:hover {
+            background: #F8FAFC;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--purple));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .timeline-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Status Badge */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success { background: #D1FAE5; color: #059669; }
+        .badge-error { background: #FEE2E2; color: #DC2626; }
+        .badge-warning { background: #FEF3C7; color: #D97706; }
+        .badge-info { background: #DBEAFE; color: #2563EB; }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Diagram Box */
+        .diagram-box {
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--bg-dark), #1a2744);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .highlight-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .highlight-box p {
+            color: #94A3B8;
+        }
+
+        /* Steps */
+        .steps {
+            margin: 20px 0;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* List */
+        ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        /* Footer */
+        .page-footer {
+            position: absolute;
+            bottom: 20mm;
+            left: 20mm;
+            right: 20mm;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-col {
+            background: #F8FAFC;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .comparison-col.bad {
+            border: 2px solid #FCA5A5;
+        }
+
+        .comparison-col.good {
+            border: 2px solid #86EFAC;
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .comparison-col.bad .comparison-label { color: #DC2626; }
+        .comparison-col.good .comparison-label { color: #059669; }
+
+        /* Debug Log */
+        .debug-log {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+        }
+
+        .debug-line {
+            color: #64748B;
+            margin-bottom: 4px;
+        }
+
+        .debug-line.highlight {
+            color: #FCD34D;
+        }
+
+        .debug-line.error {
+            color: #F87171;
+        }
+
+        .debug-line.success {
+            color: #4ADE80;
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1: COVER -->
+    <div class="page cover">
+        <div class="cover-content">
+            <div class="cover-badge">📚 Educational Case Study</div>
+            
+            <div class="cover-icon">🏥</div>
+            
+            <h1 class="cover-title">Building CareDesk</h1>
+            <p class="cover-subtitle">AI-Assisted Development with Claude & Cursor</p>
+            
+            <p class="cover-description">
+                A comprehensive case study documenting the real-world development of a hospital management system, including architecture decisions, debugging challenges, and lessons learned.
+            </p>
+
+            <div class="cover-meta">
+                <div class="cover-meta-item">
+                    <div class="cover-meta-label">Developer</div>
+                    <div class="cover-meta-value">Hamad</div>
+                </div>
+                <div class="cover-meta-item">
+                    <div class="cover-meta-label">AI Assistant</div>
+                    <div class="cover-meta-value">Claude (Anthropic)</div>
+                </div>
+                <div class="cover-meta-item">
+                    <div class="cover-meta-label">IDE</div>
+                    <div class="cover-meta-value">Cursor</div>
+                </div>
+                <div class="cover-meta-item">
+                    <div class="cover-meta-label">Duration</div>
+                    <div class="cover-meta-value">~1 Week</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: INTRODUCTION -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 01</div>
+            <h1 class="section-title">Introduction</h1>
+        </div>
+
+        <h2>The Project</h2>
+        <p>CareDesk is a hospital appointment management system built for a non-profit community hospital in Pakistan. The project demonstrates how AI assistants can accelerate development while also highlighting the debugging process when things go wrong.</p>
+
+        <div class="quote-box">
+            <p class="quote-text">My childhood friends are working on a hospital project for the needy. They need an application that allows them to enter schedules for doctor patient appointment, set fee and have the ticket no. printed on paper with that tool (I don't know what it is called).</p>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">💡 AI Insight</div>
+            <p>The developer didn't know the term "thermal printer" — AI identified the requirement from context, demonstrating how AI can bridge knowledge gaps.</p>
+        </div>
+
+        <h2>Key Requirements</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <div class="card-title">Authentication</div>
+                <div class="card-desc">Admin login to protect the system</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🩺</div>
+                <div class="card-title">Doctor Management</div>
+                <div class="card-desc">Add doctors, set schedules and fees</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Patient Records</div>
+                <div class="card-desc">Store patient information and history</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Appointments</div>
+                <div class="card-desc">Book appointments with time slots</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🖨️</div>
+                <div class="card-title">Ticket Printing</div>
+                <div class="card-desc">Print receipts on thermal printer</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Dashboard</div>
+                <div class="card-desc">Analytics and daily overview</div>
+            </div>
+        </div>
+
+        <h2>Constraints</h2>
+        <ul>
+            <li><strong>Budget:</strong> Free (non-profit organization)</li>
+            <li><strong>Timeline:</strong> Fast development needed</li>
+            <li><strong>Hosting:</strong> Must work with free tier services</li>
+            <li><strong>Devices:</strong> PC, tablet, and mobile support</li>
+        </ul>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 2</span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: TIMELINE -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 02</div>
+            <h1 class="section-title">Development Journey</h1>
+        </div>
+
+        <h2>Project Timeline</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-title">Day 1: Requirements & Planning</div>
+                <div class="timeline-desc">Gathered requirements, identified thermal printer need, created initial documentation</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Day 2: Database Design</div>
+                <div class="timeline-desc">Designed PostgreSQL schema with 5 tables, relationships, triggers, and views</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Day 3: Tech Stack Decision</div>
+                <div class="timeline-desc">Initially planned React Native, pivoted to Next.js for better cross-platform support</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Day 4-5: The Auth Challenge</div>
+                <div class="timeline-desc">Implemented Supabase auth, encountered infinite redirect loop, debugged systematically</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Day 6: Deployment</div>
+                <div class="timeline-desc">Fixed route group structure, deployed to Vercel</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Day 7: UI Polish</div>
+                <div class="timeline-desc">Created design system, wireframes, and component styling guides</div>
+            </div>
+        </div>
+
+        <h2>Technology Pivot</h2>
+        <p>A key decision point came when the developer asked: "If I want this app on PC too, can React Native do it?"</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Option</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                        <th>Decision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>React Native Windows</td>
+                        <td>Native feel</td>
+                        <td>Complex setup</td>
+                        <td><span class="badge badge-error">Rejected</span></td>
+                    </tr>
+                    <tr>
+                        <td>React Native Web</td>
+                        <td>Same codebase</td>
+                        <td>Printing issues</td>
+                        <td><span class="badge badge-error">Rejected</span></td>
+                    </tr>
+                    <tr>
+                        <td>Electron</td>
+                        <td>True desktop app</td>
+                        <td>150MB+ size</td>
+                        <td><span class="badge badge-error">Rejected</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Next.js Web App</strong></td>
+                        <td>Works everywhere</td>
+                        <td>Needs browser</td>
+                        <td><span class="badge badge-success">Selected</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">🎯 Key Learning</div>
+            <p>The best technical choice isn't always the most "native" solution. A web app that works everywhere is better than a native app that's difficult to maintain across platforms.</p>
+        </div>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 3</span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: DATABASE DESIGN -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 03</div>
+            <h1 class="section-title">Database Design</h1>
+        </div>
+
+        <h2>Entity Relationship Diagram</h2>
+        
+        <div class="diagram-box">┌─────────────┐       ┌─────────────────┐       ┌─────────────┐
+│   doctors   │       │  appointments   │       │  patients   │
+├─────────────┤       ├─────────────────┤       ├─────────────┤
+│ id (PK)     │──┐    │ id (PK)         │    ┌──│ id (PK)     │
+│ name        │  │    │ ticket_number   │    │  │ name        │
+│ specialization│ └──→│ doctor_id (FK)  │←───┘  │ phone       │
+│ consultation_fee│   │ patient_id (FK) │       │ age         │
+│ schedule    │       │ appointment_date │       │ gender      │
+│ is_active   │       │ status          │       │ blood_group │
+└─────────────┘       └────────┬────────┘       └─────────────┘
+                               │
+                               ▼
+                      ┌─────────────────┐
+                      │    billing      │
+                      ├─────────────────┤
+                      │ id (PK)         │
+                      │ appointment_id  │
+                      │ invoice_number  │
+                      │ total, status   │
+                      └─────────────────┘</div>
+
+        <h2>Key Design Decisions</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">UUID for Primary Keys</div>
+                    <div class="step-desc">Better for distributed systems, prevents sequential ID guessing attacks</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">JSONB for Doctor Schedules</div>
+                    <div class="step-desc">Flexible storage for weekly availability without multiple columns</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Separate Billing Table</div>
+                    <div class="step-desc">Allows partial payments, refunds, and detailed financial tracking</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Auto-Generated Ticket Numbers</div>
+                    <div class="step-desc">Format: APT-YYYYMMDD-XXXX using database triggers</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Schedule JSONB Example</h2>
+        <div class="code-block">
+            <div class="code-block-header">JSONB Structure</div>
+            <code>{
+  <span class="code-string">"monday"</span>: { <span class="code-string">"start"</span>: <span class="code-string">"09:00"</span>, <span class="code-string">"end"</span>: <span class="code-string">"17:00"</span>, <span class="code-string">"enabled"</span>: <span class="code-keyword">true</span> },
+  <span class="code-string">"tuesday"</span>: { <span class="code-string">"start"</span>: <span class="code-string">"09:00"</span>, <span class="code-string">"end"</span>: <span class="code-string">"17:00"</span>, <span class="code-string">"enabled"</span>: <span class="code-keyword">true</span> },
+  <span class="code-string">"sunday"</span>: { <span class="code-string">"enabled"</span>: <span class="code-keyword">false</span> }
+}</code>
+        </div>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 4</span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: THE BIG CHALLENGE -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 04</div>
+            <h1 class="section-title">The Authentication Challenge</h1>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🐛 The Bug</h3>
+            <p>After implementing Supabase authentication, the login page kept refreshing in an infinite loop: Login → Dashboard → No Session → Back to Login</p>
+        </div>
+
+        <h2>Debugging Attempt #1: The Redirect Issue</h2>
+        
+        <div class="comparison">
+            <div class="comparison-col bad">
+                <div class="comparison-label">❌ Problem Code</div>
+                <div class="code-block" style="background: #2a1a1a;">
+                    <code><span class="code-keyword">try</span> {
+  <span class="code-comment">// ... login logic</span>
+  <span class="code-function">redirect</span>(<span class="code-string">"/dashboard"</span>)
+} <span class="code-keyword">catch</span> (error) {
+  <span class="code-comment">// Catches NEXT_REDIRECT!</span>
+  <span class="code-keyword">return</span> { error: <span class="code-string">"Error"</span> }
+}</code>
+                </div>
+            </div>
+            <div class="comparison-col good">
+                <div class="comparison-label">✅ Fixed Code</div>
+                <div class="code-block" style="background: #1a2a1a;">
+                    <code><span class="code-keyword">let</span> shouldRedirect = <span class="code-keyword">false</span>
+
+<span class="code-keyword">try</span> {
+  <span class="code-comment">// ... login logic</span>
+  shouldRedirect = <span class="code-keyword">true</span>
+} <span class="code-keyword">catch</span> (error) { ... }
+
+<span class="code-comment">// Outside try-catch!</span>
+<span class="code-keyword">if</span> (shouldRedirect) {
+  <span class="code-function">redirect</span>(<span class="code-string">"/dashboard"</span>)
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">📖 Learning Point</div>
+            <p>Next.js <code>redirect()</code> works by throwing a special <code>NEXT_REDIRECT</code> error. If caught in a try-catch, it prevents the redirect from working.</p>
+        </div>
+
+        <h2>Still Not Working! Debug the Middleware</h2>
+        
+        <p>Added logging to see what the middleware was receiving:</p>
+
+        <div class="debug-log">
+            <div class="debug-line">=== MIDDLEWARE DEBUG ===</div>
+            <div class="debug-line">Path: /dashboard</div>
+            <div class="debug-line highlight">hasUser: false</div>
+            <div class="debug-line">=== COOKIE DEBUG ===</div>
+            <div class="debug-line success">Cookie found: sb-xxxx-auth-token</div>
+            <div class="debug-line success">Cookie length: 1835 characters</div>
+            <div class="debug-line error">HttpOnly: blank ← THE PROBLEM!</div>
+            <div class="debug-line error">Secure: blank</div>
+        </div>
+
+        <h2>Root Cause Found!</h2>
+        <p>The cookie existed but wasn't being sent with server-side requests because <strong>HttpOnly was not set</strong>. The <code>@supabase/ssr</code> package wasn't setting cookies correctly.</p>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 5</span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: THE SOLUTION -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 05</div>
+            <h1 class="section-title">The Solution</h1>
+        </div>
+
+        <h2>Debugging Summary</h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Attempt</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Fix redirect() in try-catch</td>
+                        <td><span class="badge badge-warning">Partial fix</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Client-side router.push()</td>
+                        <td><span class="badge badge-error">Still broken</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>window.location.href</td>
+                        <td><span class="badge badge-error">Loops to login</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Add middleware logging</td>
+                        <td><span class="badge badge-info">Found hasUser: false</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Check browser cookies</td>
+                        <td><span class="badge badge-info">Found HttpOnly missing</span></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Use getSession() instead</td>
+                        <td><span class="badge badge-error">Still broken</span></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><strong>Switch to auth-helpers package</strong></td>
+                        <td><span class="badge badge-success">FIXED!</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>The Fix: Use Battle-Tested Package</h2>
+        
+        <div class="code-block">
+            <div class="code-block-header">Install the working package</div>
+            <code>npm install @supabase/auth-helpers-nextjs @supabase/supabase-js</code>
+        </div>
+
+        <div class="code-block">
+            <div class="code-block-header">middleware.ts (Fixed)</div>
+            <code><span class="code-keyword">import</span> { createMiddlewareClient } <span class="code-keyword">from</span> <span class="code-string">'@supabase/auth-helpers-nextjs'</span>
+
+<span class="code-keyword">export async function</span> <span class="code-function">middleware</span>(request) {
+  <span class="code-keyword">const</span> response = NextResponse.<span class="code-function">next</span>()
+  <span class="code-keyword">const</span> supabase = <span class="code-function">createMiddlewareClient</span>({ 
+    req: request, 
+    res: response 
+  })
+  
+  <span class="code-keyword">const</span> { data: { session } } = <span class="code-keyword">await</span> supabase.auth.<span class="code-function">getSession</span>()
+  
+  <span class="code-comment">// Now session is properly detected!</span>
+}</code>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎉 Result</h3>
+            <p>Login works! The <code>@supabase/auth-helpers-nextjs</code> package properly handles cookie encoding/decoding that the newer <code>@supabase/ssr</code> package wasn't doing correctly.</p>
+        </div>
+
+        <div class="info-box">
+            <div class="info-box-title">💡 Key Lesson</div>
+            <p><strong>Newer isn't always better.</strong> The older, battle-tested <code>auth-helpers</code> package worked perfectly while the newer <code>ssr</code> package had cookie encoding issues. Always consider package maturity.</p>
+        </div>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 7: LESSONS LEARNED -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 06</div>
+            <h1 class="section-title">Lessons Learned</h1>
+        </div>
+
+        <h2>For AI-Assisted Development</h2>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <div class="card-title">Detailed Specs = Better Code</div>
+                <div class="card-desc">The more detailed your README and specifications, the more consistent code AI tools like Cursor will generate.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <div class="card-title">AI Accelerates, Doesn't Replace</div>
+                <div class="card-desc">You still need to understand the technology. AI is a powerful tool, but debugging requires human intuition.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔍</div>
+                <div class="card-title">Context is Everything</div>
+                <div class="card-desc">When asking AI for help, provide full context: code, error messages, what you've tried, and terminal output.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">✅</div>
+                <div class="card-title">Verify, Don't Trust Blindly</div>
+                <div class="card-desc">AI-generated code needs review. Understand what's being generated and why it works.</div>
+            </div>
+        </div>
+
+        <h2>Effective AI Prompting</h2>
+
+        <div class="comparison">
+            <div class="comparison-col bad">
+                <div class="comparison-label">❌ Bad Prompt</div>
+                <p style="font-size: 13px; margin: 0;">"Make the dashboard look better"</p>
+            </div>
+            <div class="comparison-col good">
+                <div class="comparison-label">✅ Good Prompt</div>
+                <p style="font-size: 13px; margin: 0;">"Restyle the Dashboard stats cards: Background #1E293B, border-radius 16px, gradient top border 4px, icon container 44x44px"</p>
+            </div>
+        </div>
+
+        <h2>Systematic Debugging Workflow</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Reproduce the Issue</div>
+                    <div class="step-desc">Ensure you can consistently trigger the bug</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Add Strategic Logging</div>
+                    <div class="step-desc">Log at key points to trace execution flow</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Check All Relevant Logs</div>
+                    <div class="step-desc">Browser console AND terminal (server-side)</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Isolate the Problem Layer</div>
+                    <div class="step-desc">Client? Server? Middleware? Database?</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <div class="step-title">Check External State</div>
+                    <div class="step-desc">Cookies, localStorage, database records</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <div class="step-title">Try Simpler Alternatives</div>
+                    <div class="step-desc">Sometimes a different approach solves the issue faster</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 7</span>
+        </div>
+    </div>
+
+    <!-- PAGE 8: CONCLUSION -->
+    <div class="page">
+        <div class="section-header">
+            <div class="section-number">Chapter 07</div>
+            <h1 class="section-title">Conclusion & Results</h1>
+        </div>
+
+        <h2>What We Built</h2>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-title">✅ Secure Authentication</div>
+                <div class="card-desc">Admin login with session management</div>
+            </div>
+            <div class="card">
+                <div class="card-title">✅ Doctor Management</div>
+                <div class="card-desc">Profiles, schedules, fees</div>
+            </div>
+            <div class="card">
+                <div class="card-title">✅ Patient Records</div>
+                <div class="card-desc">Full patient database with history</div>
+            </div>
+            <div class="card">
+                <div class="card-title">✅ Appointment Booking</div>
+                <div class="card-desc">Time slots, confirmations, status tracking</div>
+            </div>
+            <div class="card">
+                <div class="card-title">✅ Billing System</div>
+                <div class="card-desc">Invoices, payments, revenue tracking</div>
+            </div>
+            <div class="card">
+                <div class="card-title">✅ Thermal Printing</div>
+                <div class="card-desc">Professional appointment tickets</div>
+            </div>
+        </div>
+
+        <h2>Time Savings with AI</h2>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Traditional</th>
+                        <th>With AI</th>
+                        <th>Savings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Database Schema</td>
+                        <td>4 hours</td>
+                        <td>30 min</td>
+                        <td><strong>87%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Documentation</td>
+                        <td>3 hours</td>
+                        <td>20 min</td>
+                        <td><strong>89%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>UI Wireframes</td>
+                        <td>8 hours</td>
+                        <td>1 hour</td>
+                        <td><strong>87%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Debugging Auth</td>
+                        <td>8 hours</td>
+                        <td>3 hours</td>
+                        <td><strong>62%</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Boilerplate Code</td>
+                        <td>6 hours</td>
+                        <td>1 hour</td>
+                        <td><strong>83%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="highlight-box">
+            <h3>🎯 Key Takeaways for Students</h3>
+            <p>1. <strong>AI is a tool, not a replacement</strong> — You need to understand what you're building<br>
+            2. <strong>Good prompts = good results</strong> — Invest time in clear, detailed instructions<br>
+            3. <strong>Debugging is still a skill</strong> — AI helps, but systematic debugging knowledge is essential<br>
+            4. <strong>Documentation matters</strong> — Well-documented projects work better with AI tools<br>
+            5. <strong>Stay curious</strong> — When AI suggests something, understand why it works</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding: 30px; background: #F8FAFC; border-radius: 16px;">
+            <p style="font-size: 18px; font-weight: 600; color: var(--text-dark); margin-bottom: 8px;">Built with ❤️ for community healthcare</p>
+            <p style="font-size: 13px; color: var(--text-muted);">December 2024 • Hamad × Claude × Cursor</p>
+        </div>
+
+        <div class="page-footer">
+            <span>CareDesk Case Study</span>
+            <span>Page 8</span>
+        </div>
+    </div>
+</body>
+</html>

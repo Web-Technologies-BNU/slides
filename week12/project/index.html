@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course End Project - CSC-224 Web Technologies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-magenta: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-green: #00ff41;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff6600;
+            --deep-space: #0a0e27;
+            --dark-purple: #1a0033;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Share Tech Mono', monospace;
+            background: var(--deep-space);
+            color: var(--neon-green);
+        }
+
+        /* Presentation Container */
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Individual Slides */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateX(50px);
+            background: var(--deep-space);
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,255,65,0.03) 0px, transparent 1px, transparent 2px, rgba(0,255,65,0.03) 3px),
+                repeating-linear-gradient(90deg, rgba(0,255,65,0.03) 0px, transparent 1px, transparent 2px, rgba(0,255,65,0.03) 3px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-50px);
+        }
+
+        /* Slide Content */
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .slide-content.left {
+            text-align: left;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: var(--neon-magenta);
+            text-shadow: 
+                0 0 10px var(--neon-magenta),
+                0 0 20px var(--neon-magenta),
+                0 0 40px var(--neon-magenta);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+            margin-bottom: 40px;
+        }
+
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--neon-magenta);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--neon-magenta);
+        }
+
+        p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            letter-spacing: 3px;
+        }
+
+        .course-code {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            letter-spacing: 5px;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+
+        /* Lists */
+        ul, ol {
+            text-align: left;
+            font-size: 1.3rem;
+            line-height: 2;
+            margin: 20px 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        ul li::marker {
+            color: var(--neon-cyan);
+        }
+
+        ol li::marker {
+            color: var(--neon-magenta);
+            font-weight: bold;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-green);
+            padding: 25px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .card h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .card.mandatory {
+            border-color: var(--neon-magenta);
+        }
+
+        .card.mandatory h4 {
+            color: var(--neon-magenta);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            margin: 3px;
+            border-radius: 3px;
+            font-family: 'VT323', monospace;
+        }
+
+        .tag-mandatory {
+            background: rgba(255, 0, 255, 0.2);
+            border: 1px solid var(--neon-magenta);
+            color: var(--neon-magenta);
+        }
+
+        .tag-required {
+            background: rgba(0, 255, 65, 0.2);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 20px;
+            border-left: 3px solid var(--neon-cyan);
+        }
+
+        .timeline-week {
+            font-family: 'VT323', monospace;
+            font-size: 1.1rem;
+            color: var(--neon-yellow);
+            min-width: 100px;
+        }
+
+        .timeline-content h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            margin-bottom: 5px;
+        }
+
+        .timeline-content p {
+            font-size: 0.95rem;
+            margin: 0;
+            opacity: 0.85;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .tool {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .tool h5 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            margin-bottom: 5px;
+        }
+
+        .tool p {
+            font-size: 0.8rem;
+            margin: 0;
+            opacity: 0.7;
+        }
+
+        .tool .price {
+            font-family: 'VT323', monospace;
+            color: var(--neon-yellow);
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Grading Bar */
+        .grading-bar {
+            display: flex;
+            height: 50px;
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .grading-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            color: var(--deep-space);
+            font-weight: bold;
+        }
+
+        /* Big Number */
+        .big-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8rem;
+            color: var(--neon-magenta);
+            text-shadow: 
+                0 0 20px var(--neon-magenta),
+                0 0 40px var(--neon-magenta);
+            line-height: 1;
+        }
+
+        .big-label {
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            margin-top: 10px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin: 40px 0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--neon-green);
+            margin-top: 5px;
+        }
+
+        /* Important Box */
+        .important-box {
+            background: rgba(255, 0, 255, 0.1);
+            border: 2px solid var(--neon-magenta);
+            padding: 30px;
+            margin: 20px 0;
+            text-align: left;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-magenta); }
+            50% { box-shadow: 0 0 25px var(--neon-magenta); }
+        }
+
+        .important-box h3 {
+            margin-bottom: 15px;
+        }
+
+        /* Two Column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .col-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--neon-green);
+            padding: 25px;
+        }
+
+        .col-box h4 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-cyan);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .col-box ul {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 12px 25px;
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--deep-space);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--neon-magenta);
+            box-shadow: 0 0 10px var(--neon-magenta);
+            transition: width 0.3s ease;
+            z-index: 100;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            z-index: 100;
+        }
+
+        /* Keyboard Hint */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 35px;
+            left: 40px;
+            font-family: 'VT323', monospace;
+            font-size: 0.9rem;
+            color: rgba(0, 255, 255, 0.5);
+            z-index: 100;
+        }
+
+        .keyboard-hint kbd {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin: 0 3px;
+        }
+
+        /* Highlight */
+        .highlight {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+        }
+
+        .highlight-cyan {
+            color: var(--neon-cyan);
+        }
+
+        .highlight-magenta {
+            color: var(--neon-magenta);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .slide {
+                padding: 40px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+                gap: 40px;
+            }
+
+            .big-number {
+                font-size: 5rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .slide {
+                position: relative;
+                page-break-after: always;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+            }
+
+            .nav-controls,
+            .progress-bar,
+            .slide-counter,
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+
+    <div class="presentation" id="presentation">
+        
+        <!-- SLIDE 1: Title -->
+        <div class="slide active" data-slide="1">
+            <div class="slide-content">
+                <h1>COURSE END PROJECT</h1>
+                <p class="subtitle">// BUILD.WITH.AI // SHIP.WITH.ANALYTICS //</p>
+                <p class="course-code">[ CSC-224 // WEB.TECHNOLOGIES ]</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Mission Brief -->
+        <div class="slide" data-slide="2">
+            <div class="slide-content">
+                <h2>Mission Brief</h2>
+                <p>Build a <span class="highlight">fully functional web or mobile application</span> using AI-assisted development tools.</p>
+                <p>Your application must include <span class="highlight-cyan">built-in analytics</span> to track user behavior and engagement.</p>
+                <div class="stats-row">
+                    <div class="stat">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">TEAMS</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">PER GROUP</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">WEEKS</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">ASSIGNMENTS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: AI Requirement -->
+        <div class="slide" data-slide="3">
+            <div class="slide-content">
+                <h2>AI-Assisted Development</h2>
+                <div class="important-box">
+                    <h3>⚡ REQUIRED: Use AI Tools</h3>
+                    <p>You are <span class="highlight">required</span> to use AI tools to build your application. This is not optional.</p>
+                    <p>Document which AI tools you used and how they helped in each phase.</p>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool">
+                        <h5>Claude</h5>
+                        <p>Planning & Docs</p>
+                    </div>
+                    <div class="tool">
+                        <h5>ChatGPT</h5>
+                        <p>Code Generation</p>
+                    </div>
+                    <div class="tool">
+                        <h5>Cursor</h5>
+                        <p>AI-Powered IDE</p>
+                    </div>
+                    <div class="tool">
+                        <h5>GitHub Copilot</h5>
+                        <p>Pair Programming</p>
+                    </div>
+                    <div class="tool">
+                        <h5>v0.dev</h5>
+                        <p>UI Generation</p>
+                    </div>
+                    <div class="tool">
+                        <h5>Bolt.new</h5>
+                        <p>Full-Stack Apps</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Mandatory Analytics -->
+        <div class="slide" data-slide="4">
+            <div class="slide-content">
+                <h2>🔴 Mandatory Features</h2>
+                <p>Every project MUST implement these regardless of your application idea:</p>
+                <div class="cards-grid" style="max-width: 800px; margin: 30px auto;">
+                    <div class="card mandatory">
+                        <span class="tag tag-mandatory">MANDATORY</span>
+                        <h4>Visitor Analytics</h4>
+                        <p>Track total visits, unique visitors, page views, session duration, traffic sources</p>
+                    </div>
+                    <div class="card mandatory">
+                        <span class="tag tag-mandatory">MANDATORY</span>
+                        <h4>Interaction Heatmap</h4>
+                        <p>Visualize clicks, scroll depth, mouse movement, attention hotspots</p>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; opacity: 0.8;">💡 Recommended: <span class="highlight-cyan">Microsoft Clarity</span> — Free & provides both features!</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Core Features -->
+        <div class="slide" data-slide="5">
+            <div class="slide-content">
+                <h2>Core Features Required</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>User Authentication</h4>
+                        <p>Signup, Login, Logout, Password Recovery</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Role-Based Access</h4>
+                        <p>Admin Panel vs Regular User</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>CRUD Operations</h4>
+                        <p>Create, Read, Update, Delete</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Search & Filter</h4>
+                        <p>Find and sort data easily</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Responsive Design</h4>
+                        <p>Mobile + Desktop support</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Form Validation</h4>
+                        <p>Client & Server side</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Data Visualization</h4>
+                        <p>Charts & Analytics Dashboard</p>
+                    </div>
+                    <div class="card">
+                        <span class="tag tag-required">REQUIRED</span>
+                        <h4>Data Export</h4>
+                        <p>CSV / PDF Reports</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: SDLC Timeline -->
+        <div class="slide" data-slide="6">
+            <div class="slide-content">
+                <h2>SDLC Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-week">WEEK 1</div>
+                        <div class="timeline-content">
+                            <h4>Assignment 1 & 2</h4>
+                            <p>Planning, Requirements (SRS) + System Design (ERD, Wireframes)</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-week">WEEK 2</div>
+                        <div class="timeline-content">
+                            <h4>Assignment 3: Sprint 1</h4>
+                            <p>Core Features — Auth, Database, Basic CRUD, UI</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-week">WEEK 3</div>
+                        <div class="timeline-content">
+                            <h4>Assignment 4: Sprint 2</h4>
+                            <p>Analytics Integration — Visitor Tracking, Heatmaps, Dashboard</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-week">WEEK 4</div>
+                        <div class="timeline-content">
+                            <h4>Assignment 5 & 6</h4>
+                            <p>Testing + Deployment & Final Presentation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Tech Stack -->
+        <div class="slide" data-slide="7">
+            <div class="slide-content">
+                <h2>Recommended Tech Stack</h2>
+                <div class="two-col">
+                    <div class="col-box">
+                        <h4>Frontend</h4>
+                        <ul>
+                            <li>HTML / CSS / JavaScript</li>
+                            <li>React or Vue.js</li>
+                            <li>Tailwind CSS</li>
+                            <li>React Native (Mobile)</li>
+                        </ul>
+                    </div>
+                    <div class="col-box">
+                        <h4>Backend</h4>
+                        <ul>
+                            <li>Node.js + Express</li>
+                            <li>Firebase / Supabase</li>
+                            <li>MongoDB / PostgreSQL</li>
+                            <li>REST API</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="two-col" style="margin-top: 20px;">
+                    <div class="col-box">
+                        <h4>Analytics</h4>
+                        <ul>
+                            <li>Microsoft Clarity ⭐</li>
+                            <li>Hotjar</li>
+                            <li>Google Analytics</li>
+                        </ul>
+                    </div>
+                    <div class="col-box">
+                        <h4>Deployment</h4>
+                        <ul>
+                            <li>Vercel / Netlify</li>
+                            <li>Railway</li>
+                            <li>GitHub Pages</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Grading -->
+        <div class="slide" data-slide="8">
+            <div class="slide-content">
+                <h2>Grading Criteria</h2>
+                <div class="grading-bar">
+                    <div class="grading-segment" style="width: 30%; background: var(--neon-magenta);">Features 30%</div>
+                    <div class="grading-segment" style="width: 20%; background: var(--neon-cyan);">Code 20%</div>
+                    <div class="grading-segment" style="width: 15%; background: var(--neon-green);">UI/UX 15%</div>
+                    <div class="grading-segment" style="width: 20%; background: var(--neon-yellow);">Docs 20%</div>
+                    <div class="grading-segment" style="width: 15%; background: var(--neon-orange);">Demo 15%</div>
+                </div>
+                <div class="two-col" style="margin-top: 30px;">
+                    <div class="col-box">
+                        <h4>Assignment Weights</h4>
+                        <ul style="font-size: 0.95rem;">
+                            <li>Assignment 1: Planning — 15%</li>
+                            <li>Assignment 2: Design — 15%</li>
+                            <li>Assignment 3: Sprint 1 — 20%</li>
+                            <li>Assignment 4: Sprint 2 — 20%</li>
+                            <li>Assignment 5: Testing — 10%</li>
+                            <li>Assignment 6: Final — 20%</li>
+                        </ul>
+                    </div>
+                    <div class="col-box">
+                        <h4>Bonus Points</h4>
+                        <p style="font-size: 1rem;">Up to <span class="highlight">+10%</span> bonus for:</p>
+                        <ul style="font-size: 0.95rem;">
+                            <li>Extra features (Email, Real-time, AI)</li>
+                            <li>Exceptional design</li>
+                            <li>Innovative AI usage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Deliverables -->
+        <div class="slide" data-slide="9">
+            <div class="slide-content">
+                <h2>Final Deliverables</h2>
+                <div class="cards-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card">
+                        <h4>📁 Source Code</h4>
+                        <p>GitHub Repository</p>
+                    </div>
+                    <div class="card">
+                        <h4>🌐 Live URL</h4>
+                        <p>Deployed Application</p>
+                    </div>
+                    <div class="card">
+                        <h4>📄 SRS Document</h4>
+                        <p>IEEE 830 Format</p>
+                    </div>
+                    <div class="card">
+                        <h4>🎨 Design Docs</h4>
+                        <p>ERD, Wireframes, Architecture</p>
+                    </div>
+                    <div class="card">
+                        <h4>🧪 Test Cases</h4>
+                        <p>Minimum 20 cases</p>
+                    </div>
+                    <div class="card">
+                        <h4>📖 User Manual</h4>
+                        <p>How to use the app</p>
+                    </div>
+                    <div class="card">
+                        <h4>🤖 AI Report</h4>
+                        <p>Document AI tool usage</p>
+                    </div>
+                    <div class="card">
+                        <h4>🎬 Presentation</h4>
+                        <p>Slides + Demo Video</p>
+                    </div>
+                    <div class="card">
+                        <h4>📊 Analytics</h4>
+                        <p>Show tracking data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Key Rules -->
+        <div class="slide" data-slide="10">
+            <div class="slide-content">
+                <h2>Key Rules</h2>
+                <div class="two-col">
+                    <div class="col-box" style="border-color: var(--neon-magenta);">
+                        <h4 style="color: var(--neon-magenta);">🚫 NOT Allowed</h4>
+                        <ul>
+                            <li>Duplicate project ideas across teams</li>
+                            <li>Skipping AI tool documentation</li>
+                            <li>Missing analytics features</li>
+                            <li>No live deployment</li>
+                            <li>Plagiarism / copying code without AI</li>
+                        </ul>
+                    </div>
+                    <div class="col-box" style="border-color: var(--neon-green);">
+                        <h4 style="color: var(--neon-green);">✓ Allowed</h4>
+                        <ul>
+                            <li>Using templates & starter kits</li>
+                            <li>Third-party analytics tools</li>
+                            <li>UI component libraries</li>
+                            <li>AI-generated code (documented)</li>
+                            <li>Team collaboration tools</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Let's Build -->
+        <div class="slide" data-slide="11">
+            <div class="slide-content">
+                <h1>LET'S BUILD!</h1>
+                <p class="subtitle" style="margin-top: 20px;">YOUR IDEA // YOUR TEAM // YOUR APP</p>
+                <div class="stats-row" style="margin-top: 50px;">
+                    <div class="stat">
+                        <div class="stat-number">🤖</div>
+                        <div class="stat-label">USE AI</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">📊</div>
+                        <div class="stat-label">TRACK USERS</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">🚀</div>
+                        <div class="stat-label">SHIP IT</div>
+                    </div>
+                </div>
+                <p class="course-code" style="margin-top: 50px;">[ GOOD LUCK, DEVELOPERS ]</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◄ PREV</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">NEXT ►</button>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">11</span>
+    </div>
+
+    <div class="keyboard-hint">
+        <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd> to navigate
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index + 1 === currentSlide) {
+                    slide.classList.add('active');
+                } else if (index + 1 < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            document.getElementById('currentSlide').textContent = currentSlide;
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 1;
+                showSlide(currentSlide);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides;
+                showSlide(currentSlide);
+            }
+        });
+
+        // Touch/Swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                changeSlide(1); // Swipe left = next
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                changeSlide(-1); // Swipe right = prev
+            }
+        }
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

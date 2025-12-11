@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Library</title>
+    <link rel="stylesheet" href="retro-style.css">
+    <style>
+        .prompt-card {
+            background: #16213e;
+            border: 2px solid #00ffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .prompt-card h3 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+        }
+        
+        .prompt-text {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border: 2px solid #ff00ff;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: #00ff41;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-line"></div>
+    
+    <header>
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← BACK.TO.HOME</a>
+            </div>
+            <h1>[ AI.PROMPT.LIBRARY ]</h1>
+            <p>:: COPY-PASTE READY PROMPTS ::</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="intro section">
+            <h2>&gt; HOW.TO.USE_</h2>
+            <ol style="margin: 15px 0 15px 25px;">
+                <li>Click the COPY button on any prompt</li>
+                <li>Replace [BRACKETED] sections with your info</li>
+                <li>Paste into ChatGPT/Claude/Gemini</li>
+                <li>Refine output as needed</li>
+            </ol>
+        </div>
+        
+        <div class="section">
+            <h2>&gt; KEYWORD.RESEARCH_</h2>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>LONG-TAIL.KEYWORDS</h3>
+                <div class="prompt-text">Generate 30 long-tail keywords (3-5 words) for [YOUR TOPIC] targeting [YOUR AUDIENCE]. Focus on keywords with commercial or informational intent that would have low to medium competition. For each keyword, estimate the search intent.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>SEARCH.INTENT.ANALYSIS</h3>
+                <div class="prompt-text">Analyze the search intent for these keywords: [LIST YOUR KEYWORDS]. For each keyword, specify if it's informational, navigational, transactional, or commercial investigation. Explain reasoning and suggest best content type.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>QUESTION.KEYWORDS</h3>
+                <div class="prompt-text">What are the top 30 questions people ask about [YOUR TOPIC]? Organize by question type (what, how, why, when, where, who). For each, indicate difficulty level and content length needed.</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>&gt; CONTENT.CREATION_</h2>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>BLOG.OUTLINE</h3>
+                <div class="prompt-text">Create comprehensive blog outline for "[YOUR TITLE]" targeting [YOUR AUDIENCE]. Include: 1) Introduction with hook, 2) 6-8 H2 sections with H3 subsections, 3) Key points for each section, 4) Strong conclusion with CTA. Optimize for keyword "[YOUR KEYWORD]". Target: [LENGTH] words.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>EMAIL.SUBJECT.LINES</h3>
+                <div class="prompt-text">Write 15 email subject lines for [CAMPAIGN TYPE] promoting [YOUR OFFER]. Target: [YOUR AUDIENCE]. Include: 5 question-based, 5 benefit-focused, 5 curiosity-driven. Keep under 50 characters for mobile.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>SOCIAL.MEDIA.POSTS</h3>
+                <div class="prompt-text">Create 7 [PLATFORM] posts about [YOUR TOPIC] for [YOUR INDUSTRY] professionals. Each: [WORD COUNT] words, attention-grabbing hook, actionable value, engagement question. Vary formats: tips, stories, insights, how-tos. Include relevant hashtags.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>GOOGLE.ADS.COPY</h3>
+                <div class="prompt-text">Write Google Ads copy for [YOUR PRODUCT/SERVICE]. Create: 15 headlines (30 chars max), 10 descriptions (90 chars max). Target keyword: "[YOUR KEYWORD]". Highlight: [YOUR BENEFIT]. Include pricing, USP, clear CTA, urgency elements.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>LANDING.PAGE.COPY</h3>
+                <div class="prompt-text">Write conversion-focused landing page copy for [YOUR PRODUCT/SERVICE]. Include: 1) Hero headline & subheadline, 2) Problem statement ([PAIN POINTS]), 3) Solution presentation, 4) 5-7 key features with benefits, 5) Social proof, 6) FAQ (top 5 objections), 7) Strong CTA. Tone: [YOUR VOICE].</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>&gt; UX.ANALYSIS_</h2>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>COMPREHENSIVE.UX.AUDIT</h3>
+                <div class="prompt-text">Analyze this screenshot for usability issues. Evaluate: 1) Navigation clarity, 2) Visual hierarchy, 3) Accessibility (WCAG 2.1 AA), 4) Mobile responsiveness, 5) CTA effectiveness, 6) Form design, 7) Content readability. For each issue: severity rating, example, actionable recommendation. Prioritize by impact.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>CONVERSION.OPTIMIZATION</h3>
+                <div class="prompt-text">Review this landing page for conversion optimization. Identify: 1) Friction points, 2) Missing trust signals, 3) CTA effectiveness, 4) Above-fold clarity, 5) Form issues. Prioritize by potential CR impact. Suggest A/B test ideas for top 3 improvements.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>HEURISTIC.EVALUATION</h3>
+                <div class="prompt-text">Evaluate this interface against Nielsen's 10 usability heuristics. For each: 1) Rating (0-4 severity), 2) 2-3 specific examples, 3) Improvement recommendations. Cover all 10 heuristics systematically.</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>&gt; STRATEGY_</h2>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>CONTENT.GAP.ANALYSIS</h3>
+                <div class="prompt-text">Analyze my content strategy for [YOUR NICHE]. Current topics: [LIST YOUR TOPICS]. Competitor topics: [COMPETITOR TOPICS]. Identify: 1) Content gaps, 2) Trending topics I'm missing, 3) Question-based opportunities, 4) Depth gaps, 5) Format gaps. Create prioritized list of 20 content ideas.</div>
+            </div>
+            
+            <div class="prompt-card">
+                <button class="copy-btn" onclick="copyPrompt(this)">COPY</button>
+                <h3>AUDIENCE.ANALYSIS</h3>
+                <div class="prompt-text">Create detailed audience analysis for [YOUR PRODUCT/SERVICE]. Define: 1) Demographics, 2) Psychographics, 3) Pain points, 4) Goals, 5) Online behavior, 6) Buying triggers, 7) Preferred channels. Create 3 distinct buyer personas with backgrounds and use cases.</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" class="btn">← HOME</a>
+        </div>
+    </div>
+    
+    <script>
+        function copyPrompt(button) {
+            const promptCard = button.closest('.prompt-card');
+            const promptText = promptCard.querySelector('.prompt-text').textContent;
+            
+            navigator.clipboard.writeText(promptText).then(() => {
+                button.textContent = 'COPIED!';
+                button.style.borderColor = '#00ff41';
+                button.style.color = '#00ff41';
+                setTimeout(() => {
+                    button.textContent = 'COPY';
+                    button.style.borderColor = '#00ffff';
+                    button.style.color = '#00ffff';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
