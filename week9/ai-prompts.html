@@ -7,60 +7,59 @@
     <link rel="stylesheet" href="retro-style.css">
     <style>
         .prompt-card {
-            background: #16213e;
-            border: 2px solid #00ffff;
-            padding: 20px;
-            margin-bottom: 20px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             position: relative;
+            border-radius: 6px;
         }
         
         .prompt-card h3 {
-            color: #00ffff;
-            margin-bottom: 10px;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
         
         .prompt-text {
-            background: rgba(0,0,0,0.5);
-            padding: 15px;
-            border: 2px solid #ff00ff;
-            font-family: 'Share Tech Mono', monospace;
+            background: var(--bg-light);
+            padding: 1rem;
+            border: 1px solid var(--border);
+            font-family: 'Courier New', monospace;
             font-size: 0.9rem;
-            margin-top: 10px;
-            color: #00ff41;
+            margin-top: 0.75rem;
+            color: var(--text-dark);
+            border-radius: 4px;
         }
         
         .copy-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            color: #00ffff;
-            border: 2px solid #00ffff;
-            padding: 6px 12px;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-            font-family: 'VT323', monospace;
-            font-size: 1rem;
-            transition: all 0.3s;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            transition: background-color 0.2s;
         }
         
         .copy-btn:hover {
-            background: rgba(0, 255, 255, 0.2);
-            box-shadow: 0 0 10px #00ffff;
+            background: var(--primary-dark);
         }
     </style>
 </head>
 <body>
-    <div class="scan-line"></div>
-    
     <header>
         <div class="header-content">
             <div class="breadcrumb">
-                <a href="index.html">← BACK.TO.HOME</a>
+                <a href="index.html">← Back to Home</a>
             </div>
-            <h1>[ AI.PROMPT.LIBRARY ]</h1>
-            <p>:: COPY-PASTE READY PROMPTS ::</p>
+            <h1>AI Prompt Library</h1>
+            <p>Copy-Paste Ready Prompts</p>
         </div>
     </header>
     

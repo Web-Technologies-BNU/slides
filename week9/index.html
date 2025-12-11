@@ -4,478 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Business of Digital Marketing - Course Materials</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
-        
-        body {
-            font-family: 'Share Tech Mono', monospace;
-            line-height: 1.6;
-            color: #00ff41;
-            background: #0a0e27;
-            background-image: 
-                repeating-linear-gradient(0deg, rgba(0,255,65,0.03) 0px, transparent 1px, transparent 2px, rgba(0,255,65,0.03) 3px),
-                repeating-linear-gradient(90deg, rgba(0,255,65,0.03) 0px, transparent 1px, transparent 2px, rgba(0,255,65,0.03) 3px);
-        }
-        
-        header {
-            background: linear-gradient(135deg, #1a0033 0%, #0d001a 100%);
-            color: #ff00ff;
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 3px solid #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(255, 0, 255, 0.05) 2px,
-                rgba(255, 0, 255, 0.05) 4px
-            );
-            pointer-events: none;
-        }
-        
-        header h1 {
-            font-family: 'VT323', monospace;
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            font-weight: 400;
-            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
-            letter-spacing: 2px;
-            animation: glitch 3s infinite;
-        }
-        
-        @keyframes glitch {
-            0%, 100% { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; }
-            50% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 2px 2px #ff00ff; }
-        }
-        
-        header p {
-            font-size: 1.2rem;
-            color: #00ffff;
-            text-shadow: 0 0 5px #00ffff;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        .intro {
-            background: #1a1a2e;
-            padding: 30px;
-            border-radius: 0;
-            margin-bottom: 40px;
-            border: 2px solid #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-            position: relative;
-        }
-        
-        .intro::before {
-            content: "[ SYSTEM.INIT ]";
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #1a1a2e;
-            padding: 0 10px;
-            color: #ff00ff;
-            font-size: 0.8rem;
-        }
-        
-        .intro h2 {
-            color: #00ffff;
-            margin-bottom: 15px;
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            text-shadow: 0 0 10px #00ffff;
-        }
-        
-        .intro p {
-            color: #00ff41;
-        }
-        
-        .modules {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .module-card {
-            background: #16213e;
-            border: 2px solid;
-            overflow: hidden;
-            transition: all 0.3s;
-            position: relative;
-        }
-        
-        .module-card::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .module-card:hover::after {
-            left: 100%;
-        }
-        
-        .module-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px currentColor;
-        }
-        
-        .module-1 { border-color: #ff00ff; }
-        .module-2 { border-color: #00ffff; }
-        .module-3 { border-color: #ffff00; }
-        
-        .module-header {
-            padding: 25px;
-            position: relative;
-            border-bottom: 2px solid;
-        }
-        
-        .module-1 .module-header { 
-            background: rgba(255, 0, 255, 0.1);
-            border-bottom-color: #ff00ff;
-        }
-        .module-2 .module-header { 
-            background: rgba(0, 255, 255, 0.1);
-            border-bottom-color: #00ffff;
-        }
-        .module-3 .module-header { 
-            background: rgba(255, 255, 0, 0.1);
-            border-bottom-color: #ffff00;
-        }
-        
-        .module-header h3 {
-            font-family: 'VT323', monospace;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px currentColor;
-        }
-        
-        .module-1 .module-header h3 { color: #ff00ff; }
-        .module-2 .module-header h3 { color: #00ffff; }
-        .module-3 .module-header h3 { color: #ffff00; }
-        
-        .module-header p {
-            color: #00ff41;
-        }
-        
-        .module-content {
-            padding: 25px;
-            background: #0f1922;
-        }
-        
-        .module-content ul {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-        
-        .module-content li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            color: #00ff41;
-        }
-        
-        .module-content li:before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            font-weight: bold;
-        }
-        
-        .module-1 .module-content li:before { color: #ff00ff; }
-        .module-2 .module-content li:before { color: #00ffff; }
-        .module-3 .module-content li:before { color: #ffff00; }
-        
-        .btn {
-            display: inline-block;
-            background: transparent;
-            color: #00ffff;
-            padding: 12px 24px;
-            border: 2px solid #00ffff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            text-shadow: 0 0 5px #00ffff;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 255, 255, 0.2);
-            transition: left 0.3s;
-        }
-        
-        .btn:hover::before {
-            left: 0;
-        }
-        
-        .btn:hover {
-            box-shadow: 0 0 20px #00ffff;
-            transform: translateY(-2px);
-        }
-        
-        .resources {
-            background: #1a1a2e;
-            padding: 30px;
-            margin-bottom: 40px;
-            border: 2px solid #ff00ff;
-            position: relative;
-        }
-        
-        .resources::before {
-            content: "[ RESOURCES.DB ]";
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: #1a1a2e;
-            padding: 0 10px;
-            color: #ff00ff;
-            font-size: 0.8rem;
-        }
-        
-        .resources h2 {
-            color: #ff00ff;
-            margin-bottom: 20px;
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            text-shadow: 0 0 10px #ff00ff;
-        }
-        
-        .resource-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .resource-item {
-            padding: 20px;
-            background: #0f1922;
-            border-left: 4px solid #00ffff;
-            position: relative;
-        }
-        
-        .resource-item::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 15px 15px 0;
-            border-color: transparent #00ffff transparent transparent;
-        }
-        
-        .resource-item h3 {
-            color: #00ffff;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-        }
-        
-        .resource-item ul {
-            list-style: none;
-        }
-        
-        .resource-item li {
-            padding: 5px 0;
-            color: #00ff41;
-        }
-        
-        .resource-item li::before {
-            content: ">> ";
-            color: #00ffff;
-        }
-        
-        .resource-item a {
-            color: #ff00ff;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .resource-item a:hover {
-            color: #00ffff;
-            text-shadow: 0 0 5px #00ffff;
-        }
-        
-        footer {
-            background: #0a0e27;
-            color: #00ff41;
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 60px;
-            border-top: 2px solid #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-        }
-        
-        footer p {
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-        }
-        
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-        
-        .stat-box {
-            background: #16213e;
-            padding: 25px;
-            text-align: center;
-            border: 2px solid #00ffff;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-box::before {
-            content: "";
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
-            z-index: -1;
-            filter: blur(10px);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .stat-box:hover::before {
-            opacity: 0.7;
-        }
-        
-        .stat-number {
-            font-family: 'VT323', monospace;
-            font-size: 3rem;
-            font-weight: 400;
-            color: #00ffff;
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px #00ffff;
-        }
-        
-        .stat-label {
-            color: #00ff41;
-            font-size: 0.9rem;
-        }
-        
-        .scan-line {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: rgba(0, 255, 255, 0.5);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-            animation: scan 4s linear infinite;
-            pointer-events: none;
-            z-index: 9999;
-        }
-        
-        @keyframes scan {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
-        }
-        
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .modules {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* CRT Screen effect */
-        body::before {
-            content: " ";
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 2px;
-            z-index: 2;
-            pointer-events: none;
-            animation: flicker 0.15s infinite;
-        }
-        
-        @keyframes flicker {
-            0% { opacity: 0.27861; }
-            5% { opacity: 0.34769; }
-            10% { opacity: 0.23604; }
-            15% { opacity: 0.90626; }
-            20% { opacity: 0.18128; }
-            25% { opacity: 0.83891; }
-            30% { opacity: 0.65583; }
-            35% { opacity: 0.67807; }
-            40% { opacity: 0.26559; }
-            45% { opacity: 0.84693; }
-            50% { opacity: 0.96019; }
-            55% { opacity: 0.08594; }
-            60% { opacity: 0.20313; }
-            65% { opacity: 0.71988; }
-            70% { opacity: 0.53455; }
-            75% { opacity: 0.37288; }
-            80% { opacity: 0.71428; }
-            85% { opacity: 0.70419; }
-            90% { opacity: 0.7003; }
-            95% { opacity: 0.36108; }
-            100% { opacity: 0.24387; }
-        }
-    </style>
+    <link rel="stylesheet" href="retro-style.css">
 </head>
 <body>
-    <div class="scan-line"></div>
-    
-    <header>
-        <h1>[ DIGITAL.MARKETING.EXE ]</h1>
-        <p>:: DRIVING TRAFFIC // SEO & UX WITH AI ::</p>
+    <header style="text-align: center;">
+        <h1>Digital Marketing Course</h1>
+        <p>Driving Traffic: SEO & UX with AI</p>
     </header>
     
     <div class="container">
         <div class="intro">
-            <h2>&gt; COURSE.OVERVIEW_</h2>
+            <h2>Course Overview</h2>
             <p>This comprehensive course covers the essential aspects of digital marketing, combining traditional SEO strategies with cutting-edge AI tools and user-centric design principles. Whether you're looking to drive traffic, optimize your website, or create compelling content, this course provides practical, actionable knowledge.</p>
         </div>
         
@@ -498,12 +37,12 @@
             </div>
         </div>
         
-        <h2 style="text-align: center; margin-bottom: 30px; color: #ff00ff; font-family: 'VT323', monospace; font-size: 2.5rem; text-shadow: 0 0 10px #ff00ff;">[ COURSE.MODULES ]</h2>
+        <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark); font-size: 2rem; font-weight: 700;">Course Modules</h2>
         
         <div class="modules">
             <div class="module-card module-1">
                 <div class="module-header">
-                    <h3>MODULE.01 :: SEO & ANALYTICS</h3>
+                    <h3>Module 01: SEO & Analytics</h3>
                     <p>Master search engine optimization and traffic generation</p>
                 </div>
                 <div class="module-content">
@@ -514,13 +53,13 @@
                         <li>Website SEO analysis</li>
                         <li>Analytics and tracking</li>
                     </ul>
-                    <a href="module1-seo.html" class="btn">EXECUTE.MODULE.01 →</a>
+                    <a href="module1-seo.html" class="btn">View Module 01 →</a>
                 </div>
             </div>
             
             <div class="module-card module-2">
                 <div class="module-header">
-                    <h3>MODULE.02 :: AI-POWERED MARKETING</h3>
+                    <h3>Module 02: AI-Powered Marketing</h3>
                     <p>Leverage AI tools for content and strategy</p>
                 </div>
                 <div class="module-content">
@@ -531,13 +70,13 @@
                         <li>Social media automation</li>
                         <li>Practical AI prompts</li>
                     </ul>
-                    <a href="module2-ai.html" class="btn">EXECUTE.MODULE.02 →</a>
+                    <a href="module2-ai.html" class="btn">View Module 02 →</a>
                 </div>
             </div>
             
             <div class="module-card module-3">
                 <div class="module-header">
-                    <h3>MODULE.03 :: USER-CENTRIC DESIGN</h3>
+                    <h3>Module 03: User-Centric Design</h3>
                     <p>Create experiences that convert</p>
                 </div>
                 <div class="module-content">
@@ -548,43 +87,24 @@
                         <li>AI usability testing</li>
                         <li>Conversion optimization</li>
                     </ul>
-                    <a href="module3-ux.html" class="btn">EXECUTE.MODULE.03 →</a>
+                    <a href="module3-ux.html" class="btn">View Module 03 →</a>
                 </div>
             </div>
         </div>
         
         <div class="resources">
-            <h2>&gt; RESOURCES.DB_</h2>
+            <h2>Resources</h2>
             <div class="resource-grid">
                 <div class="resource-item">
-                    <h3>STUDY.FILES</h3>
+                    <h3>Study Files</h3>
                     <ul>
-                        <li><a href="student-handout.html">Complete Study Guide</a></li>
                         <li><a href="quick-reference.html">Quick Reference</a></li>
-                        <li><a href="practice-exercises.html">Practice Exercises</a></li>
-                    </ul>
-                </div>
-                
-                <div class="resource-item">
-                    <h3>TOOLS.SYS</h3>
-                    <ul>
-                        <li><a href="seo-checklist.html">SEO Audit Checklist</a></li>
                         <li><a href="ai-prompts.html">AI Prompt Library</a></li>
-                        <li><a href="ux-heuristics.html">UX Heuristics Guide</a></li>
                     </ul>
                 </div>
                 
                 <div class="resource-item">
-                    <h3>CASE.STUDIES</h3>
-                    <ul>
-                        <li><a href="#case1">E-commerce SEO Success</a></li>
-                        <li><a href="#case2">AI Content Strategy</a></li>
-                        <li><a href="#case3">UX Redesign Impact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="resource-item">
-                    <h3>EXTERNAL.LINKS</h3>
+                    <h3>External Resources</h3>
                     <ul>
                         <li><a href="https://search.google.com/search-console" target="_blank">Google Search Console</a></li>
                         <li><a href="https://analytics.google.com" target="_blank">Google Analytics</a></li>
@@ -596,8 +116,8 @@
     </div>
     
     <footer>
-        <p>[ © 2024 DIGITAL.MARKETING.COURSE // ALL.RIGHTS.RESERVED ]</p>
-        <p style="margin-top: 10px; opacity: 0.8;">:: QUESTIONS? REACH.OUT DURING OFFICE.HOURS ::</p>
+        <p>© 2024 Digital Marketing Course</p>
+        <p style="margin-top: 10px;">Questions? Reach out during office hours</p>
     </footer>
 </body>
 </html>

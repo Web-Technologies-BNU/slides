@@ -624,25 +624,19 @@
 
       // Create a new window with the answers for printing
       const printWindow = window.open('', '_blank');
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Short Answer Responses</title>
-            <style>
-              body { font-family: Arial, sans-serif; padding: 2rem; line-height: 1.6; max-width: 800px; margin: 0 auto; }
-              pre { white-space: pre-wrap; word-wrap: break-word; }
-              h1 { color: #3b82f6; }
-              @media print { body { padding: 1rem; } }
-            </style>
-          </head>
-          <body>
-            <h1>Short Answer Questions - Responses</h1>
-            <pre>${output}</pre>
-            <script>window.onload = () => window.print();</script>
-          </body>
-        </html>
-      `);
-      printWindow.document.close();
+      if (printWindow) {
+        const escapedOutput = output.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const styleStr = 'body{font-family:Arial,sans-serif;padding:2rem;line-height:1.6;max-width:800px;margin:0 auto;}pre{white-space:pre-wrap;word-wrap:break-word;}h1{color:#3b82f6;}@media print{body{padding:1rem;}}';
+        const scriptStr = 'window.onload=function(){window.print();}';
+        
+        printWindow.document.write('<!DOCTYPE html><html><head><title>Short Answer Responses</title>');
+        printWindow.document.write('<style>' + styleStr + '</style></head><body>');
+        printWindow.document.write('<h1>Short Answer Questions - Responses</h1>');
+        printWindow.document.write('<pre>' + escapedOutput + '</pre>');
+        printWindow.document.write('<script>' + scriptStr + '<' + '/script>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+      }
     }
 
     function clearAnswers() {
