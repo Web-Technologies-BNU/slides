@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choosing the Right Tech Stack | Web Technologies CSC-224</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --accent-cyan: #00f5ff;
+            --accent-magenta: #ff00ff;
+            --accent-purple: #8b5cf6;
+            --accent-green: #00ff88;
+            --accent-orange: #ff6b35;
+            --accent-yellow: #fbbf24;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border-glow: rgba(0, 245, 255, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-glow);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-link {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: var(--accent-cyan);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+        }
+        
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border: 1px solid var(--accent-cyan);
+            border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-cyan);
+            margin-bottom: 3rem;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--accent-magenta);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-5px);
+            border-color: var(--border-glow);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.1);
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+        }
+        
+        .card-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+        
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .card-content {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .card-content ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .card-content li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .card-content li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+        }
+        
+        /* Example Box */
+        .example-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 255, 136, 0.05);
+            border-left: 3px solid var(--accent-green);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .example-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .example-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Tech Stack Cards */
+        .stack-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stack-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.1);
+        }
+        
+        .stack-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stack-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .stack-icon.saas { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+        .stack-icon.ai { background: linear-gradient(135deg, #10b981, #059669); }
+        .stack-icon.ecom { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stack-icon.realtime { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .stack-icon.mobile { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .stack-icon.enterprise { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        
+        .stack-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+        
+        .stack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stack-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stack-item-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stack-item-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .stack-reason {
+            padding: 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 3px solid var(--accent-purple);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .stack-reason-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Comparison Table */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        
+        .comparison-table th {
+            padding: 1.2rem 1rem;
+            background: rgba(0, 245, 255, 0.1);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-cyan);
+            text-align: left;
+            border-bottom: 2px solid var(--accent-cyan);
+        }
+        
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+        }
+        
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .comparison-table td:first-child {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Warning Box */
+        .warning-box {
+            padding: 1.5rem;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .warning-box-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent-yellow);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .warning-box-content {
+            color: var(--text-secondary);
+        }
+        
+        /* Key Takeaways */
+        .takeaways {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .takeaway-item {
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .takeaway-item:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+        }
+        
+        .takeaway-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .takeaway-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .takeaway-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+        
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .footer-course {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-cyan);
+            margin-top: 0.5rem;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section {
+                padding: 5rem 1rem 1rem;
+            }
+        }
+        
+        /* Glow Effects */
+        .glow-cyan {
+            text-shadow: 0 0 10px var(--accent-cyan), 0 0 20px var(--accent-cyan);
+        }
+        
+        .glow-magenta {
+            text-shadow: 0 0 10px var(--accent-magenta), 0 0 20px var(--accent-magenta);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-brand">CSC-224 // Tech Stacks</div>
+        <div class="nav-links">
+            <button class="nav-link active" onclick="showSection('intro')">Intro</button>
+            <button class="nav-link" onclick="showSection('factors')">Key Factors</button>
+            <button class="nav-link" onclick="showSection('stacks')">Tech Stacks</button>
+            <button class="nav-link" onclick="showSection('comparison')">Comparison</button>
+            <button class="nav-link" onclick="showSection('summary')">Summary</button>
+        </div>
+    </nav>
+    
+    <!-- Section 1: Introduction -->
+    <section id="intro" class="section active">
+        <div class="container">
+            <div class="hero">
+                <div class="hero-badge">&lt;/&gt; Web Technologies Module</div>
+                <h1 class="hero-title">Choosing the Right<br>Tech Stack</h1>
+                <p class="hero-subtitle">Critical Factors for Your Next Project</p>
+            </div>
+            
+            <div class="warning-box">
+                <div class="warning-box-title">
+                    <span>⚠️</span> Avoid the Hype
+                </div>
+                <div class="warning-box-content">
+                    <p>While it's tempting to select trending technologies that are generating buzz, it's essential to evaluate these choices with a <strong>long-term perspective</strong>.</p>
+                    <br>
+                    <p>Certain frameworks or tools gain popularity quickly and may help create a quick demo or MVP, but relying on them without careful consideration can introduce <strong>hidden overheads</strong>, leading to unexpected costs, technical debt, and delays.</p>
+                    <br>
+                    <p><strong>Focus on:</strong> Sustainable growth and adaptability over short-term appeal to ensure the tech stack truly serves your long-term vision.</p>
+                </div>
+            </div>
+            
+            <div class="takeaways">
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">🚀</div>
+                    <div class="takeaway-title">Faster Development</div>
+                    <div class="takeaway-desc">A well-selected tech stack leads to faster development cycles</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">⚡</div>
+                    <div class="takeaway-title">Improved Performance</div>
+                    <div class="takeaway-desc">Right technologies ensure optimal application performance</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">📈</div>
+                    <div class="takeaway-title">Enhanced Scalability</div>
+                    <div class="takeaway-desc">Proper stack choices support future growth seamlessly</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">💰</div>
+                    <div class="takeaway-title">Reduced Costs</div>
+                    <div class="takeaway-desc">Avoid technical debt and maintenance challenges</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 2: Key Factors -->
+    <section id="factors" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">SECTION 02</div>
+                <h2 class="section-title">10 Critical Factors to Consider</h2>
+                <p class="section-desc">Before selecting your tech stack, evaluate these essential criteria to make an informed decision</p>
+            </div>
+            
+            <div class="cards-grid">
+                <!-- Factor 1 -->
+                <div class="card">
+                    <div class="card-icon">📋</div>
+                    <div class="card-number">FACTOR 01</div>
+                    <div class="card-title">Project Requirements & Complexity</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Functionality:</strong> Determine key features your project needs to deliver</li>
+                            <li><strong>Scalability:</strong> Think about future growth - vertical and horizontal scaling</li>
+                            <li><strong>Performance:</strong> Response time, data throughput requirements</li>
+                            <li><strong>Security:</strong> Built-in security features for sensitive data</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">A major streaming platform ensures scalability using Node.js + Java for backend and React for frontend, serving millions of users.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 2 -->
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <div class="card-number">FACTOR 02</div>
+                    <div class="card-title">Team Expertise</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Skill Set:</strong> Leverage existing team skills to save time and costs</li>
+                            <li><strong>Learning Curve:</strong> Factor in time for learning new technologies</li>
+                            <li><strong>Team Size:</strong> Smaller teams may benefit from simpler stacks or low-code solutions</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">E-commerce platforms often rely on Ruby on Rails to leverage existing developer expertise, enabling efficient development with minimal onboarding.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 3 -->
+                <div class="card">
+                    <div class="card-icon">⏱️</div>
+                    <div class="card-number">FACTOR 03</div>
+                    <div class="card-title">Development Speed & Time to Market</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Development Speed:</strong> Frameworks with out-of-the-box features speed up development</li>
+                            <li><strong>Framework Maturity:</strong> Mature frameworks have strong support and fewer bugs</li>
+                            <li><strong>Third-Party Libraries:</strong> Extend functionality without reinventing the wheel</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">Online marketplaces use Ruby on Rails for rapid backend development, enabling quick launches and easy adjustments.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 4 -->
+                <div class="card">
+                    <div class="card-icon">💵</div>
+                    <div class="card-number">FACTOR 04</div>
+                    <div class="card-title">Cost & Licensing</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Licensing Costs:</strong> Proprietary vs open-source considerations</li>
+                            <li><strong>Maintenance Costs:</strong> Ongoing updates and security patches</li>
+                            <li><strong>Cloud Costs:</strong> Storage and infrastructure scaling costs</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">Many startups choose open-source stacks like LAMP for cost savings, switching to more scalable options as they grow.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 5 -->
+                <div class="card">
+                    <div class="card-icon">🔧</div>
+                    <div class="card-number">FACTOR 05</div>
+                    <div class="card-title">Long-Term Maintenance</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Community Support:</strong> Resources, troubleshooting help, and plugins</li>
+                            <li><strong>Vendor Support:</strong> Reliability for quick resolution of issues</li>
+                            <li><strong>Technology Longevity:</strong> Proven track record and reliable updates</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">React enjoys extensive community support, making it ideal for sustained development and long-term maintenance.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 6 -->
+                <div class="card">
+                    <div class="card-icon">🔒</div>
+                    <div class="card-number">FACTOR 06</div>
+                    <div class="card-title">Security Requirements</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Data Protection:</strong> Robust security for healthcare, finance, e-commerce</li>
+                            <li><strong>Compliance Standards:</strong> GDPR, HIPAA, and industry-specific requirements</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">HealthTech applications typically use Java and Python with secure libraries to meet data protection and regulatory standards.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 7 -->
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <div class="card-number">FACTOR 07</div>
+                    <div class="card-title">Community Support & Documentation</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Community Resources:</strong> Easier to find support and libraries</li>
+                            <li><strong>Documentation:</strong> Good docs speed up development and avoid pitfalls</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">React is well-documented and widely used, making it a top choice for companies needing consistent community and library support.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 8 -->
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-number">FACTOR 08</div>
+                    <div class="card-title">Developer Expertise & Availability</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Internal Skills:</strong> Assess team skills and hiring needs</li>
+                            <li><strong>Hiring Market:</strong> Consider talent availability for your chosen stack</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">Many e-commerce platforms continue using Ruby on Rails due to developer familiarity and ease of onboarding new team members.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 9 -->
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-number">FACTOR 09</div>
+                    <div class="card-title">Performance Requirements</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>Real-Time Processing:</strong> For messaging apps or trading platforms</li>
+                            <li><strong>Scalability & Optimization:</strong> High throughput and low latency support</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">Real-time messaging platforms often rely on Erlang due to its ability to handle massive volumes of concurrent connections.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Factor 10 -->
+                <div class="card">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-number">FACTOR 10</div>
+                    <div class="card-title">Integration with Third-Party Services</div>
+                    <div class="card-content">
+                        <ul>
+                            <li><strong>API Compatibility:</strong> Payment gateways, social media, external services</li>
+                            <li><strong>Flexibility:</strong> Easy integration with existing ecosystems</li>
+                        </ul>
+                        <div class="example-box">
+                            <div class="example-label">Real-World Example</div>
+                            <div class="example-text">API-driven applications frequently use Node.js for its flexibility and seamless integration with third-party services.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 3: Recommended Tech Stacks -->
+    <section id="stacks" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">SECTION 03</div>
+                <h2 class="section-title">Recommended Tech Stacks by Project Type</h2>
+                <p class="section-desc">Practical recommendations based on real-world requirements and industry best practices</p>
+            </div>
+            
+            <!-- SaaS Applications -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon saas">☁️</div>
+                    <h3 class="stack-title">SaaS Applications</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Frontend</div>
+                        <div class="stack-item-value">React or Vue.js with TypeScript, Tailwind CSS</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Backend</div>
+                        <div class="stack-item-value">Node.js (Express/NestJS) or Python (Django/FastAPI)</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">PostgreSQL for relational data, Redis for caching</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Infrastructure</div>
+                        <div class="stack-item-value">AWS, Vercel, or Railway</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>SaaS needs rapid iteration, multi-tenancy support, and subscription/billing integration. These technologies have mature ecosystems for authentication (Auth0, Clerk), payments (Stripe), and analytics.</p>
+                </div>
+            </div>
+            
+            <!-- AI/ML Projects -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon ai">🤖</div>
+                    <h3 class="stack-title">AI/ML Projects</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Core ML</div>
+                        <div class="stack-item-value">Python with PyTorch or TensorFlow</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">API Layer</div>
+                        <div class="stack-item-value">FastAPI or Flask for serving models</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Frontend</div>
+                        <div class="stack-item-value">React or Streamlit for quick prototypes</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">PostgreSQL with pgvector, MongoDB for unstructured data</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Infrastructure</div>
+                        <div class="stack-item-value">AWS SageMaker, Google Vertex AI, or Replicate</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>Python dominates the AI ecosystem with the best library support (NumPy, Pandas, scikit-learn). FastAPI handles async requests efficiently for model inference with automatic API documentation.</p>
+                </div>
+            </div>
+            
+            <!-- E-Commerce -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon ecom">🛒</div>
+                    <h3 class="stack-title">E-Commerce Platforms</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Frontend</div>
+                        <div class="stack-item-value">Next.js or Shopify Hydrogen (React-based)</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Backend</div>
+                        <div class="stack-item-value">Node.js or PHP (Laravel), headless CMS options</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">PostgreSQL or MySQL, Elasticsearch for product search</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Payments</div>
+                        <div class="stack-item-value">Stripe, PayPal SDKs</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>SEO matters for e-commerce, so server-side rendering is important. Established payment integrations reduce PCI compliance burden and time-to-market.</p>
+                </div>
+            </div>
+            
+            <!-- Real-Time Applications -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon realtime">💬</div>
+                    <h3 class="stack-title">Real-Time Applications</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Frontend</div>
+                        <div class="stack-item-value">React or Vue with Socket.io client</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Backend</div>
+                        <div class="stack-item-value">Node.js with Socket.io, or Go/Elixir for high concurrency</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">Redis for pub/sub, PostgreSQL for persistence</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Infrastructure</div>
+                        <div class="stack-item-value">WebSocket-friendly hosting (Fly.io, Railway)</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>Node.js handles concurrent connections well with its event-driven architecture. Elixir/Erlang excel at massive scale (WhatsApp famously used Erlang for billions of messages).</p>
+                </div>
+            </div>
+            
+            <!-- Mobile Applications -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon mobile">📱</div>
+                    <h3 class="stack-title">Mobile Applications</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Cross-Platform</div>
+                        <div class="stack-item-value">React Native or Flutter</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Backend</div>
+                        <div class="stack-item-value">Firebase for rapid development, or Node.js/Python custom</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">Firebase Realtime DB, Supabase, or PostgreSQL</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>Cross-platform development saves 40-60% development time vs native. Firebase provides authentication, push notifications, and real-time sync out of the box.</p>
+                </div>
+            </div>
+            
+            <!-- Enterprise/Internal Tools -->
+            <div class="stack-card">
+                <div class="stack-header">
+                    <div class="stack-icon enterprise">🏢</div>
+                    <h3 class="stack-title">Enterprise/Internal Tools</h3>
+                </div>
+                <div class="stack-grid">
+                    <div class="stack-item">
+                        <div class="stack-item-label">Frontend</div>
+                        <div class="stack-item-value">React with Ant Design or Material UI</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Backend</div>
+                        <div class="stack-item-value">Java (Spring Boot), C# (.NET), or Node.js</div>
+                    </div>
+                    <div class="stack-item">
+                        <div class="stack-item-label">Database</div>
+                        <div class="stack-item-value">PostgreSQL, SQL Server, or Oracle</div>
+                    </div>
+                </div>
+                <div class="stack-reason">
+                    <div class="stack-reason-label">Why This Works</div>
+                    <p>Enterprise environments often have existing Java/.NET expertise and require strong typing, security compliance, long-term vendor support, and integration with legacy systems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 4: Comparison -->
+    <section id="comparison" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">SECTION 04</div>
+                <h2 class="section-title">Quick Comparison Table</h2>
+                <p class="section-desc">Choose your priority and find the right stack for your project needs</p>
+            </div>
+            
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Project Type</th>
+                            <th>⚡ Speed Priority</th>
+                            <th>📈 Scale Priority</th>
+                            <th>💰 Cost Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SaaS</td>
+                            <td>Next.js + Supabase</td>
+                            <td>Node.js + PostgreSQL + AWS</td>
+                            <td>Laravel + MySQL</td>
+                        </tr>
+                        <tr>
+                            <td>AI/ML</td>
+                            <td>Streamlit + HuggingFace</td>
+                            <td>FastAPI + Kubernetes</td>
+                            <td>Flask + SQLite</td>
+                        </tr>
+                        <tr>
+                            <td>E-Commerce</td>
+                            <td>Shopify / WooCommerce</td>
+                            <td>Next.js + Headless CMS</td>
+                            <td>WordPress + WooCommerce</td>
+                        </tr>
+                        <tr>
+                            <td>Real-Time</td>
+                            <td>Firebase</td>
+                            <td>Elixir / Phoenix</td>
+                            <td>Node.js + Socket.io</td>
+                        </tr>
+                        <tr>
+                            <td>Mobile</td>
+                            <td>Flutter + Firebase</td>
+                            <td>React Native + Custom Backend</td>
+                            <td>PWA with React</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise</td>
+                            <td>Low-code (Retool, Appsmith)</td>
+                            <td>Spring Boot + Kubernetes</td>
+                            <td>.NET Core + PostgreSQL</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="warning-box" style="margin-top: 3rem;">
+                <div class="warning-box-title">
+                    <span>💡</span> Pro Tip: Proof of Concept (POC)
+                </div>
+                <div class="warning-box-content">
+                    <p>Before committing to a tech stack for a large project, consider running a <strong>Proof of Concept (POC)</strong> to validate:</p>
+                    <br>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="padding: 0.3rem 0;">✓ Performance meets requirements</li>
+                        <li style="padding: 0.3rem 0;">✓ Team can effectively work with the technologies</li>
+                        <li style="padding: 0.3rem 0;">✓ Integration with third-party services works smoothly</li>
+                        <li style="padding: 0.3rem 0;">✓ Scaling approach is viable</li>
+                        <li style="padding: 0.3rem 0;">✓ Development velocity is acceptable</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 5: Summary -->
+    <section id="summary" class="section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-number">SECTION 05</div>
+                <h2 class="section-title">Key Takeaways</h2>
+                <p class="section-desc">Remember these principles when selecting your next tech stack</p>
+            </div>
+            
+            <div class="takeaways">
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">🎯</div>
+                    <div class="takeaway-title">Start with Requirements</div>
+                    <div class="takeaway-desc">Define functionality, scalability, performance, and security needs before choosing technologies</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">👥</div>
+                    <div class="takeaway-title">Consider Your Team</div>
+                    <div class="takeaway-desc">Leverage existing expertise and consider learning curves when selecting new technologies</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">⏰</div>
+                    <div class="takeaway-title">Balance Speed vs Scale</div>
+                    <div class="takeaway-desc">Choose based on immediate needs while keeping future growth in mind</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">💵</div>
+                    <div class="takeaway-title">Calculate Total Cost</div>
+                    <div class="takeaway-desc">Include licensing, hosting, maintenance, and developer costs in your decision</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">🔒</div>
+                    <div class="takeaway-title">Prioritize Security</div>
+                    <div class="takeaway-desc">Choose stacks with strong security features and compliance support</div>
+                </div>
+                <div class="takeaway-item">
+                    <div class="takeaway-icon">🌐</div>
+                    <div class="takeaway-title">Check Community</div>
+                    <div class="takeaway-desc">Strong community support ensures better documentation, libraries, and long-term viability</div>
+                </div>
+            </div>
+            
+            <div class="warning-box" style="margin-top: 3rem; background: rgba(0, 245, 255, 0.1); border-color: rgba(0, 245, 255, 0.3);">
+                <div class="warning-box-title" style="color: var(--accent-cyan);">
+                    <span>📝</span> Final Thought
+                </div>
+                <div class="warning-box-content">
+                    <p style="font-size: 1.1rem;">Selecting the right tech stack requires balancing multiple factors in a way that aligns with your <strong>project goals</strong>, <strong>budget</strong>, and <strong>long-term vision</strong>.</p>
+                    <br>
+                    <p>Each decision impacts development speed, scalability, security, and overall performance. Take the time to assess your specific needs, and consider running a proof of concept (POC) to ensure the stack meets your requirements before committing.</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p class="footer-text">Created for educational purposes</p>
+                <p class="footer-course">Web Technologies CSC-224</p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active to clicked nav link
+            event.target.classList.add('active');
+            
+            // Update progress bar
+            updateProgress(sectionId);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Progress bar
+        function updateProgress(sectionId) {
+            const sections = ['intro', 'factors', 'stacks', 'comparison', 'summary'];
+            const currentIndex = sections.indexOf(sectionId);
+            const progress = ((currentIndex + 1) / sections.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const sections = ['intro', 'factors', 'stacks', 'comparison', 'summary'];
+            const currentSection = document.querySelector('.section.active').id;
+            const currentIndex = sections.indexOf(currentSection);
+            
+            if (e.key === 'ArrowRight' && currentIndex < sections.length - 1) {
+                const nextSection = sections[currentIndex + 1];
+                document.querySelector(`[onclick="showSection('${nextSection}')"]`).click();
+            } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                const prevSection = sections[currentIndex - 1];
+                document.querySelector(`[onclick="showSection('${prevSection}')"]`).click();
+            }
+        });
+        
+        // Initialize progress bar
+        updateProgress('intro');
+    </script>
+</body>
+</html>
