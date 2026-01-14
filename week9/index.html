@@ -87,6 +87,18 @@
     .nav-link:hover {
       color: var(--text);
     }
+    
+    /* Navigation Menu */
+    .nav-menu{position:relative;display:inline-block;}
+    .nav-toggle{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;transition:color 0.3s ease;cursor:pointer;border:none;background:transparent;font-family:inherit;padding:0;display:flex;align-items:center;gap:6px;}
+    .nav-toggle:hover{color:var(--text);}
+    .nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:rgba(15,18,38,0.95);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:8px;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.4);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .2s ease;z-index:1000;max-height:70vh;overflow-y:auto;}
+    .nav-dropdown.show{opacity:1;visibility:visible;transform:translateY(0);}
+    .nav-dropdown a{display:block;padding:8px 12px;color:var(--muted);text-decoration:none;border-radius:6px;font-size:13px;transition:all .15s ease;}
+    .nav-dropdown a:hover{background:rgba(255,255,255,.08);color:var(--text);}
+    .nav-dropdown a.active{background:rgba(108,99,255,.2);color:var(--brand);font-weight:600;}
+    .nav-section-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:8px 12px 4px;font-weight:700;margin-top:4px;}
+    .nav-section-title:first-child{margin-top:0;}
 
     /* Header */
     header {
@@ -498,7 +510,30 @@
     <!-- Navigation Bar -->
     <nav class="nav-bar">
       <div class="nav-container">
-        <a href="../index.html#week9" class="nav-link">← Back to Main Index</a>
+        <div class="nav-menu">
+          <button class="nav-toggle" onclick="document.querySelector('.nav-dropdown').classList.toggle('show')">
+            📚 Lectures <span style="font-size:10px;">▼</span>
+          </button>
+          <div class="nav-dropdown">
+            <a href="../index.html" class="nav-section-title" style="padding-top:12px;">🏠 Home</a>
+            <a href="../index.html">Main Page</a>
+            <div class="nav-section-title">📖 Weekly Lectures</div>
+            <a href="../week1/index.html">Week 1: Web Basics</a>
+            <a href="../week2/index.html">Week 2: HTML5 Structure</a>
+            <a href="../week3/index.html">Week 3: CSS Styling</a>
+            <a href="../week4/index.html">Week 4: Mobile-First & Flexbox</a>
+            <a href="../week5/index.html">Week 5: JavaScript & Node.js</a>
+            <a href="../week5-2/index.html">Week 5-2: Web APIs</a>
+            <a href="../week6/index.html">Week 6: Node.js Endpoints</a>
+            <a href="../week7/index.html">Week 7: React Basics</a>
+            <a href="../week9/index.html" class="active">Week 9: SEO & UX with AI</a>
+            <a href="../week12/index.html">Week 12: CareDesk Case Study</a>
+            <div class="nav-section-title">📚 Special Topics</div>
+            <a href="../system-design/index.html">System Design</a>
+            <a href="../final/index.html">Final Exam Guide</a>
+            <a href="../comprehensive-quiz.html">📝 Comprehensive Quiz</a>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -626,5 +661,16 @@
       <p style="margin-top: 10px;">Digital Marketing Course – Week 9</p>
     </footer>
   </div>
+  
+  <script>
+    // Close nav dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      const navMenu = document.querySelector('.nav-menu');
+      const dropdown = document.querySelector('.nav-dropdown');
+      if (navMenu && dropdown && !navMenu.contains(e.target) && dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>

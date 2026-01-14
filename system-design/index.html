@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC-224 | Functional & Non-Functional Requirements</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #15151f;
+            --neon-cyan: #00fff2;
+            --neon-magenta: #ff00ff;
+            --neon-yellow: #f0ff00;
+            --neon-orange: #ff6b00;
+            --neon-green: #00ff88;
+            --neon-blue: #00a8ff;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+            --border-glow: rgba(0, 255, 242, 0.3);
+            --gradient-cyber: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            --shadow-neon: 0 0 20px rgba(0, 255, 242, 0.3), 0 0 40px rgba(0, 255, 242, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Grid */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 242, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 242, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .course-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--neon-cyan);
+            background: rgba(0, 255, 242, 0.05);
+            animation: pulse-border 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-cyan), inset 0 0 5px rgba(0, 255, 242, 0.1); }
+            50% { box-shadow: 0 0 20px var(--neon-cyan), inset 0 0 10px rgba(0, 255, 242, 0.2); }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 60px rgba(0, 255, 242, 0.5);
+            animation: glow-text 3s ease-in-out infinite;
+        }
+
+        @keyframes glow-text {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-glow);
+            padding: 1rem 2rem;
+            margin: -2rem -2rem 2rem;
+        }
+        
+        .top-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Navigation Menu */
+        .nav-menu{position:relative;display:inline-block;}
+        .nav-toggle{font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:var(--text-secondary);padding:0.75rem 1rem;background:var(--bg-tertiary);border:1px solid transparent;border-radius:6px;cursor:pointer;transition:all 0.3s ease;display:flex;align-items:center;gap:0.75rem;}
+        .nav-toggle:hover{border-color:var(--neon-cyan);color:var(--neon-cyan);background:rgba(0,255,242,0.05);}
+        .nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg-secondary);border:1px solid var(--border-glow);border-radius:12px;padding:8px;min-width:200px;box-shadow:var(--shadow-neon);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .2s ease;z-index:1000;max-height:70vh;overflow-y:auto;}
+        .nav-dropdown.show{opacity:1;visibility:visible;transform:translateY(0);}
+        .nav-dropdown a{display:block;padding:8px 12px;color:var(--text-secondary);text-decoration:none;border-radius:6px;font-size:13px;transition:all .15s ease;font-family:'JetBrains Mono',monospace;}
+        .nav-dropdown a:hover{background:rgba(0,255,242,0.05);color:var(--neon-cyan);}
+        .nav-dropdown a.active{background:rgba(0,255,242,0.15);color:var(--neon-cyan);font-weight:600;}
+        .nav-section-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:8px 12px 4px;font-weight:700;margin-top:4px;font-family:'JetBrains Mono',monospace;}
+        .nav-section-title:first-child{margin-top:0;}
+        
+        /* Navigation */
+        .nav-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow-neon);
+        }
+
+        .nav-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-cyan);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-title::before {
+            content: '>';
+            font-family: 'JetBrains Mono', monospace;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .nav-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding: 0.75rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            background: rgba(0, 255, 242, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-num {
+            color: var(--neon-magenta);
+            font-weight: 600;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-tertiary);
+        }
+
+        .section-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--neon-magenta);
+            opacity: 0.5;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-cyber);
+        }
+
+        .content-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 0 30px rgba(0, 255, 242, 0.1);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 255, 242, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .card-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, rgba(0, 255, 242, 0.05), rgba(255, 0, 255, 0.05));
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+
+        .definition-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-yellow);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: var(--bg-primary);
+            padding: 0 0.75rem;
+        }
+
+        .definition-text {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Feature Lists */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-bullet {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            margin-top: 0.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .feature-bullet.magenta { background: var(--neon-magenta); box-shadow: 0 0 10px var(--neon-magenta); }
+        .feature-bullet.yellow { background: var(--neon-yellow); box-shadow: 0 0 10px var(--neon-yellow); }
+        .feature-bullet.green { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .feature-bullet.orange { background: var(--neon-orange); box-shadow: 0 0 10px var(--neon-orange); }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* NFR Categories Grid */
+        .nfr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .nfr-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nfr-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--card-accent, var(--neon-cyan));
+        }
+
+        .nfr-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-accent, var(--neon-cyan));
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .nfr-card[data-type="performance"] { --card-accent: var(--neon-cyan); }
+        .nfr-card[data-type="security"] { --card-accent: var(--neon-magenta); }
+        .nfr-card[data-type="usability"] { --card-accent: var(--neon-green); }
+        .nfr-card[data-type="reliability"] { --card-accent: var(--neon-yellow); }
+        .nfr-card[data-type="scalability"] { --card-accent: var(--neon-orange); }
+        .nfr-card[data-type="maintainability"] { --card-accent: var(--neon-blue); }
+        .nfr-card[data-type="portability"] { --card-accent: #9d4edd; }
+
+        .nfr-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .nfr-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--card-accent, var(--neon-cyan));
+            margin-bottom: 0.5rem;
+        }
+
+        .nfr-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Sample Questions */
+        .questions-box {
+            background: var(--bg-tertiary);
+            border-left: 4px solid var(--neon-yellow);
+            border-radius: 0 10px 10px 0;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .questions-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-yellow);
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .question-item::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            color: var(--neon-yellow);
+            font-weight: bold;
+        }
+
+        /* Example Cases */
+        .example-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .example-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .example-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .example-header.banking {
+            background: linear-gradient(135deg, rgba(0, 168, 255, 0.2), rgba(0, 168, 255, 0.05));
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        .example-header.food {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 107, 0, 0.05));
+            border-bottom: 2px solid var(--neon-orange);
+        }
+
+        .example-icon {
+            font-size: 2rem;
+        }
+
+        .example-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .example-body {
+            padding: 1.5rem;
+        }
+
+        .req-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .req-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .req-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .req-label.functional {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .req-label.non-functional {
+            background: rgba(255, 0, 255, 0.15);
+            color: var(--neon-magenta);
+            border: 1px solid var(--neon-magenta);
+        }
+
+        .req-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .req-item {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            padding: 0.5rem 0;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .req-item::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--text-muted);
+        }
+
+        /* Comparison Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 12px;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+        }
+
+        .comparison-table th {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1.25rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--neon-cyan);
+        }
+
+        .comparison-table th:first-child {
+            color: var(--neon-yellow);
+        }
+
+        .comparison-table th:nth-child(2) {
+            color: var(--neon-green);
+        }
+
+        .comparison-table th:nth-child(3) {
+            color: var(--neon-magenta);
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+            vertical-align: top;
+        }
+
+        .comparison-table tbody tr {
+            background: var(--bg-card);
+            transition: all 0.3s ease;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+
+        .comparison-table tbody tr:nth-child(even):hover {
+            background: var(--bg-tertiary);
+        }
+
+        .aspect-name {
+            font-weight: 600;
+            color: var(--neon-yellow);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Collapsible Sections */
+        .collapsible {
+            margin-bottom: 1rem;
+        }
+
+        .collapsible-trigger {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible-trigger:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 255, 242, 0.05);
+        }
+
+        .collapsible-trigger.active {
+            border-color: var(--neon-cyan);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .trigger-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .trigger-icon {
+            font-size: 1.5rem;
+        }
+
+        .trigger-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .trigger-arrow {
+            font-size: 1.25rem;
+            color: var(--neon-cyan);
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible-trigger.active .trigger-arrow {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--neon-cyan);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            padding: 1.5rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .collapsible-content.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Benefits/Importance Section */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .benefit-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-3px);
+        }
+
+        .benefit-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--neon-green);
+            opacity: 0.7;
+        }
+
+        .benefit-content h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-content p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Challenges Section */
+        .challenge-item {
+            background: var(--bg-card);
+            border-left: 4px solid var(--neon-orange);
+            border-radius: 0 10px 10px 0;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--neon-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Gathering Methods */
+        .methods-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .method-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .method-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .method-header.functional {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 136, 0.05));
+            border-bottom: 2px solid var(--neon-green);
+        }
+
+        .method-header.non-functional {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 255, 0.05));
+            border-bottom: 2px solid var(--neon-magenta);
+        }
+
+        .method-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+        }
+
+        .method-header.functional .method-title { color: var(--neon-green); }
+        .method-header.non-functional .method-title { color: var(--neon-magenta); }
+
+        .method-body {
+            padding: 1.5rem;
+        }
+
+        .method-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .method-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .method-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .method-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .method-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-glow);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 255, 242, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn.copied {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--neon-green);
+            border-color: var(--neon-green);
+        }
+
+        /* Key Takeaways */
+        .takeaway-box {
+            background: linear-gradient(135deg, rgba(0, 255, 242, 0.1), rgba(255, 0, 255, 0.1));
+            border: 2px solid var(--neon-cyan);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .takeaway-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .takeaway-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .takeaway-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .takeaway-check {
+            color: var(--neon-green);
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .takeaway-text {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--bg-tertiary);
+        }
+
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-course {
+            color: var(--neon-cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header {
+                padding: 2rem 1rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .section-number {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.4rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .example-container,
+            .methods-container {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .grid-bg, .scanline {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .content-card, .nfr-card, .example-card {
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <div class="top-nav-bar">
+            <div class="top-nav-container">
+                <div class="nav-menu">
+                    <button class="nav-toggle" onclick="document.querySelector('.nav-dropdown').classList.toggle('show')">
+                        📚 Lectures <span style="font-size:10px;">▼</span>
+                    </button>
+                    <div class="nav-dropdown">
+                        <a href="../index.html" class="nav-section-title" style="padding-top:12px;">🏠 Home</a>
+                        <a href="../index.html">Main Page</a>
+                        <div class="nav-section-title">📖 Weekly Lectures</div>
+                        <a href="../week1/index.html">Week 1: Web Basics</a>
+                        <a href="../week2/index.html">Week 2: HTML5 Structure</a>
+                        <a href="../week3/index.html">Week 3: CSS Styling</a>
+                        <a href="../week4/index.html">Week 4: Mobile-First & Flexbox</a>
+                        <a href="../week5/index.html">Week 5: JavaScript & Node.js</a>
+                        <a href="../week5-2/index.html">Week 5-2: Web APIs</a>
+                        <a href="../week6/index.html">Week 6: Node.js Endpoints</a>
+                        <a href="../week7/index.html">Week 7: React Basics</a>
+                        <a href="../week9/index.html">Week 9: SEO & UX with AI</a>
+                        <a href="../week12/index.html">Week 12: CareDesk Case Study</a>
+                        <div class="nav-section-title">📚 Special Topics</div>
+                        <a href="../system-design/index.html" class="active">System Design</a>
+                        <a href="../final/index.html">Final Exam Guide</a>
+                        <a href="../comprehensive-quiz.html">📝 Comprehensive Quiz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="course-tag">CSC-224 Web Technologies</div>
+            <h1 class="main-title">Functional & Non-Functional Requirements</h1>
+            <p class="subtitle">Understanding the foundation of software requirements analysis in web development</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-section">
+            <div class="nav-title">LECTURE NAVIGATION</div>
+            <div class="nav-grid">
+                <a href="#intro" class="nav-item"><span class="nav-num">01</span> Introduction to Requirements</a>
+                <a href="#functional" class="nav-item"><span class="nav-num">02</span> Functional Requirements</a>
+                <a href="#non-functional" class="nav-item"><span class="nav-num">03</span> Non-Functional Requirements</a>
+                <a href="#examples" class="nav-item"><span class="nav-num">04</span> Real-World Examples</a>
+                <a href="#comparison" class="nav-item"><span class="nav-num">05</span> FR vs NFR Comparison</a>
+                <a href="#importance" class="nav-item"><span class="nav-num">06</span> Importance of Balance</a>
+                <a href="#challenges" class="nav-item"><span class="nav-num">07</span> Common Challenges</a>
+                <a href="#gathering" class="nav-item"><span class="nav-num">08</span> Gathering Requirements</a>
+            </div>
+        </nav>
+
+        <!-- Section 1: Introduction -->
+        <section id="intro" class="section">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Introduction to Requirements Analysis</h2>
+            </div>
+
+            <div class="content-card">
+                <div class="card-title">
+                    <span class="card-icon">📋</span>
+                    Why Requirements Matter
+                </div>
+                <p class="card-text">
+                    Requirements analysis is an essential process in software development. It helps determine whether a system or project will meet its objectives and achieve success. Without proper requirements analysis, projects risk scope creep, missed deadlines, and ultimately, failure to deliver what stakeholders need.
+                </p>
+
+                <div class="definition-box">
+                    <span class="definition-label">Key Concept</span>
+                    <p class="definition-text">
+                        To make requirements analysis effective, requirements are generally divided into two categories: <strong>Functional Requirements</strong> (what the system does) and <strong>Non-Functional Requirements</strong> (how the system performs).
+                    </p>
+                </div>
+
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <svg width="400" height="150" viewBox="0 0 400 150" style="max-width: 100%;">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00fff2;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="100" y="10" width="200" height="40" rx="8" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+                        <text x="200" y="35" text-anchor="middle" fill="#e8e8f0" font-family="Orbitron" font-size="12">REQUIREMENTS</text>
+                        <line x1="150" y1="50" x2="100" y2="90" stroke="#00fff2" stroke-width="2"/>
+                        <line x1="250" y1="50" x2="300" y2="90" stroke="#ff00ff" stroke-width="2"/>
+                        <rect x="20" y="90" width="160" height="50" rx="8" fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="2"/>
+                        <text x="100" y="115" text-anchor="middle" fill="#00ff88" font-family="Orbitron" font-size="10">FUNCTIONAL</text>
+                        <text x="100" y="130" text-anchor="middle" fill="#a0a0b0" font-family="Rajdhani" font-size="10">"What it does"</text>
+                        <rect x="220" y="90" width="160" height="50" rx="8" fill="rgba(255,0,255,0.1)" stroke="#ff00ff" stroke-width="2"/>
+                        <text x="300" y="115" text-anchor="middle" fill="#ff00ff" font-family="Orbitron" font-size="10">NON-FUNCTIONAL</text>
+                        <text x="300" y="130" text-anchor="middle" fill="#a0a0b0" font-family="Rajdhani" font-size="10">"How it performs"</text>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Functional Requirements -->
+        <section id="functional" class="section">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Functional Requirements</h2>
+            </div>
+
+            <div class="content-card">
+                <div class="definition-box">
+                    <span class="definition-label">Definition</span>
+                    <p class="definition-text">
+                        Functional requirements define the specific features and operations a system must perform to meet business and user needs. They describe <strong>what the system should do</strong> and <strong>how it should interact</strong> with users or other systems.
+                    </p>
+                </div>
+
+                <div class="card-title" style="margin-top: 2rem;">
+                    <span class="card-icon">🎯</span>
+                    Key Characteristics
+                </div>
+
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="feature-bullet"></span>
+                        <div class="feature-content">
+                            <div class="feature-title">Focus on System Behavior</div>
+                            <div class="feature-desc">Functional requirements concentrate on what actions the system performs and how it behaves in response to inputs.</div>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-bullet magenta"></span>
+                        <div class="feature-content">
+                            <div class="feature-title">Observable and Testable</div>
+                            <div class="feature-desc">These features can be directly observed and tested in the final product, making verification straightforward.</div>
+                        </div>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-bullet green"></span>
+                        <div class="feature-content">
+                            <div class="feature-title">Common Examples</div>
+                            <div class="feature-desc">User authentication, data processing, search functionality, payment handling, and report generation.</div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="questions-box">
+                    <div class="questions-title">
+                        <span>💡</span> Sample Questions to Identify Functional Requirements
+                    </div>
+                    <div class="question-item">What features should the system include?</div>
+                    <div class="question-item">What edge cases must be considered in the design?</div>
+                    <div class="question-item">How should the system respond to specific user inputs?</div>
+                    <div class="question-item">What data should the system store and retrieve?</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Non-Functional Requirements -->
+        <section id="non-functional" class="section">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Non-Functional Requirements</h2>
+            </div>
+
+            <div class="content-card">
+                <div class="definition-box">
+                    <span class="definition-label">Definition</span>
+                    <p class="definition-text">
+                        Non-functional requirements (NFRs) define <strong>how a system should operate</strong>, focusing on performance, reliability, and user experience rather than specific features. They ensure the system is efficient, secure, and maintainable over time.
+                    </p>
+                </div>
+
+                <div class="card-title" style="margin-top: 2rem;">
+                    <span class="card-icon">⚡</span>
+                    Categories of Non-Functional Requirements
+                </div>
+
+                <div class="nfr-grid">
+                    <div class="nfr-card" data-type="performance">
+                        <div class="nfr-icon">🚀</div>
+                        <div class="nfr-title">Performance</div>
+                        <div class="nfr-desc">Speed and responsiveness of the system under various conditions and load levels.</div>
+                    </div>
+                    <div class="nfr-card" data-type="security">
+                        <div class="nfr-icon">🔒</div>
+                        <div class="nfr-title">Security</div>
+                        <div class="nfr-desc">Protection against unauthorized access, data breaches, and cyber threats.</div>
+                    </div>
+                    <div class="nfr-card" data-type="usability">
+                        <div class="nfr-icon">👤</div>
+                        <div class="nfr-title">Usability</div>
+                        <div class="nfr-desc">Ease of use and intuitiveness of the interface for end users.</div>
+                    </div>
+                    <div class="nfr-card" data-type="reliability">
+                        <div class="nfr-icon">🛡️</div>
+                        <div class="nfr-title">Reliability</div>
+                        <div class="nfr-desc">System stability, availability, and consistent operation over time.</div>
+                    </div>
+                    <div class="nfr-card" data-type="scalability">
+                        <div class="nfr-icon">📈</div>
+                        <div class="nfr-title">Scalability</div>
+                        <div class="nfr-desc">Ability to handle growth in users, data, or transactions.</div>
+                    </div>
+                    <div class="nfr-card" data-type="maintainability">
+                        <div class="nfr-icon">🔧</div>
+                        <div class="nfr-title">Maintainability</div>
+                        <div class="nfr-desc">Ease of making updates, fixes, and modifications to the system.</div>
+                    </div>
+                    <div class="nfr-card" data-type="portability">
+                        <div class="nfr-icon">🌐</div>
+                        <div class="nfr-title">Portability</div>
+                        <div class="nfr-desc">Ability to run in different environments and platforms.</div>
+                    </div>
+                </div>
+
+                <div class="questions-box">
+                    <div class="questions-title">
+                        <span>💡</span> Sample Questions to Identify Non-Functional Requirements
+                    </div>
+                    <div class="question-item">How fast should the system respond to user actions?</div>
+                    <div class="question-item">How secure should it be against unauthorized access?</div>
+                    <div class="question-item">How available and reliable should the system be?</div>
+                    <div class="question-item">How many concurrent users must it support?</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Real-World Examples -->
+        <section id="examples" class="section">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Real-World Examples</h2>
+            </div>
+
+            <div class="example-container">
+                <!-- Online Banking Example -->
+                <div class="example-card">
+                    <div class="example-header banking">
+                        <span class="example-icon">🏦</span>
+                        <span class="example-title">Online Banking System</span>
+                    </div>
+                    <div class="example-body">
+                        <div class="req-section">
+                            <span class="req-label functional">Functional Requirements</span>
+                            <ul class="req-list">
+                                <li class="req-item">Users should be able to log in with their username and password</li>
+                                <li class="req-item">Users should be able to check their account balance</li>
+                                <li class="req-item">Users should receive notifications after making a transaction</li>
+                            </ul>
+                        </div>
+                        <div class="req-section">
+                            <span class="req-label non-functional">Non-Functional Requirements</span>
+                            <ul class="req-list">
+                                <li class="req-item">The system should respond to user actions in less than 2 seconds</li>
+                                <li class="req-item">All transactions must be encrypted and comply with industry security standards</li>
+                                <li class="req-item">The system should handle 100 million users with minimal downtime</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Delivery Example -->
+                <div class="example-card">
+                    <div class="example-header food">
+                        <span class="example-icon">🍔</span>
+                        <span class="example-title">Food Delivery App</span>
+                    </div>
+                    <div class="example-body">
+                        <div class="req-section">
+                            <span class="req-label functional">Functional Requirements</span>
+                            <ul class="req-list">
+                                <li class="req-item">Users can browse the menu and place an order</li>
+                                <li class="req-item">Users can make payments and track their orders in real time</li>
+                            </ul>
+                        </div>
+                        <div class="req-section">
+                            <span class="req-label non-functional">Non-Functional Requirements</span>
+                            <ul class="req-list">
+                                <li class="req-item">The app should load the restaurant menu in under 1 second</li>
+                                <li class="req-item">The system should support up to 50,000 concurrent orders during peak hours</li>
+                                <li class="req-item">The app should be easy to use for first-time users, with an intuitive interface</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Comparison -->
+        <section id="comparison" class="section">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Functional vs Non-Functional Requirements</h2>
+            </div>
+
+            <div class="table-container">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Functional Requirements</th>
+                            <th>Non-Functional Requirements</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="aspect-name">Definition</td>
+                            <td>Define what the system should do—the exact features, tasks, or operations</td>
+                            <td>Define how the system should perform—qualities or attributes like speed, security, or usability</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Purpose</td>
+                            <td>Focus on the behavior and features of the system</td>
+                            <td>Focus on the performance, usability, and overall quality of the system</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Scope</td>
+                            <td>Define the actions and operations the system must support</td>
+                            <td>Define constraints or conditions under which those actions should occur</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Measurement</td>
+                            <td>Easily measured by verifying outputs or results</td>
+                            <td>Harder to measure, often validated against benchmarks, metrics, or SLAs</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Impact on Development</td>
+                            <td>Drive the core design and features of the system</td>
+                            <td>Influence the system architecture and performance optimization</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">User Perspective</td>
+                            <td>Directly visible to users and tied to business needs</td>
+                            <td>Shape the user experience by ensuring efficiency, reliability, and smooth operation</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Documentation</td>
+                            <td>Documented in use cases, user stories, or functional specifications</td>
+                            <td>Captured in performance criteria, technical specs, or design constraints</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Evaluation</td>
+                            <td>Validated through functional testing (unit, integration, or acceptance tests)</td>
+                            <td>Verified via performance, security, and usability testing</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Dependency</td>
+                            <td>Define what must be built to meet user needs</td>
+                            <td>Define how well the system must operate once built</td>
+                        </tr>
+                        <tr>
+                            <td class="aspect-name">Examples</td>
+                            <td>Login authentication, data input/output, transaction processing</td>
+                            <td>System scalability, security, response time, reliability, maintainability</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 6: Importance of Balance -->
+        <section id="importance" class="section">
+            <div class="section-header">
+                <span class="section-number">06</span>
+                <h2 class="section-title">Importance of Balancing Both Requirements</h2>
+            </div>
+
+            <div class="content-card">
+                <p class="card-text">
+                    Balancing functional and non-functional requirements ensures a system is both <strong>useful</strong> and <strong>reliable</strong>. Focusing only on features without considering performance, security, or usability leads to systems that work technically but fail in practice.
+                </p>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <span class="benefit-num">01</span>
+                        <div class="benefit-content">
+                            <h4>Improves User Experience</h4>
+                            <p>Functional features alone may work but feel slow or hard to use. Non-functional aspects like performance, usability, and availability shape how users interact with the system.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <span class="benefit-num">02</span>
+                        <div class="benefit-content">
+                            <h4>Enhances System Performance</h4>
+                            <p>Scalability, reliability, and security ensure the system performs effectively under real-world conditions and varying loads.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <span class="benefit-num">03</span>
+                        <div class="benefit-content">
+                            <h4>Prevents Bottlenecks & Failures</h4>
+                            <p>Proper attention to non-functional needs reduces outages, security breaches, and downtime that can cripple a business.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <span class="benefit-num">04</span>
+                        <div class="benefit-content">
+                            <h4>Reduces Long-Term Costs</h4>
+                            <p>Addressing non-functional requirements early avoids expensive redesign, rework, or performance fixes later in the project lifecycle.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-card">
+                        <span class="benefit-num">05</span>
+                        <div class="benefit-content">
+                            <h4>Supports System Evolution</h4>
+                            <p>Maintainability and extensibility allow the system to scale and adapt smoothly as business and user needs grow over time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Common Challenges -->
+        <section id="challenges" class="section">
+            <div class="section-header">
+                <span class="section-number">07</span>
+                <h2 class="section-title">Common Challenges in Defining Requirements</h2>
+            </div>
+
+            <div class="content-card">
+                <p class="card-text">
+                    Defining functional and non-functional requirements can be complex due to several challenges that teams must navigate carefully.
+                </p>
+
+                <div class="challenge-item">
+                    <div class="challenge-title">⚠️ Ambiguity in Requirements</div>
+                    <div class="challenge-desc">Vague or incomplete requirements make it difficult to define what the system must do (functional) and how it should perform (non-functional). Clear, specific language is essential.</div>
+                </div>
+
+                <div class="challenge-item">
+                    <div class="challenge-title">🔄 Changing Requirements</div>
+                    <div class="challenge-desc">Evolving business goals, market trends, or user expectations can shift requirements, making it harder to maintain stable design and development timelines.</div>
+                </div>
+
+                <div class="challenge-item">
+                    <div class="challenge-title">📊 Difficulty in Prioritization</div>
+                    <div class="challenge-desc">Functional requirements often take precedence, while critical non-functional aspects like security or scalability may be overlooked until it's too late.</div>
+                </div>
+
+                <div class="challenge-item">
+                    <div class="challenge-title">📏 Measuring Non-Functional Requirements</div>
+                    <div class="challenge-desc">Functional needs are easier to test; non-functional attributes like usability, scalability, or reliability are harder to quantify and validate objectively.</div>
+                </div>
+
+                <div class="challenge-item">
+                    <div class="challenge-title">⚔️ Overlapping or Conflicting Requirements</div>
+                    <div class="challenge-desc">Some requirements may conflict—for example, stronger security potentially impacting system performance—requiring careful trade-offs and stakeholder discussions.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Gathering Requirements -->
+        <section id="gathering" class="section">
+            <div class="section-header">
+                <span class="section-number">08</span>
+                <h2 class="section-title">How to Gather Requirements</h2>
+            </div>
+
+            <div class="content-card">
+                <p class="card-text">
+                    Gathering requirements involves multiple approaches and collaboration between the development team, stakeholders, and end-users. Different techniques work better for different types of requirements.
+                </p>
+
+                <div class="methods-container">
+                    <!-- Functional Methods -->
+                    <div class="method-section">
+                        <div class="method-header functional">
+                            <span class="example-icon">✅</span>
+                            <span class="method-title">Gathering Functional Requirements</span>
+                        </div>
+                        <div class="method-body">
+                            <div class="method-item">
+                                <span class="method-icon">🎤</span>
+                                <div>
+                                    <div class="method-name">Interviews</div>
+                                    <div class="method-desc">Talk to stakeholders or users to understand their needs, workflows, and pain points directly.</div>
+                                </div>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-icon">📝</span>
+                                <div>
+                                    <div class="method-name">Surveys</div>
+                                    <div class="method-desc">Distribute questionnaires to gather input from a larger audience and identify common requirements.</div>
+                                </div>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-icon">👥</span>
+                                <div>
+                                    <div class="method-name">Workshops</div>
+                                    <div class="method-desc">Host collaborative sessions to brainstorm features, gather feedback, and reach consensus among stakeholders.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Non-Functional Methods -->
+                    <div class="method-section">
+                        <div class="method-header non-functional">
+                            <span class="example-icon">⚡</span>
+                            <span class="method-title">Gathering Non-Functional Requirements</span>
+                        </div>
+                        <div class="method-body">
+                            <div class="method-item">
+                                <span class="method-icon">📊</span>
+                                <div>
+                                    <div class="method-name">Performance Benchmarks</div>
+                                    <div class="method-desc">Consult with IT teams to set expectations for performance, load capacity, and response times.</div>
+                                </div>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-icon">🔐</span>
+                                <div>
+                                    <div class="method-name">Security Standards</div>
+                                    <div class="method-desc">Consult with security experts to define best practices for data protection, compliance, and threat mitigation.</div>
+                                </div>
+                            </div>
+                            <div class="method-item">
+                                <span class="method-icon">🧪</span>
+                                <div>
+                                    <div class="method-name">Usability Testing</div>
+                                    <div class="method-desc">Test the system with real users to find areas where they might struggle and refine the interface accordingly.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Takeaways -->
+        <div class="takeaway-box">
+            <div class="takeaway-title">
+                <span>🎯</span> Key Takeaways
+            </div>
+            <div class="takeaway-grid">
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text"><strong>Functional requirements</strong> define WHAT the system does</span>
+                </div>
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text"><strong>Non-functional requirements</strong> define HOW the system performs</span>
+                </div>
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text">Both types are <strong>essential</strong> for successful software</span>
+                </div>
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text">NFRs are <strong>harder to measure</strong> but equally important</span>
+                </div>
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text">Early attention to NFRs <strong>reduces long-term costs</strong></span>
+                </div>
+                <div class="takeaway-item">
+                    <span class="takeaway-check">✓</span>
+                    <span class="takeaway-text">Different <strong>gathering techniques</strong> suit different requirement types</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Extended Content -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-number">+</span>
+                <h2 class="section-title">Extended Learning</h2>
+            </div>
+
+            <div class="collapsible">
+                <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                    <div class="trigger-content">
+                        <span class="trigger-icon">📚</span>
+                        <span class="trigger-title">Business Context: Why This Matters for Business Students</span>
+                    </div>
+                    <span class="trigger-arrow">▼</span>
+                </button>
+                <div class="collapsible-content">
+                    <p style="margin-bottom: 1rem;">As business students learning web technologies, understanding requirements is crucial because:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-bullet"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Bridge Between Business and Technology</div>
+                                <div class="feature-desc">You'll often serve as the translator between what business stakeholders want and what developers build.</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet magenta"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Project Success Depends on It</div>
+                                <div class="feature-desc">Poor requirements are the #1 cause of project failure. Getting this right saves time and money.</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet green"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Vendor and Contractor Management</div>
+                                <div class="feature-desc">When outsourcing development, clear requirements protect your organization from scope creep and disputes.</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                    <div class="trigger-content">
+                        <span class="trigger-icon">🔍</span>
+                        <span class="trigger-title">Common Mistake: Confusing Requirements with Implementation</span>
+                    </div>
+                    <span class="trigger-arrow">▼</span>
+                </button>
+                <div class="collapsible-content">
+                    <div class="definition-box" style="margin-top: 0;">
+                        <span class="definition-label">Important Distinction</span>
+                        <p class="definition-text">
+                            A <strong>requirement</strong> states WHAT is needed. An <strong>implementation</strong> describes HOW to achieve it. Keep these separate in your documentation!
+                        </p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="background: rgba(0,255,136,0.1); padding: 1rem; border-radius: 8px; border: 1px solid var(--neon-green);">
+                            <div style="color: var(--neon-green); font-weight: 600; margin-bottom: 0.5rem;">✓ REQUIREMENT</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">"Users must be able to search for products by name"</div>
+                        </div>
+                        <div style="background: rgba(255,107,0,0.1); padding: 1rem; border-radius: 8px; border: 1px solid var(--neon-orange);">
+                            <div style="color: var(--neon-orange); font-weight: 600; margin-bottom: 0.5rem;">✗ IMPLEMENTATION</div>
+                            <div style="color: var(--text-secondary); font-size: 0.9rem;">"Use Elasticsearch with a React autocomplete component"</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <button class="collapsible-trigger" onclick="toggleCollapsible(this)">
+                    <div class="trigger-content">
+                        <span class="trigger-icon">📋</span>
+                        <span class="trigger-title">IEEE 830 Standard for SRS Documents</span>
+                    </div>
+                    <span class="trigger-arrow">▼</span>
+                </button>
+                <div class="collapsible-content">
+                    <p style="margin-bottom: 1rem;">The IEEE 830 standard provides guidelines for writing Software Requirements Specifications (SRS). Key qualities of good requirements include:</p>
+                    <ul class="feature-list">
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Correct</div>
+                                <div class="feature-desc">Every requirement accurately reflects a real need</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Unambiguous</div>
+                                <div class="feature-desc">Each requirement has only one interpretation</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Complete</div>
+                                <div class="feature-desc">All necessary requirements are included</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Consistent</div>
+                                <div class="feature-desc">No requirement conflicts with another</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Verifiable</div>
+                                <div class="feature-desc">Each requirement can be tested or checked</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Modifiable</div>
+                                <div class="feature-desc">Structure allows for easy changes</div>
+                            </div>
+                        </li>
+                        <li class="feature-item">
+                            <span class="feature-bullet yellow"></span>
+                            <div class="feature-content">
+                                <div class="feature-title">Traceable</div>
+                                <div class="feature-desc">Origin of each requirement is clear</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                <span class="footer-course">CSC-224 Web Technologies</span> | Functional & Non-Functional Requirements
+            </p>
+            <p class="footer-text" style="margin-top: 0.5rem; opacity: 0.7;">
+                5th Semester | Business Studies
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible functionality
+        function toggleCollapsible(trigger) {
+            trigger.classList.toggle('active');
+            const content = trigger.nextElementSibling;
+            content.classList.toggle('show');
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Copy to clipboard functionality
+        function copyToClipboard(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                btn.classList.add('copied');
+                btn.innerHTML = '✓ Copied';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '📋 Copy';
+                }, 2000);
+            });
+        }
+
+        // Add scroll-based animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section, .content-card, .example-card, .nfr-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Close nav dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const navMenu = document.querySelector('.nav-menu');
+            const dropdown = document.querySelector('.nav-dropdown');
+            if (navMenu && dropdown && !navMenu.contains(e.target) && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

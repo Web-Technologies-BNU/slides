@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC-224 Final Exam Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f5ff;
+            --neon-pink: #ff00ff;
+            --neon-green: #39ff14;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff6b35;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --card-bg: #12121a;
+            --border-color: #1a1a2e;
+            --text-primary: #e0e0e0;
+            --text-secondary: #888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 17px;
+            min-height: 100vh;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--card-bg) 100%);
+            border-bottom: 2px solid var(--neon-cyan);
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), var(--neon-cyan), transparent);
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0,245,255,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        .header .exam-info {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .header .exam-info span {
+            font-family: 'Share Tech Mono', monospace;
+            padding: 8px 20px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: rgba(0,245,255,0.05);
+        }
+
+        /* Top Navigation Bar */
+        .top-nav-bar {
+            background: var(--darker-bg);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .top-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* Navigation Menu */
+        .nav-menu{position:relative;display:inline-block;}
+        .nav-toggle{font-family:'Share Tech Mono',monospace;color:var(--text-secondary);text-decoration:none;padding:10px 20px;border:1px solid var(--border-color);border-radius:4px;font-size:0.85rem;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px;cursor:pointer;background:transparent;display:flex;align-items:center;gap:6px;}
+        .nav-toggle:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);background:rgba(0,245,255,0.05);}
+        .nav-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--darker-bg);border:1px solid var(--border-color);border-radius:4px;padding:8px;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.4);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .2s ease;z-index:1000;max-height:70vh;overflow-y:auto;}
+        .nav-dropdown.show{opacity:1;visibility:visible;transform:translateY(0);}
+        .nav-dropdown a{display:block;padding:8px 12px;color:var(--text-secondary);text-decoration:none;border-radius:4px;font-size:13px;transition:all .15s ease;font-family:'Share Tech Mono',monospace;}
+        .nav-dropdown a:hover{background:rgba(0,245,255,0.05);color:var(--neon-cyan);}
+        .nav-dropdown a.active{background:rgba(0,245,255,0.15);color:var(--neon-cyan);font-weight:600;}
+        .nav-section-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);padding:8px 12px 4px;font-weight:700;margin-top:4px;font-family:'Share Tech Mono',monospace;}
+        .nav-section-title:first-child{margin-top:0;}
+        
+        /* Navigation */
+        .nav {
+            background: var(--darker-bg);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-cyan);
+            border-color: var(--neon-cyan);
+            background: rgba(0,245,255,0.1);
+            box-shadow: 0 0 20px rgba(0,245,255,0.2);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Styles */
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0,245,255,0.1);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--darker-bg), var(--card-bg));
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(0,245,255,0.1), var(--card-bg));
+        }
+
+        .section-header h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header .icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1.2rem;
+        }
+
+        .section-header .toggle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            transition: transform 0.3s ease;
+        }
+
+        .section.collapsed .toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            padding: 25px;
+            display: block;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        /* Topic Colors */
+        .sdlc .section-header h2 { color: var(--neon-cyan); }
+        .sdlc .icon { background: rgba(0,245,255,0.2); }
+        
+        .srs .section-header h2 { color: var(--neon-pink); }
+        .srs .icon { background: rgba(255,0,255,0.2); }
+        
+        .analytics .section-header h2 { color: var(--neon-green); }
+        .analytics .icon { background: rgba(57,255,20,0.2); }
+        
+        .responsive .section-header h2 { color: var(--neon-orange); }
+        .responsive .icon { background: rgba(255,107,53,0.2); }
+
+        /* Content Elements */
+        h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            color: var(--neon-cyan);
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        /* Key Terms */
+        .key-term {
+            display: inline;
+            color: var(--neon-yellow);
+            font-weight: 600;
+            border-bottom: 1px dashed var(--neon-yellow);
+            cursor: help;
+        }
+
+        /* Definition Box */
+        .definition {
+            background: rgba(0,245,255,0.05);
+            border-left: 4px solid var(--neon-cyan);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .definition strong {
+            color: var(--neon-cyan);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        ul li::marker {
+            color: var(--neon-cyan);
+        }
+
+        ol li::marker {
+            color: var(--neon-pink);
+            font-weight: bold;
+        }
+
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .phase-card {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .phase-card .phase-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            opacity: 0.3;
+            float: right;
+            margin-top: -5px;
+        }
+
+        .phase-card h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--neon-pink);
+            margin-bottom: 10px;
+        }
+
+        .phase-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .phase-card .deliverable {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            background: rgba(57,255,20,0.1);
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: rgba(0,245,255,0.1);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-header span {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+        }
+
+        .copy-btn.copied {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: var(--dark-bg);
+        }
+
+        .code-content {
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        .code-content pre {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .code-content .comment { color: #6a9955; }
+        .code-content .property { color: var(--neon-cyan); }
+        .code-content .value { color: var(--neon-orange); }
+        .code-content .selector { color: var(--neon-pink); }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: rgba(0,245,255,0.1);
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            color: var(--neon-cyan);
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            background: var(--darker-bg);
+        }
+
+        tr:hover td {
+            background: rgba(0,245,255,0.05);
+        }
+
+        /* Comparison Box */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-card {
+            background: var(--darker-bg);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-card.good {
+            border-color: var(--neon-green);
+        }
+
+        .comparison-card.bad {
+            border-color: #ff4444;
+        }
+
+        .comparison-card h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-card.good h4 { color: var(--neon-green); }
+        .comparison-card.bad h4 { color: #ff4444; }
+
+        /* Tip Box */
+        .tip-box {
+            background: linear-gradient(135deg, rgba(255,0,255,0.1), rgba(0,245,255,0.1));
+            border: 1px solid var(--neon-pink);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-box h4 {
+            font-family: 'Orbitron', monospace;
+            color: var(--neon-pink);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Practice Questions */
+        .practice-section {
+            background: var(--darker-bg);
+            border: 2px dashed var(--neon-yellow);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .practice-section h4 {
+            font-family: 'Orbitron', monospace;
+            color: var(--neon-yellow);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--neon-cyan);
+        }
+
+        .question:last-child {
+            margin-bottom: 0;
+        }
+
+        .question p {
+            margin-bottom: 0;
+        }
+
+        .question .q-num {
+            font-family: 'Orbitron', monospace;
+            color: var(--neon-cyan);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Diagram */
+        .diagram {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .sdlc-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .flow-item {
+            background: rgba(0,245,255,0.1);
+            border: 1px solid var(--neon-cyan);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon-cyan);
+            transition: all 0.3s ease;
+        }
+
+        .flow-item:hover {
+            background: var(--neon-cyan);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+        }
+
+        .flow-arrow {
+            color: var(--neon-pink);
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .footer p {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer .glow {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 8px;
+            }
+            .nav-links a {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .section-header h2 {
+                font-size: 1.1rem;
+            }
+            .phase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>CSC-224 Study Guide</h1>
+        <p class="subtitle">&gt; Web Technologies Final Exam Preparation_</p>
+        <div class="exam-info">
+            <span>⏱ Duration: 1.5 Hours</span>
+            <span>📝 Total Marks: 40</span>
+            <span>📚 Closed Book</span>
+        </div>
+    </header>
+
+    <div class="top-nav-bar">
+        <div class="top-nav-container">
+            <div class="nav-menu">
+                <button class="nav-toggle" onclick="document.querySelector('.nav-dropdown').classList.toggle('show')">
+                    📚 LECTURES <span style="font-size:10px;">▼</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="../index.html" class="nav-section-title" style="padding-top:12px;">🏠 HOME</a>
+                    <a href="../index.html">Main Page</a>
+                    <div class="nav-section-title">📖 WEEKLY LECTURES</div>
+                    <a href="../week1/index.html">Week 1: Web Basics</a>
+                    <a href="../week2/index.html">Week 2: HTML5 Structure</a>
+                    <a href="../week3/index.html">Week 3: CSS Styling</a>
+                    <a href="../week4/index.html">Week 4: Mobile-First & Flexbox</a>
+                    <a href="../week5/index.html">Week 5: JavaScript & Node.js</a>
+                    <a href="../week5-2/index.html">Week 5-2: Web APIs</a>
+                    <a href="../week6/index.html">Week 6: Node.js Endpoints</a>
+                    <a href="../week7/index.html">Week 7: React Basics</a>
+                    <a href="../week9/index.html">Week 9: SEO & UX with AI</a>
+                    <a href="../week12/index.html">Week 12: CareDesk Case Study</a>
+                    <div class="nav-section-title">📚 SPECIAL TOPICS</div>
+                    <a href="../system-design/index.html">System Design</a>
+                    <a href="../final/index.html" class="active">Final Exam Guide</a>
+                    <a href="../comprehensive-quiz.html">📝 Comprehensive Quiz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="#sdlc">SDLC</a>
+            <a href="#srs">SRS/IEEE 830</a>
+            <a href="#analytics">Analytics</a>
+            <a href="#responsive">Responsive Design</a>
+            <a href="#practice">Practice Questions</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- SDLC Section -->
+        <section id="sdlc" class="section sdlc">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><span class="icon">⚙️</span> Software Development Life Cycle (SDLC)</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="definition">
+                    <strong>DEFINITION:</strong> SDLC is a structured framework/process for planning, creating, testing, and deploying software systems. It provides a systematic approach to software development that ensures quality and meets user requirements.
+                </div>
+
+                <h3>The Six Phases of SDLC</h3>
+                <div class="diagram">
+                    <div class="sdlc-flow">
+                        <span class="flow-item">Requirements</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-item">Design</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-item">Implementation</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-item">Testing</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-item">Deployment</span>
+                        <span class="flow-arrow">→</span>
+                        <span class="flow-item">Maintenance</span>
+                    </div>
+                </div>
+
+                <div class="phase-grid">
+                    <div class="phase-card">
+                        <span class="phase-num">01</span>
+                        <h4>Requirements Phase</h4>
+                        <p>Gather and document what the system should do. Interview stakeholders, analyze needs, define scope.</p>
+                        <span class="deliverable">📄 SRS Document</span>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-num">02</span>
+                        <h4>Design Phase</h4>
+                        <p>Plan how the system will work. Create architecture, database schema, UI mockups, and wireframes.</p>
+                        <span class="deliverable">📐 Wireframes, ERD</span>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-num">03</span>
+                        <h4>Implementation Phase</h4>
+                        <p>Write the actual code. Build frontend, backend, database, and integrate all components.</p>
+                        <span class="deliverable">💻 Source Code</span>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-num">04</span>
+                        <h4>Testing Phase</h4>
+                        <p>Verify the system works correctly. Unit testing, integration testing, UAT, bug fixing.</p>
+                        <span class="deliverable">🧪 Test Reports</span>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-num">05</span>
+                        <h4>Deployment Phase</h4>
+                        <p>Release the system to production. Server setup, data migration, user training, go-live.</p>
+                        <span class="deliverable">🚀 Live System</span>
+                    </div>
+                    <div class="phase-card">
+                        <span class="phase-num">06</span>
+                        <h4>Maintenance Phase</h4>
+                        <p>Keep the system running. Bug fixes, updates, performance optimization, new features.</p>
+                        <span class="deliverable">🔧 Updates & Patches</span>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>💡 Exam Tip</h4>
+                    <p>The <span class="key-term">Requirements Phase</span> is considered the most critical because errors here propagate throughout all subsequent phases. The cost of fixing requirements errors increases exponentially over time—fixing an issue in maintenance can cost 100x more than fixing it in requirements!</p>
+                </div>
+
+                <h3>Why SDLC Matters</h3>
+                <ul>
+                    <li><strong>Reduces Risk:</strong> Systematic approach catches problems early</li>
+                    <li><strong>Improves Quality:</strong> Each phase has defined outputs and reviews</li>
+                    <li><strong>Controls Costs:</strong> Better planning prevents expensive rework</li>
+                    <li><strong>Ensures Documentation:</strong> Creates artifacts for future maintenance</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SRS Section -->
+        <section id="srs" class="section srs">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><span class="icon">📋</span> SRS & IEEE 830 Standard</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="definition">
+                    <strong>DEFINITION:</strong> A Software Requirements Specification (SRS) is a formal document that describes what a software system should do. It serves as a contract between stakeholders and developers, following the IEEE 830 standard for requirements documentation.
+                </div>
+
+                <h3>Functional vs Non-Functional Requirements</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Functional Requirements</th>
+                            <th>Non-Functional Requirements</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Definition</strong></td>
+                            <td>Define <em>WHAT</em> the system should do</td>
+                            <td>Define <em>HOW</em> the system should perform</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Focus</strong></td>
+                            <td>Specific behaviors and functions</td>
+                            <td>Quality attributes and constraints</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Examples</strong></td>
+                            <td>Login, search, checkout, send email</td>
+                            <td>Performance, security, usability, scalability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Testing</strong></td>
+                            <td>Feature testing, user acceptance</td>
+                            <td>Load testing, security audits, benchmarks</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Writing Good Requirements (IEEE 830)</h3>
+                <p>Well-written requirements must have these characteristics:</p>
+                <ul>
+                    <li><span class="key-term">Unambiguous:</span> Only one possible interpretation</li>
+                    <li><span class="key-term">Complete:</span> All requirements are documented</li>
+                    <li><span class="key-term">Verifiable:</span> Can be tested/validated</li>
+                    <li><span class="key-term">Consistent:</span> No contradictions between requirements</li>
+                    <li><span class="key-term">Traceable:</span> Each requirement has a unique ID</li>
+                    <li><span class="key-term">Modifiable:</span> Easy to update when needed</li>
+                </ul>
+
+                <h3>Common Mistake: Mixing Requirements with Implementation</h3>
+                <div class="comparison">
+                    <div class="comparison-card bad">
+                        <h4>❌ Wrong (Implementation Details)</h4>
+                        <p>"The system shall use React for the frontend and MySQL for the database."</p>
+                        <p>"Use Bootstrap for responsive design."</p>
+                        <p>"Implement REST API with Node.js."</p>
+                    </div>
+                    <div class="comparison-card good">
+                        <h4>✅ Correct (Actual Requirements)</h4>
+                        <p>"The system shall allow users to search products by name, category, or price range."</p>
+                        <p>"The system shall be accessible on devices with screen widths from 320px to 1920px."</p>
+                        <p>"The system shall expose an API for third-party integration."</p>
+                    </div>
+                </div>
+
+                <h3>Converting Vague to Measurable Requirements</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>❌ Vague Requirement</th>
+                            <th>✅ Measurable Requirement</th>
+                        </tr>
+                        <tr>
+                            <td>"The system should be fast"</td>
+                            <td>"Pages shall load within 3 seconds on 4G connections"</td>
+                        </tr>
+                        <tr>
+                            <td>"It should be secure"</td>
+                            <td>"All data in transit shall be encrypted using TLS 1.2 or higher"</td>
+                        </tr>
+                        <tr>
+                            <td>"Easy to use"</td>
+                            <td>"New users shall complete checkout within 5 clicks"</td>
+                        </tr>
+                        <tr>
+                            <td>"Work on phones"</td>
+                            <td>"UI shall be fully functional on screens 320px and above"</td>
+                        </tr>
+                        <tr>
+                            <td>"Handle many users"</td>
+                            <td>"System shall support 1000 concurrent users without degradation"</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Standard Requirement Format</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>IEEE 830 Requirement Format</span>
+                    </div>
+                    <div class="code-content">
+<pre><span class="comment">// Functional Requirement Example</span>
+<span class="property">FR-01:</span> The system <span class="value">shall</span> allow users to reset their 
+       password via email verification.
+
+<span class="comment">// Non-Functional Requirement Example</span>
+<span class="property">NFR-01:</span> The system <span class="value">shall</span> maintain 99.9% uptime 
+        during business hours (9am-6pm).
+
+<span class="comment">// Key words:</span>
+<span class="value">"shall"</span> = mandatory requirement
+<span class="value">"should"</span> = recommended but not mandatory
+<span class="value">"may"</span> = optional feature</pre>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>💡 Exam Tip</h4>
+                    <p>When given a client statement, always separate <strong>technology choices</strong> (React, MySQL, Node.js) from <strong>actual requirements</strong> (what the user needs to do). Technology choices belong in the Design phase, not Requirements!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="section analytics">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><span class="icon">📊</span> Visitor Analytics & Heatmaps</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="definition">
+                    <strong>DEFINITION:</strong> Visitor Analytics is the collection and analysis of data about website visitors—their behavior, demographics, and interactions. Tools like Microsoft Clarity provide insights through heatmaps, session recordings, and metrics.
+                </div>
+
+                <h3>Types of Analytics Data</h3>
+                <div class="phase-grid">
+                    <div class="phase-card">
+                        <h4>🖱️ Click Heatmaps</h4>
+                        <p>Visual representation of where users click on a page. Hot colors (red/orange) = high activity. Cold colors (blue) = low activity.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4>📜 Scroll Heatmaps</h4>
+                        <p>Shows how far users scroll down a page. Identifies where users stop reading or lose interest.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4>🎥 Session Recordings</h4>
+                        <p>Video playback of actual user sessions. See exactly how users navigate, where they struggle, and what they do.</p>
+                    </div>
+                    <div class="phase-card">
+                        <h4>👆 Move Heatmaps</h4>
+                        <p>Tracks cursor movement patterns. Shows where users hover and focus attention (even without clicking).</p>
+                    </div>
+                </div>
+
+                <h3>Microsoft Clarity Metrics</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Metric</th>
+                            <th>What It Measures</th>
+                            <th>Why It Matters</th>
+                        </tr>
+                        <tr>
+                            <td><span class="key-term">Dead Clicks</span></td>
+                            <td>Clicks on non-interactive elements</td>
+                            <td>Users expect something to happen but nothing does</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key-term">Rage Clicks</span></td>
+                            <td>Repeated rapid clicks in same area</td>
+                            <td>User frustration—something isn't working</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key-term">Quick Backs</span></td>
+                            <td>User leaves page within seconds</td>
+                            <td>Page didn't match expectations</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key-term">Scroll Depth</span></td>
+                            <td>How far users scroll on a page</td>
+                            <td>Is content engaging? Are CTAs visible?</td>
+                        </tr>
+                        <tr>
+                            <td><span class="key-term">Excessive Scrolling</span></td>
+                            <td>Rapid up/down scrolling</td>
+                            <td>User is confused or looking for something</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Interpreting User Behavior</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Observed Behavior</th>
+                            <th>Possible Issue</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td>Clicking non-clickable images</td>
+                            <td>Users expect interaction (zoom/gallery)</td>
+                            <td>Make images clickable, add visual affordance</td>
+                        </tr>
+                        <tr>
+                            <td>Rapid scrolling up/down</td>
+                            <td>Confusion, looking for info</td>
+                            <td>Add navigation, better headers, sticky menu</td>
+                        </tr>
+                        <tr>
+                            <td>Cart abandonment at payment</td>
+                            <td>Complex form, trust issues</td>
+                            <td>Simplify form, add trust badges, guest checkout</td>
+                        </tr>
+                        <tr>
+                            <td>Low scroll depth</td>
+                            <td>Content above fold not engaging</td>
+                            <td>Improve headline, add visual hooks</td>
+                        </tr>
+                        <tr>
+                            <td>Rage clicks on button</td>
+                            <td>Button not responding/slow</td>
+                            <td>Fix functionality, add loading indicator</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Benefits of Analytics</h3>
+                <ul>
+                    <li><strong>Data-Driven Decisions:</strong> Make changes based on actual user behavior, not assumptions</li>
+                    <li><strong>UX Optimization:</strong> Find and fix usability issues before they impact conversions</li>
+                    <li><strong>A/B Testing Validation:</strong> Measure which design performs better</li>
+                    <li><strong>ROI Tracking:</strong> Connect design changes to business metrics</li>
+                </ul>
+
+                <div class="tip-box">
+                    <h4>💡 Exam Tip</h4>
+                    <p>When analyzing session recordings, look for patterns across multiple users. A single user's behavior might be an outlier, but if 50% of users do the same thing (like clicking a non-clickable element), that's a design problem to fix!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Responsive Design Section -->
+        <section id="responsive" class="section responsive">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2><span class="icon">📱</span> Responsive Web Design</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="definition">
+                    <strong>DEFINITION:</strong> Responsive Web Design is an approach that makes web pages render well on all devices and screen sizes. It uses flexible layouts, flexible images, and CSS media queries to adapt the design.
+                </div>
+
+                <h3>The Viewport</h3>
+                <p>The <span class="key-term">viewport</span> is the visible area of a web page on a device screen—the portion users can see without scrolling. Without proper viewport configuration, mobile browsers render pages at desktop width then scale down, making text tiny and unusable.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Essential Viewport Meta Tag</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="comment">&lt;!-- ALWAYS include this in &lt;head&gt; --&gt;</span>
+<span class="selector">&lt;meta</span> <span class="property">name=</span><span class="value">"viewport"</span> 
+      <span class="property">content=</span><span class="value">"width=device-width, initial-scale=1.0"</span><span class="selector">&gt;</span>
+
+<span class="comment">/* What it does:
+   - width=device-width: Sets viewport width to device width
+   - initial-scale=1.0: Sets initial zoom level to 100%
+   - Enables media queries to work correctly */</span></pre>
+                    </div>
+                </div>
+
+                <h3>Mobile-First vs Desktop-First</h3>
+                <div class="comparison">
+                    <div class="comparison-card good">
+                        <h4>📱 Mobile-First (Recommended)</h4>
+                        <p><strong>Approach:</strong> Design for mobile screens first, then add features for larger screens.</p>
+                        <p><strong>Uses:</strong> <code>min-width</code> media queries</p>
+                        <p><strong>Philosophy:</strong> Progressive Enhancement—start simple, add complexity</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>🖥️ Desktop-First</h4>
+                        <p><strong>Approach:</strong> Design for desktop first, then remove/adjust for smaller screens.</p>
+                        <p><strong>Uses:</strong> <code>max-width</code> media queries</p>
+                        <p><strong>Philosophy:</strong> Graceful Degradation—start complex, simplify</p>
+                    </div>
+                </div>
+
+                <p><strong>Why Mobile-First is Recommended:</strong></p>
+                <ul>
+                    <li>Most users browse on mobile devices</li>
+                    <li>Forces focus on essential content first</li>
+                    <li>Progressive enhancement is easier than removing features</li>
+                    <li>Smaller CSS files (base styles are simpler)</li>
+                </ul>
+
+                <h3>CSS Media Queries</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Mobile-First Media Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="comment">/* Base styles (Mobile) - No media query needed */</span>
+<span class="selector">.container</span> {
+    <span class="property">width:</span> <span class="value">100%</span>;
+    <span class="property">padding:</span> <span class="value">15px</span>;
+}
+
+<span class="comment">/* Tablet and up */</span>
+<span class="selector">@media</span> (<span class="property">min-width:</span> <span class="value">768px</span>) {
+    <span class="selector">.container</span> {
+        <span class="property">width:</span> <span class="value">750px</span>;
+        <span class="property">margin:</span> <span class="value">0 auto</span>;
+    }
+}
+
+<span class="comment">/* Desktop and up */</span>
+<span class="selector">@media</span> (<span class="property">min-width:</span> <span class="value">1024px</span>) {
+    <span class="selector">.container</span> {
+        <span class="property">width:</span> <span class="value">960px</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Desktop-First Media Queries</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="comment">/* Base styles (Desktop) */</span>
+<span class="selector">.sidebar</span> {
+    <span class="property">width:</span> <span class="value">300px</span>;
+    <span class="property">display:</span> <span class="value">block</span>;
+}
+
+<span class="comment">/* Tablet and below - hide sidebar */</span>
+<span class="selector">@media</span> (<span class="property">max-width:</span> <span class="value">767px</span>) {
+    <span class="selector">.sidebar</span> {
+        <span class="property">display:</span> <span class="value">none</span>;
+    }
+}
+
+<span class="comment">/* Mobile - single column */</span>
+<span class="selector">@media</span> (<span class="property">max-width:</span> <span class="value">480px</span>) {
+    <span class="selector">.grid</span> {
+        <span class="property">grid-template-columns:</span> <span class="value">1fr</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <h3>Common Breakpoints</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            <th>Device Type</th>
+                            <th>Width Range</th>
+                            <th>Common Breakpoint</th>
+                        </tr>
+                        <tr>
+                            <td>Small Mobile</td>
+                            <td>320px - 479px</td>
+                            <td>320px, 375px</td>
+                        </tr>
+                        <tr>
+                            <td>Large Mobile</td>
+                            <td>480px - 767px</td>
+                            <td>480px</td>
+                        </tr>
+                        <tr>
+                            <td>Tablet</td>
+                            <td>768px - 1023px</td>
+                            <td>768px</td>
+                        </tr>
+                        <tr>
+                            <td>Desktop</td>
+                            <td>1024px - 1199px</td>
+                            <td>1024px</td>
+                        </tr>
+                        <tr>
+                            <td>Large Desktop</td>
+                            <td>1200px+</td>
+                            <td>1200px, 1440px</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Exam-Ready CSS Examples</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Hide Sidebar Below 768px</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="selector">@media</span> (<span class="property">max-width:</span> <span class="value">767px</span>) {
+    <span class="selector">.sidebar</span> {
+        <span class="property">display:</span> <span class="value">none</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>3-Column to 1-Column Grid</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="comment">/* Desktop: 3 columns */</span>
+<span class="selector">.product-grid</span> {
+    <span class="property">display:</span> <span class="value">grid</span>;
+    <span class="property">grid-template-columns:</span> <span class="value">repeat(3, 1fr)</span>;
+    <span class="property">gap:</span> <span class="value">20px</span>;
+}
+
+<span class="comment">/* Mobile: 1 column */</span>
+<span class="selector">@media</span> (<span class="property">max-width:</span> <span class="value">480px</span>) {
+    <span class="selector">.product-grid</span> {
+        <span class="property">grid-template-columns:</span> <span class="value">1fr</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Tablet Font Size (768px - 1024px)</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <div class="code-content">
+<pre><span class="selector">@media</span> (<span class="property">min-width:</span> <span class="value">768px</span>) and (<span class="property">max-width:</span> <span class="value">1024px</span>) {
+    <span class="selector">body</span> {
+        <span class="property">font-size:</span> <span class="value">18px</span>;
+    }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>💡 Exam Tip</h4>
+                    <p>Remember the syntax: <code>@media (condition) { rules }</code>. Use <code>min-width</code> for mobile-first (adding styles as screen grows) and <code>max-width</code> for desktop-first (removing styles as screen shrinks).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Questions Section -->
+        <section id="practice" class="section" style="border-color: var(--neon-yellow);">
+            <div class="section-header" onclick="toggleSection(this)" style="border-color: var(--neon-yellow);">
+                <h2 style="color: var(--neon-yellow);"><span class="icon" style="background: rgba(255,255,0,0.2);">✍️</span> Practice Questions</h2>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="section-content">
+                <p>Test your understanding with these exam-style questions:</p>
+
+                <div class="practice-section">
+                    <h4>📝 Section A Style (Short Answer)</h4>
+                    <div class="question">
+                        <p><span class="q-num">1.</span> What is the difference between functional and non-functional requirements? Give one example of each.</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">2.</span> Why is the viewport meta tag essential for responsive websites?</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">3.</span> What are "rage clicks" and what do they indicate about user experience?</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">4.</span> List three characteristics of well-written requirements according to IEEE 830.</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">5.</span> Explain the mobile-first approach and why it is recommended.</p>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h4>💻 Section B Style (Applied)</h4>
+                    <div class="question">
+                        <p><span class="q-num">6.</span> A client says: "The website should use Angular and MongoDB. It needs to be fast and work on all devices." Separate the implementation details from actual requirements, then convert the vague requirements to measurable ones.</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">7.</span> Write a CSS media query that: (a) hides an element with class "mobile-menu" on screens wider than 768px, and (b) changes a 4-column grid to 2 columns on tablet (768px-1024px).</p>
+                    </div>
+                    <div class="question">
+                        <p><span class="q-num">8.</span> A session recording shows a user: repeatedly tapping on a hero image, scrolling to the footer then back to top twice, and abandoning the form after 2 minutes. Analyze each behavior and suggest improvements.</p>
+                    </div>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📊 Section C Style (Case Study)</h4>
+                    <div class="question">
+                        <p><span class="q-num">9.</span> <strong>BookWorm Online Library:</strong> A startup wants to build a digital library where users can browse, borrow, and read e-books. Librarians should manage inventory. The client says: "Make it beautiful, fast, secure, and track everything users do."</p>
+                        <p style="margin-top: 10px;">Tasks:</p>
+                        <ul>
+                            <li>Write 3 functional requirements and 2 non-functional requirements</li>
+                            <li>Propose a 12-week SDLC timeline with deliverables</li>
+                            <li>Recommend a responsive design strategy</li>
+                            <li>Identify 3 user behaviors to track with analytics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <h4>🎯 Key Focus Areas for Exam</h4>
+                    <ul>
+                        <li>Separating requirements from implementation details</li>
+                        <li>Converting vague requirements to measurable ones</li>
+                        <li>Writing correct CSS media query syntax</li>
+                        <li>Interpreting analytics data and suggesting improvements</li>
+                        <li>Planning SDLC phases with realistic timelines</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>CSC-224 Web Technologies | <span class="glow">Final Exam Preparation</span></p>
+        <p style="margin-top: 10px;">Good luck on your exam! 🚀</p>
+    </footer>
+
+    <script>
+        function toggleSection(header) {
+            const section = header.parentElement;
+            section.classList.toggle('collapsed');
+        }
+
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.code-block');
+            const code = codeBlock.querySelector('pre').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll offset for sticky nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const navHeight = document.querySelector('.nav').offsetHeight;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Close nav dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const navMenu = document.querySelector('.nav-menu');
+            const dropdown = document.querySelector('.nav-dropdown');
+            if (navMenu && dropdown && !navMenu.contains(e.target) && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
