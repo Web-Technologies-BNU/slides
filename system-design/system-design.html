@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Design | CSC-224</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --neon-cyan: #00fff2;
+            --neon-magenta: #ff00ff;
+            --neon-yellow: #f0ff00;
+            --neon-orange: #ff6b00;
+            --neon-green: #00ff88;
+            --neon-blue: #00a8ff;
+            --neon-purple: #9d4edd;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0b0;
+            --text-muted: #606070;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Background Effects */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 242, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 242, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-1 {
+            top: -100px;
+            right: -100px;
+            background: var(--neon-cyan);
+        }
+
+        .orb-2 {
+            bottom: -150px;
+            left: -100px;
+            background: var(--neon-magenta);
+        }
+
+        /* Slide Container */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            padding: 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .title-section {
+            flex: 1;
+        }
+
+        .course-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--neon-cyan);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .course-tag::before {
+            content: '';
+            width: 20px;
+            height: 2px;
+            background: var(--neon-cyan);
+        }
+
+        .slide-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .slide-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .sdlc-badge {
+            background: rgba(255, 0, 255, 0.1);
+            border: 1px solid var(--neon-magenta);
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            text-align: center;
+        }
+
+        .sdlc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--neon-magenta);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .sdlc-phase {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-top: 0.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 2rem;
+            min-height: 0;
+        }
+
+        /* Left Column - Definition & Objectives */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(0, 255, 242, 0.08), rgba(255, 0, 255, 0.05));
+            border: 1px solid rgba(0, 255, 242, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            position: relative;
+        }
+
+        .def-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--neon-yellow);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: absolute;
+            top: -8px;
+            left: 16px;
+            background: var(--bg-primary);
+            padding: 0 0.5rem;
+        }
+
+        .def-text {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .def-text strong {
+            color: var(--neon-cyan);
+        }
+
+        /* Objectives Section */
+        .objectives-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            flex: 1;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .objective-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .objective-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .obj-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 255, 136, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .obj-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Right Column - Components Grid */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .components-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--neon-orange);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .component-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--card-color);
+        }
+
+        .component-card:hover {
+            border-color: var(--card-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .component-card[data-type="architecture"] { --card-color: var(--neon-cyan); }
+        .component-card[data-type="data"] { --card-color: var(--neon-magenta); }
+        .component-card[data-type="interface"] { --card-color: var(--neon-green); }
+        .component-card[data-type="procedure"] { --card-color: var(--neon-yellow); }
+        .component-card[data-type="security"] { --card-color: var(--neon-orange); }
+        .component-card[data-type="network"] { --card-color: var(--neon-blue); }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .card-icon {
+            font-size: 1.3rem;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--card-color);
+            letter-spacing: 0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .card-examples {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed var(--bg-tertiary);
+        }
+
+        /* Bottom Section - Key Activities */
+        .bottom-section {
+            margin-top: 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+        }
+
+        .activities-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--neon-purple);
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activities-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .activity-step {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg-tertiary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--neon-purple);
+            opacity: 0.5;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+
+        .step-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .flow-arrow {
+            color: var(--neon-purple);
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--bg-tertiary);
+        }
+
+        .footer-left {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .footer-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 1.5rem 2rem;
+            }
+
+            .slide-title {
+                font-size: 2.2rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .components-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .activities-flow {
+                flex-wrap: wrap;
+            }
+
+            .activity-step {
+                flex: 1 1 45%;
+            }
+
+            .flow-arrow {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .components-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .activity-step {
+                flex: 1 1 100%;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .grid-bg, .glow-orb {
+                display: none;
+            }
+
+            .component-card, .definition-box, .objectives-section {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <div class="slide">
+        <!-- Header -->
+        <header class="slide-header">
+            <div class="title-section">
+                <div class="course-tag">CSC-224 Web Technologies</div>
+                <h1 class="slide-title">System Design</h1>
+                <p class="slide-subtitle">Transforming requirements into technical architecture</p>
+            </div>
+            <div class="sdlc-badge">
+                <div class="sdlc-label">SDLC Phase</div>
+                <div class="sdlc-phase">Phase 3 of 7</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <div class="definition-box">
+                    <span class="def-label">Definition</span>
+                    <p class="def-text">
+                        System Design is the process of defining the <strong>architecture</strong>, <strong>components</strong>, <strong>modules</strong>, <strong>interfaces</strong>, and <strong>data flow</strong> of a system to satisfy specified requirements. It bridges the gap between <strong>WHAT</strong> the system should do and <strong>HOW</strong> it will be built.
+                    </p>
+                </div>
+
+                <div class="objectives-section">
+                    <div class="section-title">
+                        <span>🎯</span> Key Objectives
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">📐</span>
+                        <span class="obj-text">Define system architecture and technology stack</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">🔗</span>
+                        <span class="obj-text">Establish component relationships and interfaces</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">💾</span>
+                        <span class="obj-text">Design database schema and data models</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">🖥️</span>
+                        <span class="obj-text">Create UI/UX wireframes and mockups</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">🔒</span>
+                        <span class="obj-text">Plan security measures and access control</span>
+                    </div>
+                    <div class="objective-item">
+                        <span class="obj-icon">📈</span>
+                        <span class="obj-text">Ensure scalability and performance targets</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <div class="components-title">
+                    <span>⚙️</span> Core Design Components
+                </div>
+                <div class="components-grid">
+                    <div class="component-card" data-type="architecture">
+                        <div class="card-header">
+                            <span class="card-icon">🏗️</span>
+                            <span class="card-title">Architecture Design</span>
+                        </div>
+                        <p class="card-desc">Overall system structure defining how components interact and communicate</p>
+                        <div class="card-examples">MVC, Client-Server, Microservices, Monolithic</div>
+                    </div>
+
+                    <div class="component-card" data-type="data">
+                        <div class="card-header">
+                            <span class="card-icon">🗄️</span>
+                            <span class="card-title">Data Design</span>
+                        </div>
+                        <p class="card-desc">Database schema, ERD diagrams, data models, and storage strategies</p>
+                        <div class="card-examples">SQL, NoSQL, ERD, Normalization</div>
+                    </div>
+
+                    <div class="component-card" data-type="interface">
+                        <div class="card-header">
+                            <span class="card-icon">🎨</span>
+                            <span class="card-title">Interface Design</span>
+                        </div>
+                        <p class="card-desc">UI layouts, wireframes, user flows, and interaction patterns</p>
+                        <div class="card-examples">Wireframes, Mockups, Prototypes</div>
+                    </div>
+
+                    <div class="component-card" data-type="procedure">
+                        <div class="card-header">
+                            <span class="card-icon">📋</span>
+                            <span class="card-title">Procedural Design</span>
+                        </div>
+                        <p class="card-desc">Algorithms, business logic flow, and processing sequences</p>
+                        <div class="card-examples">Flowcharts, Pseudocode, DFD</div>
+                    </div>
+
+                    <div class="component-card" data-type="security">
+                        <div class="card-header">
+                            <span class="card-icon">🔐</span>
+                            <span class="card-title">Security Design</span>
+                        </div>
+                        <p class="card-desc">Authentication, authorization, encryption, and threat mitigation</p>
+                        <div class="card-examples">OAuth, JWT, RBAC, HTTPS</div>
+                    </div>
+
+                    <div class="component-card" data-type="network">
+                        <div class="card-header">
+                            <span class="card-icon">🌐</span>
+                            <span class="card-title">Network Design</span>
+                        </div>
+                        <p class="card-desc">API design, communication protocols, and deployment topology</p>
+                        <div class="card-examples">REST, GraphQL, WebSocket</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section - Activities Flow -->
+        <div class="bottom-section">
+            <div class="activities-header">
+                <span>🔄</span> Design Process Activities
+            </div>
+            <div class="activities-flow">
+                <div class="activity-step">
+                    <span class="step-num">01</span>
+                    <div class="step-content">
+                        <div class="step-title">Analyze Requirements</div>
+                        <div class="step-desc">Review SRS document</div>
+                    </div>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="activity-step">
+                    <span class="step-num">02</span>
+                    <div class="step-content">
+                        <div class="step-title">Define Architecture</div>
+                        <div class="step-desc">Choose tech stack & patterns</div>
+                    </div>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="activity-step">
+                    <span class="step-num">03</span>
+                    <div class="step-content">
+                        <div class="step-title">Design Components</div>
+                        <div class="step-desc">Create modules & interfaces</div>
+                    </div>
+                </div>
+                <span class="flow-arrow">→</span>
+                <div class="activity-step">
+                    <span class="step-num">04</span>
+                    <div class="step-content">
+                        <div class="step-title">Review & Validate</div>
+                        <div class="step-desc">Verify against requirements</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="slide-footer">
+            <div class="footer-left">System Design Phase | Software Development Life Cycle</div>
+            <div class="footer-right">
+                <div class="footer-item">
+                    <span class="footer-dot"></span>
+                    <span>Input: SRS Document</span>
+                </div>
+                <div class="footer-item">
+                    <span class="footer-dot" style="background: var(--neon-magenta);"></span>
+                    <span>Output: Design Document</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
